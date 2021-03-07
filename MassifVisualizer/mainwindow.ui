@@ -13,7 +13,20 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTextBrowser" name="textBrowser">
+      <property name="maximumSize">
+       <size>
+        <width>401</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -27,7 +40,14 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen_File"/>
+    <widget class="QMenu" name="menuOpen_File">
+     <property name="title">
+      <string>Open File</string>
+     </property>
+     <addaction name="actionOpen_Massif_File"/>
+     <addaction name="actionOpen_Code_File"/>
+    </widget>
+    <addaction name="menuOpen_File"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -42,11 +62,6 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionOpen_File">
-   <property name="text">
-    <string>Open File</string>
-   </property>
-  </action>
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
@@ -55,6 +70,16 @@
   <action name="actionA">
    <property name="text">
     <string>A</string>
+   </property>
+  </action>
+  <action name="actionOpen_Massif_File">
+   <property name="text">
+    <string>Open Massif File</string>
+   </property>
+  </action>
+  <action name="actionOpen_Code_File">
+   <property name="text">
+    <string>Open Code File</string>
    </property>
   </action>
  </widget>

@@ -19,7 +19,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_actionOpen_File_triggered()
+void MainWindow::on_actionQuit_triggered()
+{
+     QApplication::quit();
+}
+
+void MainWindow::on_actionOpen_Massif_File_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
                               "Massif Out File (rainbow emoji)", "./", "massif.out.*");
@@ -28,6 +33,8 @@ void MainWindow::on_actionOpen_File_triggered()
         return;
 
     _fileName = fileName.toStdString();
+
+    std::cout << _fileName << std::endl;
 
     //TODO: parse the input
 
@@ -41,10 +48,28 @@ void MainWindow::on_actionOpen_File_triggered()
 
 
     //TODO: visualize the data
-
 }
 
-void MainWindow::on_actionQuit_triggered()
+void MainWindow::on_actionOpen_Code_File_triggered()
 {
-     QApplication::quit();
+    QString fileName = QFileDialog::getOpenFileName(this,
+                              "Code File (code Lyoko)", "./", "*.*");
+
+    if (fileName.isEmpty())
+        return;
+
+    _codeFileName = fileName.toStdString();
+
+    std::ifstream in(fileName.toStdString());
+
+    std::string text;
+    std::string line;
+    while (std::getline(in, line)) {
+
+        line.append("\n");
+        text.append(line);
+    }
+    QString text2;
+    text2 = QString::fromStdString(text);
+    ui->textBrowser->setText(text2);
 }
