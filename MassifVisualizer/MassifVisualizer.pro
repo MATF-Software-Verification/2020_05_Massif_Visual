@@ -26,10 +26,12 @@ CONFIG += c++17
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    parse-massif-file/parser-massif.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    parse-massif-file/parser-massif.h
 
 FORMS += \
         mainwindow.ui
