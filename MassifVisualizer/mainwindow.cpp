@@ -3,6 +3,8 @@
 
 #include <QFileDialog>
 #include <iostream>
+#include <QTextCursor>
+#include <QTextBlock>
 
 //needed for reading from a file
 #include <fstream>
@@ -72,4 +74,14 @@ void MainWindow::on_actionOpen_Code_File_triggered()
     QString text2;
     text2 = QString::fromStdString(text);
     ui->textBrowser->setText(text2);
+    highlightLine(80);
+}
+
+void MainWindow::highlightLine(int lineNumber)
+{
+    QTextCursor coursor(ui->textBrowser->document()->findBlockByLineNumber(lineNumber));
+    QTextBlockFormat frmt = coursor.blockFormat();
+    frmt.setBackground(QBrush(Qt::yellow));
+    coursor.setBlockFormat(frmt);
+    ui->textBrowser->setTextCursor(coursor);
 }

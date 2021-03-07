@@ -27,6 +27,8 @@ private:
     Ui::MainWindow *ui;
     std::string _fileName;
     std::string _codeFileName;
+
+    void highlightLine(int lineNumber);
 };
 
 #endif // MAINWINDOW_H
