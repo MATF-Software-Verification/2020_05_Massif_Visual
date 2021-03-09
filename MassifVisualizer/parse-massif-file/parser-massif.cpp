@@ -130,5 +130,27 @@ void ParserMassif::parseTimeValueLine(const std::string &line)
 
 void ParserMassif::parseMemHeapBLine(const std::string &line)
 {
-
+    std::cout << "Mem heap B line: " << line << std::endl;
 }
+
+void ParserMassif::parseMemHeapExtraBLine(const std::string &line)
+{
+    std::cout << "Mem heap extra B line: " << line << std::endl;
+}
+
+void ParserMassif::parseMemStacksBLine(const std::string &line)
+{
+    std::cout << "Mem stacks B line: " << line << std::endl;
+}
+
+void ParserMassif::parseHeapTreeLines(std::vector<std::string> &lines)
+{
+    std::cout << "Heap tree lines: " << std::endl;
+
+    for (auto line : lines) {
+        std::cout << line << std::endl;
+    }
+}
+
+
+
