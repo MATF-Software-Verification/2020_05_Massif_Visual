@@ -26,11 +26,6 @@ ParserMassif::ParserMassif(std::string inputFileName)
 */
 void ParserMassif::parseMassifOutput()
 {
-
-}
-
-void ParserMassif::parseMsPrintOutput()
-{
     std::string line;
     std::vector<std::string> lines;
     std::ifstream inputFile(_inputFileName);
@@ -97,6 +92,20 @@ void ParserMassif::parseMsPrintOutput()
             }
         }
         inputFile.close();
+    }
+    else {
+        std::cout << "File is not opened." << std::endl;
+    }
+}
+
+void ParserMassif::parseMsPrintOutput()
+{
+    std::string line;
+    std::ifstream inputFile(_inputFileName);
+    if (inputFile.is_open()) {
+        while (std::getline(inputFile, line)) {
+            std::cout << line << '\n';
+        }
     }
     else {
         std::cout << "File is not opened." << std::endl;
