@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
+#include "./snapshotitem.h"
 
 class ParserMassif
 {
@@ -17,6 +19,15 @@ public:
 
 private:
     std::string _inputFileName;
+    std::map<std::string, std::string> _descArgs;
+    /*
+        insert elements in random order
+        _descArgs.insert(pair<str, str>("bla", "blah"));
+    */
+    std::string _exeFile;
+    std::string _timeUnit;
+
+    std::vector<SnapshotItem*> snapshotItems;
 
     void parseDescLine(const std::string &line);
     void parseCmdLine(const std::string &line);
