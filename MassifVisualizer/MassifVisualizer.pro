@@ -27,11 +27,15 @@ CONFIG += c++17
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    parse-massif-file/parser-massif.cpp
+    parse-massif-file/parser-massif.cpp \
+    parse-massif-file/snapshotitem.cpp \
+    parse-massif-file/heaptreeitem.cpp
 
 HEADERS += \
         mainwindow.h \
-    parse-massif-file/parser-massif.h
+    parse-massif-file/parser-massif.h \
+    parse-massif-file/snapshotitem.h \
+    parse-massif-file/heaptreeitem.h
 
 FORMS += \
         mainwindow.ui
