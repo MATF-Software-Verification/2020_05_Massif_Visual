@@ -160,6 +160,3 @@ void ParserMassif::parseHeapTreeLines(std::vector<std::string> &lines)
         std::cout << line << std::endl;
     }
 }
-
-
-
