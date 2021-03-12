@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QList>
+
+#include <vector>
 
 namespace Ui {
 class MainWindow;
@@ -29,15 +32,22 @@ private slots:
 
     void openRecent();
 
+    void clearRecent();
+
+    void quit();
+
 private:
     Ui::MainWindow *ui;
     std::string _fileName;
     std::string _directoryName;
     std::string _codeFileName;
-    int _numRecent = 2;
+    unsigned long _numRecent = 2;
     QMenu* recentFilesMenu;
     std::vector<std::string> _recentFiles;
+    std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
+    QList<QAction*> _recentFileActionList;
     void createMenus();
+    void updateMenus();
     void parseRecentFiles();
 
 

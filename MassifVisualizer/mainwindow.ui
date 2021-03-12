@@ -48,9 +48,6 @@
      <addaction name="actionOpen_Code_File"/>
     </widget>
     <addaction name="menuOpen_File"/>
-    <addaction name="actionOpen_recent"/>
-    <addaction name="separator"/>
-    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
