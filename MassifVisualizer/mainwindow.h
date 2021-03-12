@@ -23,10 +23,23 @@ private slots:
 
     void on_actionOpen_Code_File_triggered();
 
+    void on_actionHelp_triggered();
+
+    void on_actionOpen_recent_triggered();
+
+    void openRecent();
+
 private:
     Ui::MainWindow *ui;
     std::string _fileName;
+    std::string _directoryName;
     std::string _codeFileName;
+    int _numRecent = 2;
+    QMenu* recentFilesMenu;
+    std::vector<std::string> _recentFiles;
+    void createMenus();
+    void parseRecentFiles();
+
 
     void highlightLine(int lineNumber);
 };

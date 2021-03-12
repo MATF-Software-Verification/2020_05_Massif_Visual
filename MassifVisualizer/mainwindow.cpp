@@ -9,11 +9,17 @@
 //needed for reading from a file
 #include <fstream>
 
+#include <QMessageBox>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->menuFile->addSeparator();
+    recentFilesMenu = ui->menuFile->addMenu("Open Recent");
+    parseRecentFiles();
+    createMenus();
 }
 
 MainWindow::~MainWindow()
@@ -35,8 +41,8 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
         return;
 
     _fileName = fileName.toStdString();
-
-    std::cout << _fileName << std::endl;
+    auto index = _fileName.find_last_of('/');
+    _directoryName = _fileName.substr(0, (index+1));
 
     //TODO: parse the input
 
@@ -50,6 +56,7 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
 
 
     //TODO: visualize the data
+    //TODO: add filepath to recentFiles
 }
 
 void MainWindow::on_actionOpen_Code_File_triggered()
@@ -84,4 +91,51 @@ void MainWindow::highlightLine(int lineNumber)
     frmt.setBackground(QBrush(Qt::yellow));
     coursor.setBlockFormat(frmt);
     ui->textBrowser->setTextCursor(coursor);
+}
+
+void MainWindow::on_actionHelp_triggered()
+{
+    QMessageBox msgBox;
+    msgBox.setText("You are on your own.");
+    msgBox.exec();
+}
+
+void MainWindow::on_actionOpen_recent_triggered()
+{
+    ui->menuFile->addMenu(recentFilesMenu);
+}
+
+void MainWindow::openRecent()
+{
+    QAction *action = qobject_cast<QAction * >(sender());
+    if(action){
+        std::cout << action->data().toString().toStdString() << std::endl;
+    }
+}
+
+void MainWindow::createMenus()
+{
+
+
+    for(auto i = 0; i < _numRecent; i++){
+        QAction* recentFile = new QAction(this);
+        QObject::connect(recentFile, SIGNAL(triggered()), this, SLOT(openRecent()));
+        recentFile->setText(QString::fromStdString(_recentFiles[i]));
+        recentFile->setData(QString::fromStdString(_recentFiles[i]));
+        recentFilesMenu->addAction(recentFile);
+    }
+
+}
+
+void MainWindow::parseRecentFiles()
+{
+    std::ifstream in("../MassifVisualizer/assets/recentFiles.txt");
+
+    std::string text;
+    std::string line;
+    while (std::getline(in, line)) {
+
+        _recentFiles.push_back(line);
+    }
+
 }
