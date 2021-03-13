@@ -116,7 +116,6 @@ void MainWindow::openRecent()
 void MainWindow::createMenus()
 {
 
-
     for(auto i = 0; i < _numRecent; i++){
         QAction* recentFile = new QAction(this);
         QObject::connect(recentFile, SIGNAL(triggered()), this, SLOT(openRecent()));
