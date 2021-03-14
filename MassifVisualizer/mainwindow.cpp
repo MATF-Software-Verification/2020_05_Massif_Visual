@@ -8,6 +8,7 @@
 
 //needed for reading from a file
 #include <fstream>
+#include <math.h>
 
 #include <QMessageBox>
 
@@ -16,15 +17,27 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->menuFile->addSeparator();
     recentFilesMenu = ui->menuFile->addMenu("Open Recent");
     parseRecentFiles();
     createMenus();
+
+    ui->menuFile->addSeparator();
+
+    QAction* quit = new QAction(this);
+    QObject::connect(quit, SIGNAL(triggered()), this, SLOT(quit()));
+    quit->setText(QString::fromStdString("Quit"));
+    ui->menuFile->addAction(quit);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::quit()
+{
+     QApplication::quit();
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -57,6 +70,14 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
 
     //TODO: visualize the data
     //TODO: add filepath to recentFiles
+    std::ofstream outfile;
+    outfile.open(_recentFilesFile, std::ios_base::app);
+    outfile << _fileName << std::endl;
+    outfile.close();
+    parseRecentFiles();
+    updateMenus();
+
+
 }
 
 void MainWindow::on_actionOpen_Code_File_triggered()
@@ -113,28 +134,72 @@ void MainWindow::openRecent()
     }
 }
 
+void MainWindow::clearRecent(){
+    std::ofstream outfile;
+    outfile.open(_recentFilesFile, std::ofstream::out | std::ofstream::trunc);
+    outfile.close();
+    parseRecentFiles();
+    updateMenus();
+}
+
 void MainWindow::createMenus()
 {
 
-    for(auto i = 0; i < _numRecent; i++){
+    QAction* clearRecentFiles = new QAction(this);
+    QObject::connect(clearRecentFiles, SIGNAL(triggered()), this, SLOT(clearRecent()));
+    clearRecentFiles->setText(QString::fromStdString("Clear recent files"));
+    recentFilesMenu->addAction(clearRecentFiles);
+
+    recentFilesMenu->addSeparator();
+
+
+    for(unsigned long i = 0; i < _numRecent; i++){
         QAction* recentFile = new QAction(this);
         QObject::connect(recentFile, SIGNAL(triggered()), this, SLOT(openRecent()));
         recentFile->setText(QString::fromStdString(_recentFiles[i]));
         recentFile->setData(QString::fromStdString(_recentFiles[i]));
         recentFilesMenu->addAction(recentFile);
+        _recentFileActionList.append(recentFile);
+    }
+
+
+}
+
+void MainWindow::updateMenus()
+{
+
+
+    for(int i = 0; i < _recentFileActionList.size() ; i++){
+        _recentFileActionList[i]->setText(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
+        _recentFileActionList[i]->setData(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
+
     }
 
 }
 
+
 void MainWindow::parseRecentFiles()
 {
-    std::ifstream in("../MassifVisualizer/assets/recentFiles.txt");
+    std::ifstream in(_recentFilesFile);
 
-    std::string text;
+    std::vector<std::string> allRecentFiles;
     std::string line;
     while (std::getline(in, line)) {
 
-        _recentFiles.push_back(line);
+        allRecentFiles.push_back(line);
     }
+
+    if(allRecentFiles.size() < _numRecent){
+        _recentFiles = std::vector<std::string>(allRecentFiles);
+        for(unsigned long i = 0; i < _numRecent - static_cast<unsigned long>(allRecentFiles.size()); i++){
+            _recentFiles.push_back("");
+        }
+        return;
+    }
+
+    std::vector<std::string>::const_iterator begin = allRecentFiles.end() - static_cast<long>(_numRecent);
+    std::vector<std::string>::const_iterator end = allRecentFiles.end();
+    _recentFiles = std::vector<std::string>(begin, end);
+
 
 }
