@@ -20,23 +20,18 @@ public:
 
 private slots:
 
-    void on_actionQuit_triggered();
-
     void on_actionOpen_Massif_File_triggered();
-
     void on_actionOpen_Code_File_triggered();
-
     void on_actionHelp_triggered();
-
     void on_actionOpen_recent_triggered();
-
     void openRecent();
-
     void clearRecent();
-
     void quit();
+    void onPointClick();
+    void on_tabWidget_tabCloseRequested(int index);
 
 private:
+
     Ui::MainWindow *ui;
     std::string _fileName;
     std::string _directoryName;
@@ -49,8 +44,7 @@ private:
     void createMenus();
     void updateMenus();
     void parseRecentFiles();
-
-
+    void createGraph();
     void highlightLine(int lineNumber);
 };
 

@@ -6,11 +6,36 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
+
 //needed for reading from a file
 #include <fstream>
 #include <math.h>
 
 #include <QMessageBox>
+
+
+#include <QtCharts/QChartView>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QLegend>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QHorizontalStackedBarSeries>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QCategoryAxis>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsView>
+
+#include <QXYSeries>
+
+#include <QTextBrowser>
+
+QT_CHARTS_USE_NAMESPACE
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent) :
     quit->setText(QString::fromStdString("Quit"));
     ui->menuFile->addAction(quit);
 
+    ui->tabWidget->removeTab(0);
+    ui->tabWidget->removeTab(0);
 }
 
 MainWindow::~MainWindow()
@@ -35,12 +62,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::quit()
-{
-     QApplication::quit();
+void MainWindow::onPointClick(){
+    auto serie = qobject_cast<QLineSeries *>(sender());
+    std::cout << serie->points().first().rx() << std::endl;
 }
 
-void MainWindow::on_actionQuit_triggered()
+void MainWindow::quit()
 {
      QApplication::quit();
 }
@@ -59,17 +86,6 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
 
     //TODO: parse the input
 
-    //template for reading from a file
-   /* std::ifstream in(fileName.toStdString());
-    char c;
-    while (in >> c) {
-        std::cout << c;
-    }
-    std::cout << std::endl;*/
-
-
-    //TODO: visualize the data
-    //TODO: add filepath to recentFiles
     std::ofstream outfile;
     outfile.open(_recentFilesFile, std::ios_base::app);
     outfile << _fileName << std::endl;
@@ -77,6 +93,8 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
     parseRecentFiles();
     updateMenus();
 
+    //TODO: visualize the data
+    createGraph();
 
 }
 
@@ -99,19 +117,12 @@ void MainWindow::on_actionOpen_Code_File_triggered()
         line.append("\n");
         text.append(line);
     }
+    in.close();
     QString text2;
     text2 = QString::fromStdString(text);
     ui->textBrowser->setText(text2);
-    highlightLine(80);
-}
+    //highlightLine(80);
 
-void MainWindow::highlightLine(int lineNumber)
-{
-    QTextCursor coursor(ui->textBrowser->document()->findBlockByLineNumber(lineNumber));
-    QTextBlockFormat frmt = coursor.blockFormat();
-    frmt.setBackground(QBrush(Qt::yellow));
-    coursor.setBlockFormat(frmt);
-    ui->textBrowser->setTextCursor(coursor);
 }
 
 void MainWindow::on_actionHelp_triggered()
@@ -142,6 +153,22 @@ void MainWindow::clearRecent(){
     updateMenus();
 }
 
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    ui->tabWidget->removeTab(index);
+}
+
+
+void MainWindow::highlightLine(int lineNumber)
+{
+    QTextCursor coursor(ui->textBrowser->document()->findBlockByLineNumber(lineNumber));
+    QTextBlockFormat frmt = coursor.blockFormat();
+    frmt.setBackground(QBrush(Qt::yellow));
+    coursor.setBlockFormat(frmt);
+    ui->textBrowser->setTextCursor(coursor);
+}
+
+
 void MainWindow::createMenus()
 {
 
@@ -161,22 +188,17 @@ void MainWindow::createMenus()
         recentFilesMenu->addAction(recentFile);
         _recentFileActionList.append(recentFile);
     }
-
-
 }
 
 void MainWindow::updateMenus()
 {
 
-
     for(int i = 0; i < _recentFileActionList.size() ; i++){
         _recentFileActionList[i]->setText(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
         _recentFileActionList[i]->setData(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
-
     }
 
 }
-
 
 void MainWindow::parseRecentFiles()
 {
@@ -201,5 +223,39 @@ void MainWindow::parseRecentFiles()
     std::vector<std::string>::const_iterator end = allRecentFiles.end();
     _recentFiles = std::vector<std::string>(begin, end);
 
+
+}
+
+void MainWindow::createGraph()
+{
+
+    QLineSeries *series = new QLineSeries();
+            series->append(0, 16);
+            series->append(1, 25);
+            series->append(2, 24);
+            series->append(3, 19);
+            series->append(4, 33);
+            series->append(5, 25);
+            series->append(6, 34);
+
+    QChart *chart = new QChart();
+            chart->legend()->hide();
+            chart->addSeries(series);
+            chart->createDefaultAxes();
+
+    QChartView *chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
+
+
+    QBoxLayout *chartBoxLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    chartBoxLayout->addWidget(chartView);
+    QGraphicsView* graphicsView = new QGraphicsView();
+    graphicsView->setLayout(chartBoxLayout);
+    QObject::connect(series, &QXYSeries::clicked, this, &MainWindow::onPointClick);
+
+    ui->tabWidget->addTab(graphicsView, "aca");
+
+    //int index = fileName.lastIndexOf("/");
+    //ui->tabWidget->addTab(textBrowser, fileName.mid(index+1));
 
 }
