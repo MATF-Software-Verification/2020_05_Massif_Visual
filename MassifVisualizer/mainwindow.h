@@ -5,6 +5,7 @@
 #include <QList>
 
 #include <vector>
+#include <QLineEdit>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,7 @@ public:
 
 private slots:
 
+    void changeRange();
     void on_actionOpen_Massif_File_triggered();
     void on_actionOpen_Code_File_triggered();
     void on_actionHelp_triggered();
@@ -29,6 +31,7 @@ private slots:
     void quit();
     void onPointClick();
     void on_tabWidget_tabCloseRequested(int index);
+
 
 private:
 

@@ -17,6 +17,9 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
       <property name="tabsClosable">
        <bool>true</bool>
       </property>

@@ -13,7 +13,7 @@
 
 #include <QMessageBox>
 
-
+//koliko ovoga nam treba?
 #include <QtCharts/QChartView>
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QBarSet>
@@ -30,9 +30,14 @@
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
 
+//jel nam treba ovo?
 #include <QXYSeries>
 
 #include <QTextBrowser>
+#include <QTabWidget>
+#include <QLabel>
+#include <QPushButton>
+#include <QRegExpValidator>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -158,6 +163,39 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
 }
 
+void MainWindow::changeRange()
+{
+    QWidget* tab = ui->tabWidget->widget(ui->tabWidget->currentIndex());
+
+    tab->dumpObjectTree();
+
+    QChartView* chartyView = tab->findChild<QChartView*>("chartyViewMcChartChart");
+
+    int num_minLE = 0;
+    int num_maxLE = 0;
+    QLineEdit* minLE = tab->findChild<QLineEdit*>("minLE");
+    QLineEdit* maxLE = tab->findChild<QLineEdit*>("maxLE");
+
+    if(minLE){
+
+        num_minLE = std::atoi(minLE->text().toStdString().c_str());
+        std::cout << num_minLE << std::endl;
+    }
+
+    if(maxLE){
+
+        num_maxLE = std::atoi(maxLE->text().toStdString().c_str());
+        std::cout << num_maxLE << std::endl;
+    }
+
+    if(chartyView and (num_minLE < num_maxLE)){
+
+        chartyView->chart()->axisX()->setRange(num_minLE, num_maxLE);
+    }
+    //else maybe print a msg of failure
+
+}
+
 
 void MainWindow::highlightLine(int lineNumber)
 {
@@ -230,32 +268,78 @@ void MainWindow::createGraph()
 {
 
     QLineSeries *series = new QLineSeries();
-            series->append(0, 16);
-            series->append(1, 25);
-            series->append(2, 24);
-            series->append(3, 19);
-            series->append(4, 33);
-            series->append(5, 25);
-            series->append(6, 34);
+    series->append(0, 16);
+    series->append(1, 25);
+    series->append(2, 24);
+    series->append(3, 19);
+    series->append(4, 33);
+    series->append(5, 25);
+    series->append(6, 34);
 
     QChart *chart = new QChart();
-            chart->legend()->hide();
-            chart->addSeries(series);
-            chart->createDefaultAxes();
+    chart->legend()->hide();
+    chart->addSeries(series);
+    chart->createDefaultAxes();
+
+    //how to change theme
+    //ui->mainToolBar->setStyleSheet("* {background-color: blue}");
+    //ui->centralWidget->setStyleSheet("* {background-color: blue}");
 
     QChartView *chartView = new QChartView(chart);
-            chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setObjectName("chartyViewMcChartChart");
 
 
-    QBoxLayout *chartBoxLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    QBoxLayout *chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     chartBoxLayout->addWidget(chartView);
+
+    QBoxLayout *lineEditsLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+
+    QLabel* minL = new QLabel("MIN X Axis:");
+    lineEditsLayout->addWidget(minL);
+
+    QLineEdit* minLE = new QLineEdit();
+    minLE->setObjectName("minLE");
+    minLE->setValidator(new QRegExpValidator(QRegExp("[0-9]*")));
+    lineEditsLayout->addWidget(minLE);
+
+    QLabel* maxL = new QLabel("MAX X Axis:");
+    lineEditsLayout->addWidget(maxL);
+
+    QLineEdit* maxLE = new QLineEdit();
+    maxLE->setObjectName("maxLE");
+    //consider regex for real numbers
+    maxLE->setValidator(new QRegExpValidator(QRegExp("[0-9]*")));
+    lineEditsLayout->addWidget(maxLE);
+
+    QPushButton* submit = new QPushButton("submit");
+    lineEditsLayout->addWidget(submit);
+
+    QObject::connect(submit, SIGNAL(clicked()), this, SLOT(changeRange()));
+
+    chartBoxLayout->addLayout(lineEditsLayout);
+
     QGraphicsView* graphicsView = new QGraphicsView();
     graphicsView->setLayout(chartBoxLayout);
     QObject::connect(series, &QXYSeries::clicked, this, &MainWindow::onPointClick);
 
-    ui->tabWidget->addTab(graphicsView, "aca");
+    /*QBoxLayout *testButtonLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+
+    QPushButton* test = new QPushButton("test");
+    test->setObjectName("test");
+    testButtonLayout->addWidget(test);
+
+    QObject::connect(test, SIGNAL(clicked()), this, SLOT(changeRange()));
+
+    QWidget* tabWidget = new QWidget();
+    tabWidget->setLayout(testButtonLayout);*/
+
+    int index =  QString::fromStdString(_fileName).lastIndexOf("/");
+    ui->tabWidget->addTab(graphicsView, QString::fromStdString(_fileName).mid(index+1));
+
+    //QWidget* tab = ui->tabWidget->widget(tabIndex);
+    //tab->layout()->addWidget(tabWidget);
 
     //int index = fileName.lastIndexOf("/");
     //ui->tabWidget->addTab(textBrowser, fileName.mid(index+1));
-
 }
