@@ -44,16 +44,6 @@
       </widget>
      </widget>
     </item>
-    <item>
-     <widget class="QTextBrowser" name="textBrowser">
-      <property name="maximumSize">
-       <size>
-        <width>401</width>
-        <height>16777215</height>
-       </size>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -74,7 +64,6 @@
       <string>Open File</string>
      </property>
      <addaction name="actionOpen_Massif_File"/>
-     <addaction name="actionOpen_Code_File"/>
     </widget>
     <addaction name="menuOpen_File"/>
    </widget>

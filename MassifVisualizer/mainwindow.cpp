@@ -29,8 +29,6 @@
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
-
-//jel nam treba ovo?
 #include <QXYSeries>
 
 #include <QTextBrowser>
@@ -103,36 +101,10 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
 
 }
 
-void MainWindow::on_actionOpen_Code_File_triggered()
-{
-    QString fileName = QFileDialog::getOpenFileName(this,
-                              "Code File (code Lyoko)", "./", "*.*");
-
-    if (fileName.isEmpty())
-        return;
-
-    _codeFileName = fileName.toStdString();
-
-    std::ifstream in(fileName.toStdString());
-
-    std::string text;
-    std::string line;
-    while (std::getline(in, line)) {
-
-        line.append("\n");
-        text.append(line);
-    }
-    in.close();
-    QString text2;
-    text2 = QString::fromStdString(text);
-    ui->textBrowser->setText(text2);
-    //highlightLine(80);
-
-}
-
 void MainWindow::on_actionHelp_triggered()
 {
     QMessageBox msgBox;
+    msgBox.setWindowTitle("Help me Obi Van");
     msgBox.setText("You are on your own.");
     msgBox.exec();
 }
@@ -163,6 +135,35 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
 }
 
+void MainWindow::open_and_jump_code_file()
+{
+    QPushButton *button= qobject_cast<QPushButton * >(sender());
+
+    std::string fileName = button->text().split("#")[0].toStdString();
+    int jumpLine = std::atoi(button->text().split("#")[1].toStdString().c_str());
+
+
+    if (fileName.empty())
+        return;
+
+    _codeFileName = fileName;
+
+    std::ifstream in(fileName);
+
+    std::string text;
+    std::string line;
+    while (std::getline(in, line)) {
+
+        line.append("\n");
+        text.append(line);
+    }
+    in.close();
+    QString code = QString::fromStdString(text);
+    (ui->tabWidget->widget(ui->tabWidget->currentIndex())->findChild<QTextBrowser*>("codeTB"))->setText(code);
+    //ui->textBrowser->setText(code);
+    highlightLine(jumpLine);
+}
+
 void MainWindow::changeRange()
 {
     QWidget* tab = ui->tabWidget->widget(ui->tabWidget->currentIndex());
@@ -190,20 +191,71 @@ void MainWindow::changeRange()
 
     if(chartyView and (num_minLE < num_maxLE)){
 
-        chartyView->chart()->axisX()->setRange(num_minLE, num_maxLE);
+        chartyView->chart()->axes(Qt::Horizontal).back()->setRange(num_minLE, num_maxLE);
     }
-    //else maybe print a msg of failure
+    else {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Invalid axis range change error");
+        msgBox.setText("MIN X Axis needs to be less than MAX X Axis.\n To be not empty, they both need.");
+        msgBox.exec();
+    }
 
 }
 
 
 void MainWindow::highlightLine(int lineNumber)
 {
-    QTextCursor coursor(ui->textBrowser->document()->findBlockByLineNumber(lineNumber));
+    QTextBrowser* tb = ui->tabWidget->widget(ui->tabWidget->currentIndex())->findChild<QTextBrowser*>("codeTB");
+    QTextCursor coursor(tb->document()->findBlockByLineNumber(lineNumber));
     QTextBlockFormat frmt = coursor.blockFormat();
     frmt.setBackground(QBrush(Qt::yellow));
     coursor.setBlockFormat(frmt);
-    ui->textBrowser->setTextCursor(coursor);
+    tb->setTextCursor(coursor);
+}
+
+QBoxLayout* MainWindow::createChangeRangeLayout()
+{
+    QBoxLayout *lineEditsLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+
+    QLabel* minL = new QLabel("MIN X Axis:");
+    lineEditsLayout->addWidget(minL);
+
+    QLineEdit* minLE = new QLineEdit();
+    minLE->setObjectName("minLE");
+    minLE->setValidator(new QRegExpValidator(QRegExp("[0-9]*")));
+    lineEditsLayout->addWidget(minLE);
+
+    QLabel* maxL = new QLabel("MAX X Axis:");
+    lineEditsLayout->addWidget(maxL);
+
+    QLineEdit* maxLE = new QLineEdit();
+    maxLE->setObjectName("maxLE");
+    maxLE->setValidator(new QRegExpValidator(QRegExp("[0-9]*")));
+    lineEditsLayout->addWidget(maxLE);
+
+    QPushButton* submit = new QPushButton("submit");
+    lineEditsLayout->addWidget(submit);
+
+    QObject::connect(submit, SIGNAL(clicked()), this, SLOT(changeRange()));
+
+    return lineEditsLayout;
+}
+
+QBoxLayout *MainWindow::createSnapshotListLayout()
+{
+    QBoxLayout *generalSnapshotListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    QPushButton* generalPushButton1 = new QPushButton("button 1");
+    QPushButton* generalPushButton2 = new QPushButton("button 2");
+
+    generalPushButton1->setText("/home/student/Desktop/massif_example.c#3");
+
+    QObject::connect(generalPushButton1, SIGNAL(clicked()), this, SLOT(open_and_jump_code_file()));
+
+
+    generalSnapshotListLayout->addWidget(generalPushButton1);
+    generalSnapshotListLayout->addWidget(generalPushButton2);
+
+    return generalSnapshotListLayout;
 }
 
 
@@ -216,7 +268,6 @@ void MainWindow::createMenus()
     recentFilesMenu->addAction(clearRecentFiles);
 
     recentFilesMenu->addSeparator();
-
 
     for(unsigned long i = 0; i < _numRecent; i++){
         QAction* recentFile = new QAction(this);
@@ -261,19 +312,18 @@ void MainWindow::parseRecentFiles()
     std::vector<std::string>::const_iterator end = allRecentFiles.end();
     _recentFiles = std::vector<std::string>(begin, end);
 
-
 }
 
 void MainWindow::createGraph()
 {
 
     QLineSeries *series = new QLineSeries();
-    series->append(0, 16);
-    series->append(1, 25);
-    series->append(2, 24);
-    series->append(3, 19);
-    series->append(4, 33);
-    series->append(5, 25);
+    series->append(0, 10);
+    series->append(1, 11);
+    series->append(2, 12);
+    series->append(3, 100);
+    series->append(4, 101);
+    series->append(5, 100);
     series->append(6, 34);
 
     QChart *chart = new QChart();
@@ -289,57 +339,29 @@ void MainWindow::createGraph()
     chartView->setRenderHint(QPainter::Antialiasing);
     chartView->setObjectName("chartyViewMcChartChart");
 
-
     QBoxLayout *chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     chartBoxLayout->addWidget(chartView);
 
-    QBoxLayout *lineEditsLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-
-    QLabel* minL = new QLabel("MIN X Axis:");
-    lineEditsLayout->addWidget(minL);
-
-    QLineEdit* minLE = new QLineEdit();
-    minLE->setObjectName("minLE");
-    minLE->setValidator(new QRegExpValidator(QRegExp("[0-9]*")));
-    lineEditsLayout->addWidget(minLE);
-
-    QLabel* maxL = new QLabel("MAX X Axis:");
-    lineEditsLayout->addWidget(maxL);
-
-    QLineEdit* maxLE = new QLineEdit();
-    maxLE->setObjectName("maxLE");
-    //consider regex for real numbers
-    maxLE->setValidator(new QRegExpValidator(QRegExp("[0-9]*")));
-    lineEditsLayout->addWidget(maxLE);
-
-    QPushButton* submit = new QPushButton("submit");
-    lineEditsLayout->addWidget(submit);
-
-    QObject::connect(submit, SIGNAL(clicked()), this, SLOT(changeRange()));
-
-    chartBoxLayout->addLayout(lineEditsLayout);
+    chartBoxLayout->addLayout(createChangeRangeLayout());
 
     QGraphicsView* graphicsView = new QGraphicsView();
     graphicsView->setLayout(chartBoxLayout);
     QObject::connect(series, &QXYSeries::clicked, this, &MainWindow::onPointClick);
 
-    /*QBoxLayout *testButtonLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    QBoxLayout *generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    generalTabLayout->addWidget(graphicsView);
 
-    QPushButton* test = new QPushButton("test");
-    test->setObjectName("test");
-    testButtonLayout->addWidget(test);
+    generalTabLayout->addLayout(createSnapshotListLayout());
 
-    QObject::connect(test, SIGNAL(clicked()), this, SLOT(changeRange()));
+    QTextBrowser* codeTB = new QTextBrowser();
+    codeTB->setObjectName("codeTB");
 
-    QWidget* tabWidget = new QWidget();
-    tabWidget->setLayout(testButtonLayout);*/
+    generalTabLayout->addWidget(codeTB);
+
+    QWidget* generalTabWidget = new QWidget();
+    generalTabWidget->setLayout(generalTabLayout);
 
     int index =  QString::fromStdString(_fileName).lastIndexOf("/");
-    ui->tabWidget->addTab(graphicsView, QString::fromStdString(_fileName).mid(index+1));
+    ui->tabWidget->addTab(generalTabWidget, QString::fromStdString(_fileName).mid(index+1));
 
-    //QWidget* tab = ui->tabWidget->widget(tabIndex);
-    //tab->layout()->addWidget(tabWidget);
-
-    //int index = fileName.lastIndexOf("/");
-    //ui->tabWidget->addTab(textBrowser, fileName.mid(index+1));
 }

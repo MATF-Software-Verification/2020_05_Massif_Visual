@@ -11,6 +11,8 @@ namespace Ui {
 class MainWindow;
 }
 
+#include <QBoxLayout>
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -23,7 +25,6 @@ private slots:
 
     void changeRange();
     void on_actionOpen_Massif_File_triggered();
-    void on_actionOpen_Code_File_triggered();
     void on_actionHelp_triggered();
     void on_actionOpen_recent_triggered();
     void openRecent();
@@ -31,6 +32,7 @@ private slots:
     void quit();
     void onPointClick();
     void on_tabWidget_tabCloseRequested(int index);
+    void open_and_jump_code_file();
 
 
 private:
@@ -49,6 +51,8 @@ private:
     void parseRecentFiles();
     void createGraph();
     void highlightLine(int lineNumber);
+    QBoxLayout* createChangeRangeLayout();
+    QBoxLayout* createSnapshotListLayout();
 };
 
 #endif // MAINWINDOW_H
