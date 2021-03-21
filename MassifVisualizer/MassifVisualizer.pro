@@ -29,13 +29,15 @@ SOURCES += \
         mainwindow.cpp \
     parse-massif-file/parser-massif.cpp \
     parse-massif-file/snapshotitem.cpp \
-    parse-massif-file/heaptreeitem.cpp
+    parse-massif-file/heaptreeitem.cpp \
+    helper-functions.cpp
 
 HEADERS += \
         mainwindow.h \
     parse-massif-file/parser-massif.h \
     parse-massif-file/snapshotitem.h \
-    parse-massif-file/heaptreeitem.h
+    parse-massif-file/heaptreeitem.h \
+    helper-functions.h
 
 FORMS += \
         mainwindow.ui

@@ -1,4 +1,5 @@
 #include "parser-massif.h"
+#include "helper-functions.h"
 
 ParserMassif::ParserMassif()
 {
@@ -10,6 +11,18 @@ ParserMassif::ParserMassif(std::string inputFileName)
 {
 
 }
+
+ParserMassif::~ParserMassif()
+{
+    for (SnapshotItem* si: _snapshotItems) {
+        delete si;
+    }
+    // TODO: napisati obican c++ program van Qt i pokrenuti Valgrind --massif
+    // u kom ce se meriti da li se poziva default destruktor za mapu
+    // default destructor for a map containing primitive types will free memory
+    // _descArgs
+}
+
 
 /*
     desc: --massif-out-file=izlaz_masif
@@ -44,26 +57,36 @@ void ParserMassif::parseMassifOutput()
         while (std::getline(inputFile, line)) {
             //std::cout << line << '\n';
             if (!line.compare(0, 8, "snapshot")) {
+                lines.clear();
+
+                SnapshotItem* newSnapshot = new SnapshotItem;
+
                 // to extract snapshot=#
-                parseSnapshotNumberLine(line);
+                uint snapshotNum = parseSnapshotNumberLine(line);
+                newSnapshot->setSnapshotNum(snapshotNum);
+
                 // to swallow this: #-----------
                 std::getline(inputFile, line);
 
                 // to extract time=#
                 std::getline(inputFile, line);
-                parseTimeValueLine(line);
+                double timeValue = parseTimeValueLine(line);
+                newSnapshot->setTime(timeValue);
 
                 // to extract mem_heap_B=#
                 std::getline(inputFile, line);
-                parseMemHeapBLine(line);
+                quint64 memHeapB = parseMemHeapBLine(line);
+                newSnapshot->setMemHeapB(memHeapB);
 
                 // to extract mem_heap_extra_B=#
                 std::getline(inputFile, line);
-                parseMemHeapExtraBLine(line);
+                quint64 memHeapExtraB = parseMemHeapExtraBLine(line);
+                newSnapshot->setMemHeapExtraB(memHeapExtraB);
 
                 // to extract mem_stacks_B=#
                 std::getline(inputFile, line);
-                parseMemStacksBLine(line);
+                quint64 memStacksB = parseMemStacksBLine(line);
+                newSnapshot->setMemHeapB(memStacksB);
 
                 // to extract heap_tree
                 std::getline(inputFile, line);
@@ -76,7 +99,6 @@ void ParserMassif::parseMassifOutput()
                     std::cout << "Heap tree is not empty here." << std::endl;
                     std::cout << line << std::endl;
 
-                    lines.empty();
                     /*
                      * push_back("foo") constructs a temporary string from the string literal,
                      * and then moves that string into the container, whereas emplace_back("foo")
@@ -87,8 +109,17 @@ void ParserMassif::parseMassifOutput()
                         lines.emplace_back(line);
                         std::getline(inputFile, line);
                     }
-                    parseHeapTreeLines(lines);
+                    std::pair<std::string, HeapTreeItem*> returnTypeAndHeapTree = parseHeapTreeLines(lines);
+                    if (!returnTypeAndHeapTree.first.compare("detailed")) {
+                        newSnapshot->setTreeType(HeapTreeType::DETAILED);
+                    }
+                    else {
+                        newSnapshot->setTreeType(HeapTreeType::PEAK);
+                    }
+
+                    newSnapshot->setHeapTreeItem(returnTypeAndHeapTree.second);
                 }
+                _snapshotItems.push_back(newSnapshot);
             }
         }
         inputFile.close();
@@ -144,50 +175,73 @@ void ParserMassif::parseDescLine(const std::string &line)
         std::string value = trim(arguments.at(i).substr(equalPos+delimiter.size()));
 
         _descArgs[key] = trim(value);
-        }
     }
 }
 
 void ParserMassif::parseCmdLine(const std::string &line)
 {
      std::cout << "Cmd line: " << line << std::endl;
+     std::string target = "./";
+     size_t start = line.find_first_of(target);
+     _exeFile = trim(line.substr(start+target.size()));
 }
 
 void ParserMassif::parseTimeUnitLine(const std::string &line)
 {
     std::cout << "Time unit line: " << line << std::endl;
+    std::string target = ":";
+    _timeUnit = line.substr(line.find(target)+target.size());
 }
 
-void ParserMassif::parseSnapshotNumberLine(const std::string &line)
+uint ParserMassif::parseSnapshotNumberLine(const std::string &line)
 {
     std::cout << "Snapshot line: " << line << std::endl;
+    uint snapshotNum = static_cast<uint>(std::stoi(trim(line.substr(line.find("=")+1))));
+    return snapshotNum;
 }
 
-void ParserMassif::parseTimeValueLine(const std::string &line)
+double ParserMassif::parseTimeValueLine(const std::string &line)
 {
     std::cout << "Time Value line: " << line << std::endl;
+    double timeValue = std::stod(trim(line.substr(line.find("=")+1)));
+    return timeValue;
 }
 
-void ParserMassif::parseMemHeapBLine(const std::string &line)
+quint64 ParserMassif::parseMemHeapBLine(const std::string &line)
 {
     std::cout << "Mem heap B line: " << line << std::endl;
+    quint64 memHeapB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
+    return memHeapB;
 }
 
-void ParserMassif::parseMemHeapExtraBLine(const std::string &line)
+quint64 ParserMassif::parseMemHeapExtraBLine(const std::string &line)
 {
     std::cout << "Mem heap extra B line: " << line << std::endl;
+    quint64 memHeapExtraB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
+    return memHeapExtraB;
 }
 
-void ParserMassif::parseMemStacksBLine(const std::string &line)
+quint64 ParserMassif::parseMemStacksBLine(const std::string &line)
 {
     std::cout << "Mem stacks B line: " << line << std::endl;
+    quint64 memStacksB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
+    return memStacksB;
 }
 
-void ParserMassif::parseHeapTreeLines(std::vector<std::string> &lines)
+std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vector<std::string> &lines)
 {
-    std::cout << "Heap tree lines: " << std::endl;
+    HeapTreeItem* newHeapTree = new HeapTreeItem;
+    std::pair<std::string, HeapTreeItem*> returnTypeAndHeapTree;
 
-    for (auto line : lines) {
-        std::cout << line << std::endl;
-    }
+    std::cout << "Heap tree lines: " << std::endl;
+    std::string target = "=";
+    std::string treeType = lines[0].substr(lines[0].find(target)+target.size());
+    returnTypeAndHeapTree.first = treeType;
+
+//    for (auto line : lines) {
+//        std::cout << line << std::endl;
+//    }
+
+    returnTypeAndHeapTree.second = newHeapTree;
+    return returnTypeAndHeapTree;
 }

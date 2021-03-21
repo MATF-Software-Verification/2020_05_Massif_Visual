@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <utility>
 #include "./snapshotitem.h"
 
 class ParserMassif
@@ -13,6 +14,7 @@ class ParserMassif
 public:
     ParserMassif();
     ParserMassif(std::string inputFileName);
+    ~ParserMassif();
 
     void parseMassifOutput();
     void parseMsPrintOutput();
@@ -27,18 +29,18 @@ private:
     std::string _exeFile;
     std::string _timeUnit;
 
-    std::vector<SnapshotItem*> snapshotItems;
+    std::vector<SnapshotItem*> _snapshotItems;
 
     void parseDescLine(const std::string &line);
     void parseCmdLine(const std::string &line);
     void parseTimeUnitLine(const std::string &line);
 
-    void parseSnapshotNumberLine(const std::string &line);
-    void parseTimeValueLine(const std::string &line);
-    void parseMemHeapBLine(const std::string &line);
-    void parseMemHeapExtraBLine(const std::string &line);
-    void parseMemStacksBLine(const std::string &line);
-    void parseHeapTreeLines(std::vector<std::string> &lines);
+    uint parseSnapshotNumberLine(const std::string &line);
+    double parseTimeValueLine(const std::string &line);
+    quint64 parseMemHeapBLine(const std::string &line);
+    quint64 parseMemHeapExtraBLine(const std::string &line);
+    quint64 parseMemStacksBLine(const std::string &line);
+    std::pair<std::string, HeapTreeItem*> parseHeapTreeLines(std::vector<std::string> &lines);
 };
 
 #endif // PARSERMASSIF_H
