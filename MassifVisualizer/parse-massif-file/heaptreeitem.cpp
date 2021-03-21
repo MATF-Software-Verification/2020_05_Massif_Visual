@@ -10,9 +10,17 @@ HeapTreeItem::HeapTreeItem()
 {
 
 }
+
 HeapTreeItem::~HeapTreeItem()
 {
-    //TODO: delete all children and test that
+    for (HeapTreeItem* child: _children) {
+        delete child;
+        child = nullptr;
+    }
+    _children.clear();
+    // we are not going to call delete _mother
+    // because it has already been called
+    _mother = nullptr;
 }
 
 uint HeapTreeItem::numOfDirectChildren() const
