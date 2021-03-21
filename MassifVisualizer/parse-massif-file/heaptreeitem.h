@@ -26,6 +26,7 @@ public:
     void setMother(HeapTreeItem *mother);
     void setNumOfDirectChildren(const uint &numOfDirectChildren);
     void setMemoryAlloc(const quint64 &memoryAlloc);
+    void setMemoryAddr(const std::string &memoryAddr);
     void setFileName(const std::string &fileName);
     void setFuncName(const std::string &funcName);
     void setLineNum(const uint &lineNum);
@@ -35,6 +36,7 @@ public:
 private:
     uint _numOfDirectChildren;
     quint64 _memoryAlloc;
+    std::string _memoryAddr;
     std::string _fileName;
     std::string _funcName;
     uint _lineNum;

@@ -4,6 +4,12 @@
 #include <qglobal.h>
 #include "./heaptreeitem.h"
 
+enum class HeapTreeType {
+    EMPTY,
+    DETAILED,
+    PEAK
+};
+
 class SnapshotItem
 {
 public:
@@ -28,6 +34,8 @@ public:
     HeapTreeItem *heapTreeItem() const;
     void setHeapTreeItem(HeapTreeItem *heapTreeItem);
 
+    void setTreeType(const HeapTreeType &treeType);
+
 private:
     uint _snapshotNum;
 
@@ -37,6 +45,7 @@ private:
     quint64 _memHeapExtraB;
     quint64 _memStacksB;
 
+     HeapTreeType _treeType;
     HeapTreeItem* _heapTreeItem;
 };
 

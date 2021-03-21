@@ -6,6 +6,7 @@ SnapshotItem::SnapshotItem()
       _memHeapB(0),
       _memHeapExtraB(0),
       _memStacksB(0),
+      _treeType(HeapTreeType::EMPTY),
       _heapTreeItem(nullptr)
 {
 
@@ -75,3 +76,9 @@ void SnapshotItem::setHeapTreeItem(HeapTreeItem *heapTreeItem)
 {
     _heapTreeItem = heapTreeItem;
 }
+
+void SnapshotItem::setTreeType(const HeapTreeType &treeType)
+{
+    _treeType = treeType;
+}
+

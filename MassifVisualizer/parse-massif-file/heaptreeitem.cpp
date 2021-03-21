@@ -43,6 +43,11 @@ void HeapTreeItem::setMemoryAlloc(const quint64 &memoryAlloc)
     _memoryAlloc = memoryAlloc;
 }
 
+void HeapTreeItem::setMemoryAddr(const std::string &memoryAddr)
+{
+    _memoryAddr = memoryAddr;
+}
+
 std::string HeapTreeItem::fileName() const
 {
     return _fileName;
