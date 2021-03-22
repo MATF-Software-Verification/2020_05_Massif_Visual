@@ -26,10 +26,14 @@ CONFIG += c++17
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        gui-assets/snapshotlistbutton.cpp \
+    gui-assets/generaltabwidget.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        gui-assets/snapshotlistbutton.h \
+    gui-assets/generaltabwidget.h
 
 FORMS += \
         mainwindow.ui
@@ -38,3 +42,8 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    assets/recentFiles.txt \
+    assets/bugReport.gif
+

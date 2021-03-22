@@ -1,17 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <vector>
+
 #include <QMainWindow>
 #include <QList>
 
-#include <vector>
-#include <QLineEdit>
+#include "gui-assets/generaltabwidget.h"
 
 namespace Ui {
 class MainWindow;
 }
-
-#include <QBoxLayout>
 
 class MainWindow : public QMainWindow
 {
@@ -23,18 +22,14 @@ public:
 
 private slots:
 
-    void changeRange();
     void on_actionOpen_Massif_File_triggered();
     void on_actionHelp_triggered();
     void on_actionOpen_recent_triggered();
     void openRecent();
     void clearRecent();
     void quit();
-    void onPointClick();
     void on_tabWidget_tabCloseRequested(int index);
-    void open_and_jump_code_file();
-
-
+    void on_actionReport_Bug_triggered();
 private:
 
     Ui::MainWindow *ui;
@@ -46,13 +41,15 @@ private:
     std::vector<std::string> _recentFiles;
     std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
     QList<QAction*> _recentFileActionList;
+
+    void visualizeData(QString fileName);
     void createMenus();
     void updateMenus();
     void parseRecentFiles();
-    void createGraph();
-    void highlightLine(int lineNumber);
-    QBoxLayout* createChangeRangeLayout();
-    QBoxLayout* createSnapshotListLayout();
 };
 
 #endif // MAINWINDOW_H
+
+//how to change theme
+//ui->mainToolBar->setStyleSheet("* {background-color: blue}");
+//ui->centralWidget->setStyleSheet("* {background-color: blue}");
