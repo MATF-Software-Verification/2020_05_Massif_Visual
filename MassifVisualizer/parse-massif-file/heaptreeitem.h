@@ -15,6 +15,7 @@ public:
 
     uint numOfDirectChildren() const;
     quint64 memoryAlloc() const;
+    std::string memoryAddr() const;
     std::string fileName() const;
     std::string funcName() const;
     uint lineNum() const;
@@ -31,8 +32,7 @@ public:
     void setFuncName(const std::string &funcName);
     void setLineNum(const uint &lineNum);
 
-    quint64 heapTreeSum();
-
+    quint64 heapTreeSum();    
 private:
     uint _numOfDirectChildren;
     quint64 _memoryAlloc;

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <regex>
 #include <string>
 #include <vector>
 #include <map>
@@ -18,6 +19,8 @@ public:
 
     void parseMassifOutput();
     void parseMsPrintOutput();
+
+    std::vector<SnapshotItem *> snapshotItems() const;
 
 private:
     std::string _inputFileName;
