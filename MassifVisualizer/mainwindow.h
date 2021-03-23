@@ -23,13 +23,22 @@ public:
 private slots:
 
     void on_actionOpen_Massif_File_triggered();
+
     void on_actionHelp_triggered();
+    void on_actionReport_Bug_triggered();
+
     void on_actionOpen_recent_triggered();
     void openRecent();
     void clearRecent();
-    void quit();
+
     void on_tabWidget_tabCloseRequested(int index);
-    void on_actionReport_Bug_triggered();
+
+    void on_actionDefault_triggered();
+    void on_actionBright_theme_triggered();
+    void on_actionPsychedelic_theme_triggered();
+
+    void quit();
+
 private:
 
     Ui::MainWindow *ui;
@@ -46,10 +55,7 @@ private:
     void createMenus();
     void updateMenus();
     void parseRecentFiles();
+    void setDefaultTheme();
 };
 
 #endif // MAINWINDOW_H
-
-//how to change theme
-//ui->mainToolBar->setStyleSheet("* {background-color: blue}");
-//ui->centralWidget->setStyleSheet("* {background-color: blue}");

@@ -53,7 +53,7 @@ void GeneralTabWidget::highlightLine(unsigned lineNumber)
 {
     QTextCursor coursor(_codeTextBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNumber)));
     QTextBlockFormat frmt = coursor.blockFormat();
-    frmt.setBackground(QBrush(Qt::yellow));
+    frmt.setBackground(QBrush(QColor(255, 128, 0)));
     coursor.setBlockFormat(frmt);
     _codeTextBrowser->setTextCursor(coursor);
 }
@@ -74,6 +74,7 @@ void GeneralTabWidget::createChart()
     _chart->legend()->hide();
     _chart->addSeries(series);
     _chart->createDefaultAxes();
+    _chart->setTheme(QChart::ChartThemeBrownSand);
 }
 
 void GeneralTabWidget::createChartView()

@@ -10,6 +10,8 @@
 #include <QInputDialog>
 #include <QDialogButtonBox>
 #include <QMovie>
+#include <QRandomGenerator>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,6 +31,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tabWidget->removeTab(0);
     ui->tabWidget->removeTab(0);
+    this->resize(1000, 600);
+    this->setWindowTitle("MassifCorn");
+
+    setDefaultTheme();
 }
 
 MainWindow::~MainWindow()
@@ -63,8 +69,7 @@ void MainWindow::on_actionReport_Bug_triggered()
     std::string title = "So you wanted to report a bug?";
     std::string description = "Describe in detail the bug that you have ecountered... "
                    "Your description matters to us! "
-                   "The more you write the more effective we will be in solving the bug! "
-                   "Consider that when writing";
+                   "The more you write the more effective we will be in solving the bug! ";
     std::string input = "Are you sure you've really found a bug?";
 
     bool ok;
@@ -76,8 +81,14 @@ void MainWindow::on_actionReport_Bug_triggered()
 
         QMovie *movie = new QMovie("../MassifVisualizer/assets/bugReport.gif");
         QLabel *processLabel = new QLabel(this);
-        ui->tabWidget->addTab(processLabel, "bug report procedure");
+        QWidget *wdg = new QWidget;
+
+        processLabel->setParent(wdg);
+        processLabel->setFixedSize(700, 300);
         processLabel->setMovie(movie);
+        wdg->setWindowTitle("Your bug report is being processed...");
+        wdg->show();
+
         movie->start();
     }
 
@@ -186,4 +197,62 @@ void MainWindow::parseRecentFiles()
     std::vector<std::string>::const_iterator end = allRecentFiles.end();
     _recentFiles = std::vector<std::string>(begin, end);
 
+}
+
+void MainWindow::setDefaultTheme()
+{
+
+
+    //QString pushButtnoPressed = "QPushButton:pressed { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))}";
+    QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
+    QString pushButtonStyle = "QPushButton { background-color: #ff8000; border: 1px solid #ff8000; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
+    //QString backgroungOfElements = "* {background-color: rgba(60, 186, 162, 255)}";
+    QString backgroundOfElements = "* {background-color: #4d4d4d}";
+    QString textColor = "* {color: white}";
+    QString lineEditBackground = "QLineEdit {background-color: #262626}";
+    QString labelText = "QLabel {color: #ff8000; font-size: 12pt; font-weight: bold}";
+    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + backgroundOfElements + "\n" + textColor
+                        + "\n" + lineEditBackground + "\n" + labelText);
+}
+
+void MainWindow::on_actionDefault_triggered()
+{
+    setDefaultTheme();
+}
+
+void MainWindow::on_actionBright_theme_triggered()
+{
+    QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
+    QString pushButtonStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
+    QString backgroundOfElements = "* {background-color: #f2f2f2}";
+    QString textColor = "* {color: black}";
+    QString lineEditBackground = "QLineEdit {background-color: #ffe6cc}";
+    QString labelText = "QLabel {color: black; font-size: 12pt; font-weight: bold}";
+
+    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + backgroundOfElements + "\n" + textColor
+                        + "\n" + lineEditBackground + "\n" + labelText);
+
+}
+
+void MainWindow::on_actionPsychedelic_theme_triggered()
+{
+    int backgroundRed = QRandomGenerator::global()->bounded(255);
+    int backgroundGreen = QRandomGenerator::global()->bounded(255);
+    int backgroundBlue = QRandomGenerator::global()->bounded(255);
+    int textColorRed = 255-backgroundRed;
+    int textColorGreen = 255-backgroundGreen;
+    int textColorBlue = 255-backgroundBlue;
+    //maybe add theme colors for QWidget
+
+    QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
+    QString pushButtonStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); padding: 3px; font-size: 12pt; font-weight: bold}";
+    QString backgroundOfElements = "* {background-color: rgba(" + QString::number(backgroundRed) + "," + QString::number(backgroundGreen)  + "," + QString::number(backgroundBlue) + ", 1)}";
+    QString textColor = "* {color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); font-weight: bold}";
+    std::cout << backgroundOfElements.toStdString() << std::endl;
+    std::cout << textColor.toStdString() << std::endl;
+    QString lineEditBackground = "QLineEdit {background-color: #ffe6cc}";
+    QString labelText = "QLabel {color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); font-size: 12pt; font-weight: bold}";
+
+    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + backgroundOfElements + "\n" + textColor
+                        + "\n" + lineEditBackground + "\n" + labelText);
 }
