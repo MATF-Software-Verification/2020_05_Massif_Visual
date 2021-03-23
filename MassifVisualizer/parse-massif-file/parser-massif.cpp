@@ -238,9 +238,27 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
     std::string treeType = lines[0].substr(lines[0].find(target)+target.size());
     returnTypeAndHeapTree.first = treeType;
 
-//    for (auto line : lines) {
-//        std::cout << line << std::endl;
-//    }
+//n3: 10000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+// n2: 8000 0x109161: g (massif.c:5)
+//  n1: 4000 0x109177: f (massif.c:11)
+//   n0: 4000 0x1091C0: main (massif.c:23)
+//  n0: 4000 0x1091C5: main (massif.c:24)
+// n1: 2000 0x109172: f (massif.c:10)
+//  n0: 2000 0x1091C0: main (massif.c:23)
+// n0: 0 in 1 place, below massif's threshold (1.00%)
+
+    lines.erase(lines.begin());
+    for (auto line : lines) {
+        std::cout << line << std::endl;
+        HeapTreeItem* newTree = new HeapTreeItem;
+
+        size_t posN = line.find("n");
+        size_t posTwoDots = line.find(":");
+        uint numOfDirectChildren = static_cast<uint>(std::stoi(line.substr(posN+1, posTwoDots-posN-1)));
+        newTree->setNumOfDirectChildren(numOfDirectChildren);
+
+
+    }
 
     returnTypeAndHeapTree.second = newHeapTree;
     return returnTypeAndHeapTree;
