@@ -33,7 +33,19 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
         gui-assets/snapshotlistbutton.h \
-    gui-assets/generaltabwidget.h
+    gui-assets/generaltabwidget.h \
+    parse-massif-file/parser-massif.cpp \
+    parse-massif-file/snapshotitem.cpp \
+    parse-massif-file/heaptreeitem.cpp \
+    helper-functions.cpp
+
+HEADERS += \
+        mainwindow.h \
+    parse-massif-file/parser-massif.h \
+    parse-massif-file/snapshotitem.h \
+    parse-massif-file/heaptreeitem.h \
+    helper-functions.h \
+    feature/parse-massif-file
 
 FORMS += \
         mainwindow.ui
