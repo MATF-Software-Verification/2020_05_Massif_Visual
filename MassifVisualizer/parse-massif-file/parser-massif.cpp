@@ -123,10 +123,6 @@ void ParserMassif::parseMassifOutput()
             }
         }
         inputFile.close();
-        for (auto item: _snapshotItems)
-            if(item->heapTreeItem()){
-                std::cout <<" snapshot = " << item->heapTreeItem()->children().size() << std::endl;
-            }
     }
     else {
         std::cout << "File is not opened." << std::endl;
@@ -242,7 +238,6 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
     HeapTreeItem* newHeapTree = new HeapTreeItem;
     std::pair<std::string, HeapTreeItem*> returnTypeAndHeapTree;
 
-    std::cout << "Heap tree lines: " << std::endl;
     std::string target = "=";
     std::string treeType = lines[0].substr(lines[0].find(target)+target.size());
     returnTypeAndHeapTree.first = treeType;
@@ -265,7 +260,6 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
 
     auto currentMother = newHeapTree;
     for (auto line : lines) {
-        //std::cout << line << std::endl;
         HeapTreeItem* newTree = new HeapTreeItem;
 
         size_t posN = line.find("n");
@@ -299,56 +293,14 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
             uint lineNum = static_cast<uint>(std::stoi(trim(line.substr(start+1, end-start-1))));
             newTree->setLineNum(lineNum);
         }
-        //n3
-        // n2: 8000 0x109161: g (massif.c:5)
-        //  n1: 4000 0x109177: f (massif.c:11)
-        //   n0: 4000 0x1091C0: main (massif.c:23)
-        //  n0: 4000 0x1091C5: main (massif.c:24)
-        // n1: 2000 0x109172: f (massif.c:10)
-        //  n0: 2000 0x1091C0: main (massif.c:23)
-        // n0: 0 in 1 place, below massif's threshold (1.00%)
+        while(currentMother->children().size() == currentMother->numOfDirectChildren()){
+            currentMother = currentMother->mother();
+        }
+        currentMother->addChild(newTree);
+
         if(numOfDirectChildren != 0) {
-            newTree->setMother(currentMother);
-            currentMother->children().push_back(newTree);
             currentMother = newTree;
         }
-        else {
-            while(currentMother->children().size() == currentMother->numOfDirectChildren()){
-                currentMother = currentMother->mother();
-            }
-            currentMother->children().push_back(newTree);
-            newTree->setMother(currentMother);
-        }
-
-
-        /* too slow */
-//        std::regex memoryRegExp("\\s+[1-9][0-9]*\\s+");
-//        std::smatch m;
-//        std::regex_search(line, m, memoryRegExp);
-//        quint64 memoryAlloc = static_cast<quint64>(std::stoi(trim(m[0])));
-//        newTree->setMemoryAlloc(memoryAlloc);
-
-//        std::regex addrRegExp("0x[0-9]+");
-//        std::regex_search(line, m, addrRegExp);
-//        std::string memoryAddr = m[0];
-//        // for the first and the last line the search returns empty string
-//        // because there isn't address info for these lines
-//        newTree->setMemoryAddr(memoryAddr);
-
-//        std::regex fileNameRegExp("\\((\\S+\\.\\S+):[1-9][0-9]*\\)");
-//        std::regex_search(line, m, fileNameRegExp);
-//        std::string fileName = m[1];
-//        // for the first and the last line the search returns empty string
-//        // because there isn't fileName info for these lines
-//        newTree->setFileName(fileName);
-
-        /* also slow??? */
-//        std::regex whitespaces("[\\s]+");
-//        std::sregex_token_iterator it(line.begin(), line.end(), whitespaces, -1);
-//        std::sregex_token_iterator reg_end;
-//        for (; it != reg_end; ++it) {
-//             std::cout << it->str() << std::endl;
-//        }
     }
 
     returnTypeAndHeapTree.second = newHeapTree;
