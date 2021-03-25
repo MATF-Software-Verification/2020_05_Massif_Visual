@@ -86,7 +86,7 @@ void ParserMassif::parseMassifOutput()
                 // to extract mem_stacks_B=#
                 std::getline(inputFile, line);
                 quint64 memStacksB = parseMemStacksBLine(line);
-                newSnapshot->setMemHeapB(memStacksB);
+                newSnapshot->setMemStacksB(memStacksB);
 
                 // to extract heap_tree
                 std::getline(inputFile, line);

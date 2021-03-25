@@ -45,7 +45,7 @@ private:
     quint64 _memHeapExtraB;
     quint64 _memStacksB;
 
-     HeapTreeType _treeType;
+    HeapTreeType _treeType;
     HeapTreeItem* _heapTreeItem;
 };
 
