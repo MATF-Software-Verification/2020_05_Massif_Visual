@@ -79,7 +79,7 @@ void MainWindow::on_actionReport_Bug_triggered()
     if (ok && !text.isEmpty()){
 
 
-        QMovie *movie = new QMovie("../MassifVisualizer/assets/bugReport.gif");
+        QMovie *movie = new QMovie("../MassifVisualizer/assets/trash.gif");
         QLabel *processLabel = new QLabel(this);
         QWidget *wdg = new QWidget;
 
