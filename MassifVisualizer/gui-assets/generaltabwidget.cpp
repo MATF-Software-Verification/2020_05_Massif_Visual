@@ -1,7 +1,10 @@
 #include "generaltabwidget.h"
 
-GeneralTabWidget::GeneralTabWidget(QWidget *parent) : QWidget(parent)
+GeneralTabWidget::GeneralTabWidget(QWidget *parent, std::string fileName)
+    : QWidget(parent),
+      _fileName(fileName)
 {
+    _parser = new ParserMassif(fileName);
     createGraph();
 }
 
@@ -62,14 +65,13 @@ void GeneralTabWidget::createChart()
 {
     //TODO: this will look completely different
     QLineSeries *series = new QLineSeries();
-    series->append(0, 10);
-    series->append(1, 11);
-    series->append(2, 12);
-    series->append(3, 100);
-    series->append(4, 101);
-    series->append(5, 100);
-    series->append(6, 34);
 
+    _parser->parseMassifOutput();
+    for (SnapshotItem* snapshot : _parser->snapshotItems()) {
+        uint xValue = snapshot->snapshotNum();
+        quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
+        series->append(xValue, yValue);
+    }
     _chart = new QChart();
     _chart->legend()->hide();
     _chart->addSeries(series);

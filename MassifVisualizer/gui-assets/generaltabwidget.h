@@ -17,6 +17,7 @@
 #include <QTextBlock>
 
 #include "snapshotlistbutton.h"
+#include "parse-massif-file/parser-massif.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -24,7 +25,8 @@ class GeneralTabWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GeneralTabWidget(QWidget *parent = nullptr);
+    explicit GeneralTabWidget(QWidget *parent = nullptr,
+                              std::string fileName = "");
 
 signals:
 
@@ -52,7 +54,7 @@ private:
     QLineEdit* _minLE;
     QLineEdit* _maxLE;
     QTextBrowser* _codeTextBrowser;
-
+    ParserMassif* _parser;
     std::string _fileName;
 
     void highlightLine(unsigned lineNumber);

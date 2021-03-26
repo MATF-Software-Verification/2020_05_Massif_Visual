@@ -141,7 +141,7 @@ void MainWindow::visualizeData(QString fileName)
     //TODO: visualize the data
     int indexx =  QString::fromStdString(_fileName).lastIndexOf("/");
 
-    int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(), QString::fromStdString(_fileName).mid(indexx+1));
+    int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, _fileName), QString::fromStdString(_fileName).mid(indexx+1));
     ui->tabWidget->setCurrentIndex(indexxx);
 }
 

@@ -55,7 +55,6 @@ void ParserMassif::parseMassifOutput()
         std::getline(inputFile, line);
 
         while (std::getline(inputFile, line)) {
-            //std::cout << line << '\n';
             if (!line.compare(0, 8, "snapshot")) {
                 lines.clear();
 
@@ -91,14 +90,10 @@ void ParserMassif::parseMassifOutput()
                 // to extract heap_tree
                 std::getline(inputFile, line);
                 if (!line.compare("heap_tree=empty")) {
-                    std::cout << "Heap tree is empty here." << std::endl;
                     // to swallow this: #-----------
                     std::getline(inputFile, line);
                 }
                 else {
-                    std::cout << "Heap tree is not empty here." << std::endl;
-                    std::cout << line << std::endl;
-
                     /*
                      * push_back("foo") constructs a temporary string from the string literal,
                      * and then moves that string into the container, whereas emplace_back("foo")
@@ -150,7 +145,6 @@ std::vector<SnapshotItem *> ParserMassif::snapshotItems() const
 
 void ParserMassif::parseDescLine(const std::string &line)
 {
-    std::cout << "Desc line: " << line << std::endl;
     //    std::string lineCopy("desc: --massif-out-line=andja --alloc-func=bla --traa=tralal");
     std::string delimiter = "--";
     std::vector<size_t> positions;
@@ -185,7 +179,6 @@ void ParserMassif::parseDescLine(const std::string &line)
 
 void ParserMassif::parseCmdLine(const std::string &line)
 {
-     std::cout << "Cmd line: " << line << std::endl;
      std::string target = "./";
      size_t start = line.find_first_of(target);
      _exeFile = trim(line.substr(start+target.size()));
@@ -193,42 +186,36 @@ void ParserMassif::parseCmdLine(const std::string &line)
 
 void ParserMassif::parseTimeUnitLine(const std::string &line)
 {
-    std::cout << "Time unit line: " << line << std::endl;
     std::string target = ":";
     _timeUnit = line.substr(line.find(target)+target.size());
 }
 
 uint ParserMassif::parseSnapshotNumberLine(const std::string &line)
 {
-    std::cout << "Snapshot line: " << line << std::endl;
     uint snapshotNum = static_cast<uint>(std::stoi(trim(line.substr(line.find("=")+1))));
     return snapshotNum;
 }
 
 double ParserMassif::parseTimeValueLine(const std::string &line)
 {
-    std::cout << "Time Value line: " << line << std::endl;
     double timeValue = std::stod(trim(line.substr(line.find("=")+1)));
     return timeValue;
 }
 
 quint64 ParserMassif::parseMemHeapBLine(const std::string &line)
 {
-    std::cout << "Mem heap B line: " << line << std::endl;
     quint64 memHeapB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
     return memHeapB;
 }
 
 quint64 ParserMassif::parseMemHeapExtraBLine(const std::string &line)
 {
-    std::cout << "Mem heap extra B line: " << line << std::endl;
     quint64 memHeapExtraB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
     return memHeapExtraB;
 }
 
 quint64 ParserMassif::parseMemStacksBLine(const std::string &line)
 {
-    std::cout << "Mem stacks B line: " << line << std::endl;
     quint64 memStacksB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
     return memStacksB;
 }
