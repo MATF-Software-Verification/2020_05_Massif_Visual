@@ -145,6 +145,7 @@ std::vector<SnapshotItem *> ParserMassif::snapshotItems() const
 
 void ParserMassif::parseDescLine(const std::string &line)
 {
+    std::cout << "File name: " << _inputFileName << std::endl;
     //    std::string lineCopy("desc: --massif-out-line=andja --alloc-func=bla --traa=tralal");
     std::string delimiter = "--";
     std::vector<size_t> positions;
@@ -159,6 +160,10 @@ void ParserMassif::parseDescLine(const std::string &line)
 
     // separating flags with arguments following positions
     std::vector<std::string> arguments;
+
+    if (positions.size() == 0)
+        return;
+
     for (size_t i=1; i<positions.size(); i++){
         arguments.push_back(line.substr(
                 positions[i-1]+delimiter.size(),

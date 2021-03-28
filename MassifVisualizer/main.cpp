@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 
     // TODO: create unit testing using QtTest or Google Test
     // For now, this is testing
-    ParserMassif parser = ParserMassif();
-    parser.parseMassifOutput();
+//    ParserMassif parser = ParserMassif();
+//    parser.parseMassifOutput();
 
 //    TODO: figure out how to execute valgrind from c++
 //    system("valgrind --tool=massif --massif-out-file=opala /home/student/Desktop/a.out 2>&0");
