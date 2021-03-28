@@ -42,6 +42,7 @@ void ParserMassif::parseMassifOutput()
     std::string line;
     std::vector<std::string> lines;
     std::ifstream inputFile(_inputFileName);
+    _snapshotItems.clear();
 
     if (inputFile.is_open()) {
         std::getline(inputFile, line);

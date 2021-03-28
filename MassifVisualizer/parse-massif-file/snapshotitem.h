@@ -34,11 +34,11 @@ public:
     HeapTreeItem *heapTreeItem() const;
     void setHeapTreeItem(HeapTreeItem *heapTreeItem);
 
+    HeapTreeType treeType() const;
     void setTreeType(const HeapTreeType &treeType);
 
 private:
     uint _snapshotNum;
-
     double _time;
     //quint64 = unsigned long long int
     quint64 _memHeapB;

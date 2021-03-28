@@ -77,8 +77,12 @@ void SnapshotItem::setHeapTreeItem(HeapTreeItem *heapTreeItem)
     _heapTreeItem = heapTreeItem;
 }
 
+HeapTreeType SnapshotItem::treeType() const
+{
+    return _treeType;
+}
+
 void SnapshotItem::setTreeType(const HeapTreeType &treeType)
 {
     _treeType = treeType;
 }
-

@@ -8,18 +8,22 @@
 #include <QValueAxis>
 #include <QCategoryAxis>
 #include <QLineSeries>
+#include <QValueAxis>
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QRegExpValidator>
 #include <QLabel>
 #include <QLineEdit>
+#include <QListWidget>
 #include <QMessageBox>
 #include <QTextBrowser>
 #include <QTextCursor>
 #include <QTextBlock>
+#include <QScrollBar>
 
 #include "snapshotlistbutton.h"
+#include "heaptreebutton.h"
 #include "parse-massif-file/parser-massif.h"
 
 QT_CHARTS_USE_NAMESPACE
@@ -41,6 +45,9 @@ private slots:
     void open_and_jump_code_file();
     void showTimeUnitGraph();
 
+    void create_my_children();
+    void create_tree_root();
+
 private:
 
     void createChart();
@@ -49,12 +56,15 @@ private:
 
     QBoxLayout *createChangeRangeLayout();
     QBoxLayout *createSnapshotListLayout();
+    QBoxLayout *createCodeAndTreeTabLayout();
+    QBoxLayout *createTreeButtonsLayout();
 
     void createGraph();
 
     QChart* _chart;
     QChartView* _chartView;
     QBoxLayout* _chartBoxLayout;
+    QBoxLayout* _treeBoxLayout;
     QLineEdit* _minLE;
     QLineEdit* _maxLE;
     QTextBrowser* _codeTextBrowser;
