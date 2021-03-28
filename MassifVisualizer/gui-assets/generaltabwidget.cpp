@@ -122,8 +122,6 @@ void GeneralTabWidget::createChart()
     uint peakNum = 0;
     float peakValue = 0;
 
-    QLineSeries *series = new QLineSeries();
-
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
         uint xValue = snapshot->snapshotNum();
         quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
