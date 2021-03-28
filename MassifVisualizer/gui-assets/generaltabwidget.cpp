@@ -5,6 +5,7 @@ GeneralTabWidget::GeneralTabWidget(QWidget *parent, std::string fileName)
       _fileName(fileName)
 {
     _parser = new ParserMassif(fileName);
+    _parser->parseMassifOutput();
     createGraph();
 }
 
@@ -52,6 +53,35 @@ void GeneralTabWidget::open_and_jump_code_file()
     highlightLine(jumpLine);
 }
 
+void GeneralTabWidget::create_my_children()
+{
+    HeapTreeButton *button= qobject_cast<HeapTreeButton * >(sender());
+    //QBoxLayout* btnLayout = qobject_cast<QBoxLayout * >(button->layout());
+    HeapTreeItem* currentNode = button->currentNode();
+
+    for(HeapTreeItem* child: currentNode->children()) {
+        QString buttonName = "n" + QString::number(child->numOfDirectChildren());
+        HeapTreeButton* node = new HeapTreeButton(buttonName.toStdString(), child);
+        _treeBoxLayout->addWidget(node);
+        QObject::connect(node, SIGNAL(clicked()), this, SLOT(create_my_children()));
+        _treeBoxLayout->setAlignment(node, Qt::AlignTop);
+    }
+}
+
+void GeneralTabWidget::create_tree_root()
+{
+    QPushButton *button= qobject_cast<QPushButton * >(sender());
+    QString text = button->text();
+    unsigned snapNum = static_cast<unsigned>(std::atoi((text.split(" ")[1]).toStdString().c_str()));
+    SnapshotItem* snap = _parser->snapshotItems().at(snapNum);
+    QString numOfChildren = "n"+ QString::number(snap->heapTreeItem()->numOfDirectChildren());
+
+    HeapTreeButton* tree_root = new HeapTreeButton(numOfChildren.toStdString(), snap->heapTreeItem());
+    _treeBoxLayout->addWidget(tree_root);
+    QObject::connect(tree_root, SIGNAL(clicked()), this, SLOT(create_my_children()));
+    _treeBoxLayout->setAlignment(tree_root, Qt::AlignTop);
+}
+
 void GeneralTabWidget::highlightLine(unsigned lineNumber)
 {
     QTextCursor coursor(_codeTextBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNumber)));
@@ -63,10 +93,8 @@ void GeneralTabWidget::highlightLine(unsigned lineNumber)
 
 void GeneralTabWidget::createChart()
 {
-    //TODO: this will look completely different
     QLineSeries *series = new QLineSeries();
 
-    _parser->parseMassifOutput();
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
         uint xValue = snapshot->snapshotNum();
         quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
@@ -121,14 +149,70 @@ QBoxLayout* GeneralTabWidget::createChangeRangeLayout()
 QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
 {
     QBoxLayout *generalSnapshotListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    SnapshotListButton* generalPushButton1 = new SnapshotListButton("button 1", 3, "/home/student/Desktop/massif_example.c");
+
+    QBoxLayout* flowLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    QWidget* scrollAreaContent = new QWidget;
+    scrollAreaContent->setLayout(flowLayout);
+    QScrollArea* scrollArea = new QScrollArea;
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(scrollAreaContent);
+    QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spLeft.setHorizontalStretch(1);
+    scrollArea->setSizePolicy(spLeft);
 
 
-    QObject::connect(generalPushButton1, SIGNAL(clicked()), this, SLOT(open_and_jump_code_file()));
+    std::cout << _parser->snapshotItems().size() << std::endl;
+    for (SnapshotItem* snapshot : _parser->snapshotItems()) {
 
-    generalSnapshotListLayout->addWidget(generalPushButton1);
+        SnapshotListButton* generalPushButton = new SnapshotListButton("snapshot " + QString::number(snapshot->snapshotNum()).toStdString() , 3, "/home/student/Desktop/massif_example.c");
 
+        generalPushButton->setStyleSheet("margin: 0px 15px 0px 0px");
+        if(snapshot->treeType() == HeapTreeType::EMPTY){
+            generalPushButton->setDisabled(true);
+        }
+        else{
+            QObject::connect(generalPushButton, SIGNAL(clicked()), this, SLOT(create_tree_root()));
+        }
+        flowLayout->addWidget( generalPushButton );
+
+    }
+
+    generalSnapshotListLayout->addWidget(scrollArea);
     return generalSnapshotListLayout;
+}
+
+QBoxLayout *GeneralTabWidget::createTreeButtonsLayout()
+{
+    QBoxLayout *generalCreateTreeButtonsLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+
+    QPushButton* tree_root = new QPushButton("tree_root");
+    generalCreateTreeButtonsLayout->addWidget(tree_root);
+    QObject::connect(tree_root, SIGNAL(clicked()), this, SLOT(create_my_children()));
+    generalCreateTreeButtonsLayout->setAlignment(tree_root, Qt::AlignTop);
+    return generalCreateTreeButtonsLayout;
+}
+
+QBoxLayout *GeneralTabWidget::createCodeAndTreeTabLayout()
+{
+    QBoxLayout *generalCreateCodeAndTreeTabLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+
+    QWidget *tree = new QWidget();
+    QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spUp.setVerticalStretch(2);
+    tree->setSizePolicy(spUp);
+    _treeBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    tree->setLayout(_treeBoxLayout);
+    generalCreateCodeAndTreeTabLayout->addWidget(tree);
+
+    _codeTextBrowser = new QTextBrowser();
+    QSizePolicy spDown(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spDown.setVerticalStretch(1);
+    _codeTextBrowser->setSizePolicy(spDown);
+    generalCreateCodeAndTreeTabLayout->addWidget(_codeTextBrowser);
+
+    return generalCreateCodeAndTreeTabLayout;
 }
 
 void GeneralTabWidget::createGraph()
@@ -138,12 +222,17 @@ void GeneralTabWidget::createGraph()
     createChartBoxLayout();
 
     QGraphicsView* graphicsView = new QGraphicsView();
+
+    QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spLeft.setHorizontalStretch(2);
+    graphicsView->setSizePolicy(spLeft);
     graphicsView->setLayout(_chartBoxLayout);
+
     QBoxLayout *generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     generalTabLayout->addWidget(graphicsView);
     generalTabLayout->addLayout(createSnapshotListLayout());
-    _codeTextBrowser = new QTextBrowser();
-    generalTabLayout->addWidget(_codeTextBrowser);
+
+    generalTabLayout->addLayout(createCodeAndTreeTabLayout());
     this->setLayout(generalTabLayout);
 }
 

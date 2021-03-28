@@ -32,7 +32,8 @@ SOURCES += \
         parse-massif-file/parser-massif.cpp \
         parse-massif-file/snapshotitem.cpp \
         parse-massif-file/heaptreeitem.cpp \
-        helper-functions.cpp
+        helper-functions.cpp \
+    gui-assets/heaptreebutton.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
         parse-massif-file/parser-massif.h \
         parse-massif-file/snapshotitem.h \
         parse-massif-file/heaptreeitem.h \
-        helper-functions.h
+        helper-functions.h \
+    gui-assets/heaptreebutton.h
 
 FORMS += \
         mainwindow.ui

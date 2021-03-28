@@ -206,12 +206,12 @@ void MainWindow::setDefaultTheme()
     //QString pushButtnoPressed = "QPushButton:pressed { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))}";
     QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
     QString pushButtonStyle = "QPushButton { background-color: #ff8000; border: 1px solid #ff8000; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
-    //QString backgroungOfElements = "* {background-color: rgba(60, 186, 162, 255)}";
+    QString pushButtnoDisabled = "QPushButton:disabled { background-color: #ffe0b3; border: 1px solid black;}";
     QString backgroundOfElements = "* {background-color: #4d4d4d}";
     QString textColor = "* {color: white}";
     QString lineEditBackground = "QLineEdit {background-color: #262626}";
     QString labelText = "QLabel {color: #ff8000; font-size: 12pt; font-weight: bold}";
-    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + backgroundOfElements + "\n" + textColor
+    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
 }
 
@@ -224,12 +224,13 @@ void MainWindow::on_actionBright_theme_triggered()
 {
     QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
     QString pushButtonStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
+    QString pushButtnoDisabled = "QPushButton:disabled { background-color: white; border: 1px solid black;}";
     QString backgroundOfElements = "* {background-color: #f2f2f2}";
     QString textColor = "* {color: black}";
     QString lineEditBackground = "QLineEdit {background-color: #ffe6cc}";
     QString labelText = "QLabel {color: black; font-size: 12pt; font-weight: bold}";
 
-    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + backgroundOfElements + "\n" + textColor
+    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
 
 }
