@@ -4,10 +4,13 @@
 #include <fstream>
 
 #include <QWidget>
-#include <QtCharts/QChartView>
+#include <QChartView>
+#include <QValueAxis>
+#include <QCategoryAxis>
 #include <QLineSeries>
 #include <QBoxLayout>
 #include <QPushButton>
+#include <QRadioButton>
 #include <QRegExpValidator>
 #include <QLabel>
 #include <QLineEdit>
@@ -36,6 +39,7 @@ private slots:
 
     void changeRange();
     void open_and_jump_code_file();
+    void showTimeUnitGraph();
 
 private:
 
@@ -56,6 +60,9 @@ private:
     QTextBrowser* _codeTextBrowser;
     ParserMassif* _parser;
     std::string _fileName;
+    QRadioButton* _radioButtonTimeUnit;
+    QLineSeries* _seriesSnapshotNum;
+    QLineSeries* _seriesTimeUnit;
 
     void highlightLine(unsigned lineNumber);
 };

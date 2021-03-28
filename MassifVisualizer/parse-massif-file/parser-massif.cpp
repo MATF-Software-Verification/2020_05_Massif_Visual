@@ -143,9 +143,18 @@ std::vector<SnapshotItem *> ParserMassif::snapshotItems() const
     return _snapshotItems;
 }
 
+std::string ParserMassif::exeFile() const
+{
+    return _exeFile;
+}
+
+std::string ParserMassif::timeUnit() const
+{
+    return _timeUnit;
+}
+
 void ParserMassif::parseDescLine(const std::string &line)
 {
-    std::cout << "File name: " << _inputFileName << std::endl;
     //    std::string lineCopy("desc: --massif-out-line=andja --alloc-func=bla --traa=tralal");
     std::string delimiter = "--";
     std::vector<size_t> positions;
@@ -192,7 +201,7 @@ void ParserMassif::parseCmdLine(const std::string &line)
 void ParserMassif::parseTimeUnitLine(const std::string &line)
 {
     std::string target = ":";
-    _timeUnit = line.substr(line.find(target)+target.size());
+    _timeUnit = line.substr(line.find(target)+target.size()+1);
 }
 
 uint ParserMassif::parseSnapshotNumberLine(const std::string &line)

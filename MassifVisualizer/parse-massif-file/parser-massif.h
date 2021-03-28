@@ -22,6 +22,9 @@ public:
 
     std::vector<SnapshotItem *> snapshotItems() const;
 
+    std::string exeFile() const;
+    std::string timeUnit() const;
+
 private:
     std::string _inputFileName;
     std::map<std::string, std::string> _descArgs;

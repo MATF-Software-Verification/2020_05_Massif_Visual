@@ -52,6 +52,28 @@ void GeneralTabWidget::open_and_jump_code_file()
     highlightLine(jumpLine);
 }
 
+void GeneralTabWidget::showTimeUnitGraph()
+{
+    auto axisXBottom = _chart->axes(Qt::Horizontal).back();
+
+    if (_radioButtonTimeUnit->isChecked()) {
+        _chart->axes(Qt::Horizontal).back()->setRange(0, _seriesTimeUnit->at(_seriesTimeUnit->count()-1).x());
+        std::string timeUnit = "time unit [" + _parser->timeUnit() + "]";
+        axisXBottom->setTitleText(QString::fromStdString(timeUnit.c_str()));
+        _chart->addSeries(_seriesTimeUnit);
+        _seriesTimeUnit->attachAxis(_chart->axes(Qt::Vertical).back());
+        _chart->removeSeries(_seriesSnapshotNum);
+        _seriesTimeUnit->attachAxis(axisXBottom);
+    }
+    else {
+        _chart->axes(Qt::Horizontal).back()->setRange(0, _seriesSnapshotNum->count()-1);
+        axisXBottom->setTitleText("snapshot #");
+        _chart->addSeries(_seriesSnapshotNum);
+        _chart->removeSeries(_seriesTimeUnit);
+        _seriesSnapshotNum->attachAxis(axisXBottom);
+    }
+}
+
 void GeneralTabWidget::highlightLine(unsigned lineNumber)
 {
     QTextCursor coursor(_codeTextBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNumber)));
@@ -63,19 +85,61 @@ void GeneralTabWidget::highlightLine(unsigned lineNumber)
 
 void GeneralTabWidget::createChart()
 {
-    //TODO: this will look completely different
-    QLineSeries *series = new QLineSeries();
+    _seriesSnapshotNum = new QLineSeries();
+    _seriesTimeUnit = new QLineSeries();
 
     _parser->parseMassifOutput();
+    uint peakNum = 0;
+    float peakValue = 0;
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
         uint xValue = snapshot->snapshotNum();
         quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
-        series->append(xValue, yValue);
+        _seriesSnapshotNum->append(xValue, yValue);
+        _seriesTimeUnit->append(snapshot->time(), yValue);
+
+        if (snapshot->treeType() == HeapTreeType::PEAK) {
+            peakNum = xValue;
+            peakValue = yValue;
+        }
     }
+
     _chart = new QChart();
+    std::ostringstream title;
+    std::string peakValueStr = std::to_string(peakValue/1000);
+
+    title << "<i>File exe: ./"
+          << _parser->exeFile()
+          << "</i><br><b>Peak: "
+          << peakValueStr.substr(0, peakValueStr.find(".")+4)
+          << "KB at Snapshot #"
+          << std::to_string(peakNum)
+          << "</b>";
+
+    _chart->setTitle(QString::fromStdString(title.str()));
     _chart->legend()->hide();
-    _chart->addSeries(series);
-    _chart->createDefaultAxes();
+    _chart->adjustSize();
+
+    QValueAxis* axisYLeft = new QValueAxis();
+    axisYLeft->applyNiceNumbers();
+    axisYLeft->setMin(0);
+    axisYLeft->setLabelFormat("%d");
+    axisYLeft->setTitleText("memory size");
+
+    QValueAxis* axisXBottom = new QValueAxis();
+    axisXBottom->applyNiceNumbers();
+    axisXBottom->setMin(0);
+    axisXBottom->setLabelFormat("%d");
+
+    _chart->addAxis(axisYLeft, Qt::AlignLeft);
+    _chart->addAxis(axisXBottom, Qt::AlignBottom);
+
+    _chart->addSeries(_seriesSnapshotNum);
+
+    axisXBottom->setTitleText("snapshot #");
+    _seriesSnapshotNum->attachAxis(axisYLeft);
+    _seriesSnapshotNum->attachAxis(axisXBottom);
+
+    //_chart->createDefaultAxes();
     _chart->setTheme(QChart::ChartThemeBrownSand);
 }
 
@@ -88,6 +152,14 @@ void GeneralTabWidget::createChartView()
 void GeneralTabWidget::createChartBoxLayout()
 {
     _chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    _radioButtonTimeUnit = new QRadioButton("Time unit on x-axis");
+    QObject::connect(_radioButtonTimeUnit, SIGNAL(clicked()), this, SLOT(showTimeUnitGraph()));
+
+    _chartBoxLayout->addWidget(_radioButtonTimeUnit);
+
+    createChart();
+    createChartView();
+
     _chartBoxLayout->addWidget(_chartView);
     _chartBoxLayout->addLayout(createChangeRangeLayout());
 }
@@ -133,8 +205,6 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
 
 void GeneralTabWidget::createGraph()
 {
-    createChart();
-    createChartView();
     createChartBoxLayout();
 
     QGraphicsView* graphicsView = new QGraphicsView();
