@@ -238,6 +238,7 @@ quint64 ParserMassif::parseMemStacksBLine(const std::string &line)
 std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vector<std::string> &lines)
 {
     HeapTreeItem* newHeapTree = new HeapTreeItem;
+    newHeapTree->setIndentation(0);
     std::pair<std::string, HeapTreeItem*> returnTypeAndHeapTree;
 
     std::string target = "=";
@@ -297,8 +298,10 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
         }
         while(currentMother->children().size() == currentMother->numOfDirectChildren()){
             currentMother = currentMother->mother();
+
         }
         currentMother->addChild(newTree);
+        newTree->setIndentation(currentMother->indentation() + 1);
 
         if(numOfDirectChildren != 0) {
             currentMother = newTree;

@@ -103,6 +103,16 @@ void HeapTreeItem::setMother(HeapTreeItem *mother)
     _mother = mother;
 }
 
+uint HeapTreeItem::indentation() const
+{
+    return _indentation;
+}
+
+void HeapTreeItem::setIndentation(const uint &indentation)
+{
+    _indentation = indentation;
+}
+
 void HeapTreeItem::addChild(HeapTreeItem *node)
 {
     node->_mother = this;
@@ -132,3 +142,4 @@ quint64 HeapTreeItem::heapTreeSum()
     }
     return sum;
 }
+

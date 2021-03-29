@@ -21,6 +21,7 @@ public:
     uint lineNum() const;
     std::vector<HeapTreeItem*> children() const;
     HeapTreeItem* mother() const;
+    uint indentation() const;
 
     void addChild(HeapTreeItem* node);
     void setChildren(const std::vector<HeapTreeItem*> &nodes);
@@ -31,8 +32,12 @@ public:
     void setFileName(const std::string &fileName);
     void setFuncName(const std::string &funcName);
     void setLineNum(const uint &lineNum);
+    void setIndentation(const uint &indentation);
 
     quint64 heapTreeSum();    
+
+
+
 private:
     uint _numOfDirectChildren;
     quint64 _memoryAlloc;
@@ -42,6 +47,7 @@ private:
     uint _lineNum;
     std::vector<HeapTreeItem*> _children;
     HeapTreeItem* _mother;
+    uint _indentation;
 };
 
 #endif // HEAPTREEITEM_H

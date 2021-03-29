@@ -43,10 +43,8 @@ private slots:
 
     void changeRange();
     void open_and_jump_code_file();
+    void easy_visibility();
     void showTimeUnitGraph();
-
-    void create_my_children();
-    void create_tree_root();
 
 private:
 
@@ -57,7 +55,7 @@ private:
     QBoxLayout *createChangeRangeLayout();
     QBoxLayout *createSnapshotListLayout();
     QBoxLayout *createCodeAndTreeTabLayout();
-    QBoxLayout *createTreeButtonsLayout();
+    QBoxLayout *createTreeLayout(SnapshotListButton* generalBtn);
 
     void createGraph();
 

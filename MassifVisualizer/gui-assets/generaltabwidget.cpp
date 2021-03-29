@@ -31,8 +31,12 @@ void GeneralTabWidget::open_and_jump_code_file()
 {
     SnapshotListButton *button= qobject_cast<SnapshotListButton * >(sender());
 
-    std::string fileName = button->getCodeFileName();
-    unsigned jumpLine = button->getLineNumber();
+
+    auto index = _fileName.find_last_of('/');
+    auto directoryName = _fileName.substr(0, (index+1));
+    std::string fileName =directoryName + button->getCodeFileName();
+    std::cout << fileName << std::endl;
+    unsigned jumpLine = button->getLineNumber()-1;
 
     if (fileName.empty())
         return;
@@ -51,6 +55,11 @@ void GeneralTabWidget::open_and_jump_code_file()
     QString code = QString::fromStdString(text);
     _codeTextBrowser->setText(code);
     highlightLine(jumpLine);
+}
+
+void GeneralTabWidget::easy_visibility()
+{
+    SnapshotListButton *button= qobject_cast<SnapshotListButton * >(sender());
 }
 
 void GeneralTabWidget::showTimeUnitGraph()
@@ -73,35 +82,6 @@ void GeneralTabWidget::showTimeUnitGraph()
         _chart->removeSeries(_seriesTimeUnit);
         _seriesSnapshotNum->attachAxis(axisXBottom);
     }
-}
-
-void GeneralTabWidget::create_my_children()
-{
-    HeapTreeButton *button= qobject_cast<HeapTreeButton * >(sender());
-    //QBoxLayout* btnLayout = qobject_cast<QBoxLayout * >(button->layout());
-    HeapTreeItem* currentNode = button->currentNode();
-
-    for(HeapTreeItem* child: currentNode->children()) {
-        QString buttonName = "n" + QString::number(child->numOfDirectChildren());
-        HeapTreeButton* node = new HeapTreeButton(buttonName.toStdString(), child);
-        _treeBoxLayout->addWidget(node);
-        QObject::connect(node, SIGNAL(clicked()), this, SLOT(create_my_children()));
-        _treeBoxLayout->setAlignment(node, Qt::AlignTop);
-    }
-}
-
-void GeneralTabWidget::create_tree_root()
-{
-    QPushButton *button= qobject_cast<QPushButton * >(sender());
-    QString text = button->text();
-    unsigned snapNum = static_cast<unsigned>(std::atoi((text.split(" ")[1]).toStdString().c_str()));
-    SnapshotItem* snap = _parser->snapshotItems().at(snapNum);
-    QString numOfChildren = "n"+ QString::number(snap->heapTreeItem()->numOfDirectChildren());
-
-    HeapTreeButton* tree_root = new HeapTreeButton(numOfChildren.toStdString(), snap->heapTreeItem());
-    _treeBoxLayout->addWidget(tree_root);
-    QObject::connect(tree_root, SIGNAL(clicked()), this, SLOT(create_my_children()));
-    _treeBoxLayout->setAlignment(tree_root, Qt::AlignTop);
 }
 
 void GeneralTabWidget::highlightLine(unsigned lineNumber)
@@ -221,6 +201,41 @@ QBoxLayout* GeneralTabWidget::createChangeRangeLayout()
     return lineEditsLayout;
 }
 
+QBoxLayout *GeneralTabWidget::createTreeLayout(SnapshotListButton* generalBtn)
+{
+    QBoxLayout *btnLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+
+
+    QString text = generalBtn->text();
+    unsigned snapNum = static_cast<unsigned>(std::atoi((text.split(" ")[1]).toStdString().c_str()));
+    SnapshotItem* snap = _parser->snapshotItems().at(snapNum);
+    QString numOfChildren = "n"+ QString::number(snap->heapTreeItem()->numOfDirectChildren());
+
+    HeapTreeItem* root = snap->heapTreeItem();
+    std::stack<HeapTreeItem*> tree;
+    tree.push(root);
+
+    while(!tree.empty()){
+        HeapTreeItem* tmpNode = tree.top();
+        tree.pop();
+        QString BUTname = "n" + QString::number(tmpNode->numOfDirectChildren());
+        std::cout << tmpNode->lineNum() << " " << tmpNode->fileName() << std::endl;
+        SnapshotListButton* curNodeBut = new SnapshotListButton(BUTname.toStdString(), tmpNode->lineNum(), tmpNode->fileName());
+        QObject::connect(curNodeBut, SIGNAL(clicked()), this, SLOT(open_and_jump_code_file()));
+        curNodeBut->setStyleSheet("margin : 0px 0px 0px " + QString::number(tmpNode->indentation()*10) + "px");
+        btnLayout->addWidget(curNodeBut);
+        auto revesedChildren = tmpNode->children();
+        std::reverse(revesedChildren.begin(), revesedChildren.end());
+
+        for(auto& child : revesedChildren){
+            tree.push(child);
+        }
+    }
+
+    return btnLayout;
+
+}
+
 QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
 {
     QBoxLayout *generalSnapshotListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -241,49 +256,32 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
     std::cout << _parser->snapshotItems().size() << std::endl;
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
 
+
         SnapshotListButton* generalPushButton = new SnapshotListButton("snapshot " + QString::number(snapshot->snapshotNum()).toStdString() , 3, "/home/student/Desktop/massif_example.c");
 
         generalPushButton->setStyleSheet("margin: 0px 15px 0px 0px");
         if(snapshot->treeType() == HeapTreeType::EMPTY){
             generalPushButton->setDisabled(true);
+            flowLayout->addWidget( generalPushButton );
         }
         else{
-            QObject::connect(generalPushButton, SIGNAL(clicked()), this, SLOT(create_tree_root()));
+            QObject::connect(generalPushButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
+            flowLayout->addWidget( generalPushButton );
+            flowLayout->addLayout(createTreeLayout(generalPushButton));
         }
-        flowLayout->addWidget( generalPushButton );
-
     }
 
     generalSnapshotListLayout->addWidget(scrollArea);
     return generalSnapshotListLayout;
 }
 
-QBoxLayout *GeneralTabWidget::createTreeButtonsLayout()
-{
-    QBoxLayout *generalCreateTreeButtonsLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-
-    QPushButton* tree_root = new QPushButton("tree_root");
-    generalCreateTreeButtonsLayout->addWidget(tree_root);
-    QObject::connect(tree_root, SIGNAL(clicked()), this, SLOT(create_my_children()));
-    generalCreateTreeButtonsLayout->setAlignment(tree_root, Qt::AlignTop);
-    return generalCreateTreeButtonsLayout;
-}
-
 QBoxLayout *GeneralTabWidget::createCodeAndTreeTabLayout()
 {
     QBoxLayout *generalCreateCodeAndTreeTabLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-    QWidget *tree = new QWidget();
-    QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    spUp.setVerticalStretch(2);
-    tree->setSizePolicy(spUp);
-    _treeBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    tree->setLayout(_treeBoxLayout);
-    generalCreateCodeAndTreeTabLayout->addWidget(tree);
-
     _codeTextBrowser = new QTextBrowser();
     QSizePolicy spDown(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    spDown.setVerticalStretch(1);
+    spDown.setHorizontalStretch(1);
     _codeTextBrowser->setSizePolicy(spDown);
     generalCreateCodeAndTreeTabLayout->addWidget(_codeTextBrowser);
 
