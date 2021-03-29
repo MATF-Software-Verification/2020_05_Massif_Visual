@@ -4,6 +4,7 @@ GeneralTabWidget::GeneralTabWidget(QWidget *parent, std::string fileName)
     : QWidget(parent),
       _fileName(fileName)
 {
+    _codeTextBrowser = new QTextBrowser();
     _parser = new ParserMassif(fileName);
     _parser->parseMassifOutput();
     createGraph();
@@ -27,39 +28,12 @@ void GeneralTabWidget::changeRange()
     }
 }
 
-void GeneralTabWidget::open_and_jump_code_file()
-{
-    SnapshotListButton *button= qobject_cast<SnapshotListButton * >(sender());
-
-
-    auto index = _fileName.find_last_of('/');
-    auto directoryName = _fileName.substr(0, (index+1));
-    std::string fileName =directoryName + button->getCodeFileName();
-    std::cout << fileName << std::endl;
-    unsigned jumpLine = button->getLineNumber()-1;
-
-    if (fileName.empty())
-        return;
-
-    std::ifstream in(fileName);
-
-    std::string text;
-    std::string line;
-    while (std::getline(in, line)) {
-
-        line.append("\n");
-        text.append(line);
-    }
-
-    in.close();
-    QString code = QString::fromStdString(text);
-    _codeTextBrowser->setText(code);
-    highlightLine(jumpLine);
-}
-
 void GeneralTabWidget::easy_visibility()
 {
-    SnapshotListButton *button= qobject_cast<SnapshotListButton * >(sender());
+    ListButton *button= qobject_cast<ListButton * >(sender());
+
+    button->treeWidget()->setVisible(button->isVisible());
+    button->setIsVisible(!button->isVisible());
 }
 
 void GeneralTabWidget::showTimeUnitGraph()
@@ -83,16 +57,6 @@ void GeneralTabWidget::showTimeUnitGraph()
         _seriesSnapshotNum->attachAxis(axisXBottom);
     }
 }
-
-void GeneralTabWidget::highlightLine(unsigned lineNumber)
-{
-    QTextCursor coursor(_codeTextBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNumber)));
-    QTextBlockFormat frmt = coursor.blockFormat();
-    frmt.setBackground(QBrush(QColor(255, 128, 0)));
-    coursor.setBlockFormat(frmt);
-    _codeTextBrowser->setTextCursor(coursor);
-}
-
 void GeneralTabWidget::createChart()
 {
     _seriesSnapshotNum = new QLineSeries();
@@ -215,6 +179,7 @@ QBoxLayout *GeneralTabWidget::createTreeLayout(SnapshotListButton* generalBtn)
     std::stack<HeapTreeItem*> tree;
     tree.push(root);
 
+
     while(!tree.empty()){
         HeapTreeItem* tmpNode = tree.top();
         tree.pop();
@@ -252,23 +217,36 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
     spLeft.setHorizontalStretch(1);
     scrollArea->setSizePolicy(spLeft);
 
+    auto index = _fileName.find_last_of('/');
+    auto directoryName = _fileName.substr(0, (index+1));
 
     std::cout << _parser->snapshotItems().size() << std::endl;
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
 
 
-        SnapshotListButton* generalPushButton = new SnapshotListButton("snapshot " + QString::number(snapshot->snapshotNum()).toStdString() , 3, "/home/student/Desktop/massif_example.c");
+        //SnapshotListButton* generalPushButton = new SnapshotListButton("snapshot " + QString::number(snapshot->snapshotNum()).toStdString() , 3, "/home/student/Desktop/massif_example.c");
 
-        generalPushButton->setStyleSheet("margin: 0px 15px 0px 0px");
+
+       ListButton* listButton;
         if(snapshot->treeType() == HeapTreeType::EMPTY){
-            generalPushButton->setDisabled(true);
-            flowLayout->addWidget( generalPushButton );
+            listButton = new ListButton();
+            listButton->setDisabled(true);
+            flowLayout->addWidget(listButton);
         }
         else{
-            QObject::connect(generalPushButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
-            flowLayout->addWidget( generalPushButton );
-            flowLayout->addLayout(createTreeLayout(generalPushButton));
+
+            TreeWidget* treeWidget = new TreeWidget(snapshot->snapshotNum(), _parser, directoryName,_codeTextBrowser);
+            treeWidget->setVisible(false);
+            listButton = new ListButton(treeWidget);
+            QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
+            flowLayout->addWidget(listButton);
+            flowLayout->addWidget(treeWidget);
+            //flowLayout->addLayout(createTreeLayout(generalPushButton));
         }
+
+        listButton->setText("snapshot " + QString::number(snapshot->snapshotNum()));
+
+        listButton->setStyleSheet("margin: 0px 15px 0px 0px");
     }
 
     generalSnapshotListLayout->addWidget(scrollArea);
@@ -279,7 +257,7 @@ QBoxLayout *GeneralTabWidget::createCodeAndTreeTabLayout()
 {
     QBoxLayout *generalCreateCodeAndTreeTabLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-    _codeTextBrowser = new QTextBrowser();
+    //_codeTextBrowser = new QTextBrowser();
     QSizePolicy spDown(QSizePolicy::Preferred, QSizePolicy::Preferred);
     spDown.setHorizontalStretch(1);
     _codeTextBrowser->setSizePolicy(spDown);

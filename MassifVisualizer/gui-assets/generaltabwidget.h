@@ -26,6 +26,8 @@
 #include "heaptreebutton.h"
 #include "parse-massif-file/parser-massif.h"
 
+#include "listbutton.h"
+
 QT_CHARTS_USE_NAMESPACE
 
 class GeneralTabWidget : public QWidget
@@ -42,7 +44,6 @@ public slots:
 private slots:
 
     void changeRange();
-    void open_and_jump_code_file();
     void easy_visibility();
     void showTimeUnitGraph();
 
@@ -71,8 +72,6 @@ private:
     QRadioButton* _radioButtonTimeUnit;
     QLineSeries* _seriesSnapshotNum;
     QLineSeries* _seriesTimeUnit;
-
-    void highlightLine(unsigned lineNumber);
 };
 
 #endif // GENERALTABWIDGET_H
