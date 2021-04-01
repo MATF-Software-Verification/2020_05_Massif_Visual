@@ -35,7 +35,8 @@ SOURCES += \
         helper-functions.cpp \
     gui-assets/heaptreebutton.cpp \
     gui-assets/listbutton.cpp \
-    gui-assets/treewidget.cpp
+    gui-assets/treewidget.cpp \
+    exethread.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,7 +48,8 @@ HEADERS += \
         helper-functions.h \
     gui-assets/heaptreebutton.h \
     gui-assets/listbutton.h \
-    gui-assets/treewidget.h
+    gui-assets/treewidget.h \
+    exethread.h
 
 FORMS += \
         mainwindow.ui

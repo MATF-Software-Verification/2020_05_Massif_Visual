@@ -145,6 +145,14 @@ void MainWindow::visualizeData(QString fileName)
     ui->tabWidget->setCurrentIndex(indexxx);
 }
 
+void MainWindow::runMassif(QString exeFileName)
+{
+    ExeThread *exeThread = new ExeThread(this, exeFileName);
+    connect(exeThread, SIGNAL(valgrindMassifFinished(QString)),
+                this, SLOT(onValgrindMassifFinished(QString)));
+    exeThread->start();
+}
+
 void MainWindow::createMenus()
 {
 
@@ -267,4 +275,18 @@ void MainWindow::on_actionSapphire_triggered()
     QString labelText = "QLabel {color:   #e6f3ff; font-size: 12pt; font-weight: bold}";
     this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
+}
+
+void MainWindow::on_actionOpen_From_Executable_triggered()
+{
+    // TODO: how to put OR in regex and add .exe option
+    QString exeFileName = QFileDialog::getOpenFileName(this,
+                              "Executable File (BEERVILLE)", "./", "*.out");
+
+    runMassif(exeFileName);
+}
+
+void MainWindow::onValgrindMassifFinished(QString massifOutputName)
+{
+    visualizeData(massifOutputName);
 }

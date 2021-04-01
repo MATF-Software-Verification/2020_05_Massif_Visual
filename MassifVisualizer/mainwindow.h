@@ -5,8 +5,10 @@
 
 #include <QMainWindow>
 #include <QList>
+#include <QProcess>
 
 #include "gui-assets/generaltabwidget.h"
+#include "./exethread.h"
 
 namespace Ui {
 class MainWindow;
@@ -40,6 +42,8 @@ private slots:
     void quit();
 
     void on_actionSapphire_triggered();
+    void on_actionOpen_From_Executable_triggered();
+    void onValgrindMassifFinished(QString massifOutputName);
 
 private:
 
@@ -54,6 +58,7 @@ private:
     QList<QAction*> _recentFileActionList;
 
     void visualizeData(QString fileName);
+    void runMassif(QString exeFileName);
     void createMenus();
     void updateMenus();
     void parseRecentFiles();

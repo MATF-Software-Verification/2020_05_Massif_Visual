@@ -70,6 +70,7 @@
       <string>Open File</string>
      </property>
      <addaction name="actionOpen_Massif_File"/>
+     <addaction name="actionOpen_From_Executable"/>
     </widget>
     <addaction name="menuOpen_File"/>
    </widget>
@@ -156,6 +157,11 @@
   <action name="actionSapphire">
    <property name="text">
     <string>Sapphire theme</string>
+   </property>
+  </action>
+  <action name="actionOpen_From_Executable">
+   <property name="text">
+    <string>Open From Executable</string>
    </property>
   </action>
  </widget>
