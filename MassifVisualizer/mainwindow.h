@@ -39,6 +39,8 @@ private slots:
 
     void quit();
 
+    void on_actionSapphire_triggered();
+
 private:
 
     Ui::MainWindow *ui;

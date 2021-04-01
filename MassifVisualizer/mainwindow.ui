@@ -93,6 +93,8 @@
      <addaction name="actionBright_theme"/>
      <addaction name="separator"/>
      <addaction name="actionPsychedelic_theme"/>
+     <addaction name="separator"/>
+     <addaction name="actionSapphire"/>
     </widget>
     <addaction name="menuChange_Theme"/>
    </widget>
@@ -149,6 +151,11 @@
   <action name="actionPsychedelic_theme">
    <property name="text">
     <string>Psychedelic theme</string>
+   </property>
+  </action>
+  <action name="actionSapphire">
+   <property name="text">
+    <string>Sapphire theme</string>
    </property>
   </action>
  </widget>

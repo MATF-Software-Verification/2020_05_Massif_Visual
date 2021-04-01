@@ -20,30 +20,52 @@ void TreeWidget::open_and_jump_code_file()
     std::cout << fileName << std::endl;
     unsigned jumpLine = button->getLineNumber()-1;
 
-    std::cout<<"a"<<std::endl;
-
     if (fileName.empty())
         return;
 
     std::ifstream in(fileName);
-
-    std::string text;
-    std::string line;    while (std::getline(in, line)) {
-
-        line.append("\n");
-        text.append(line);
+    /*QFile file(QString::fromStdString(fileName));
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+       return;
     }
 
-    std::cout<<"b"<<std::endl;
+    QString text;
+    QString line;
+    int i = 1;
+    QString numberedLine;
+
+    while (!file.atEnd()) {
+        line = file.readLine();
+        numberedLine = "<font color=\"DeepPink\">" + QString::number(i) + " </font>";
+        line = "<pre>" + line + "</pre>";
+        _textBrowser->insertHtml(numberedLine);
+        _textBrowser->insertHtml(line);
+        _textBrowser->insertPlainText("\n");
+        i++;
+
+    }
+
+    file.close();
+    highlightLine(jumpLine);*/
+
+    std::string text;
+    std::string line;
+    int i = 1;
+    std::string numberedLine;
+
+    while (std::getline(in, line)) {
+        numberedLine = QString::number(i).toStdString() + " ";
+        line.append("\n");
+        text.append(numberedLine);
+        text.append(line);
+        i++;
+    }
 
     in.close();
     QString code = QString::fromStdString(text);
-    std::cout<<"ba"<<std::endl;
     _textBrowser->setText(code);
-    std::cout<<"bb"<<std::endl;
     highlightLine(jumpLine);
 
-    std::cout<<"c"<<std::endl;
 }
 
 void TreeWidget::highlightLine(unsigned lineNumber)
@@ -65,16 +87,24 @@ void TreeWidget::createTreeLayout()
     HeapTreeItem* root = snap->heapTreeItem();
     std::stack<HeapTreeItem*> tree;
     tree.push(root);
-
+    bool disabledBtn = true;
 
     while(!tree.empty()){
         HeapTreeItem* tmpNode = tree.top();
         tree.pop();
-        QString BUTname = "n" + QString::number(tmpNode->numOfDirectChildren());
-        std::cout << tmpNode->lineNum() << " " << tmpNode->fileName() << std::endl;
+        QString BUTname = "n" + QString::number(tmpNode->numOfDirectChildren()) + ": ";
+        BUTname.append(QString::number(tmpNode->memoryAlloc()) + " " + QString::fromStdString(tmpNode->funcName()));
         SnapshotListButton* curNodeBut = new SnapshotListButton(BUTname.toStdString(), tmpNode->lineNum(), tmpNode->fileName());
-        QObject::connect(curNodeBut, SIGNAL(clicked()), this, SLOT(open_and_jump_code_file()));
-        curNodeBut->setStyleSheet("margin : 0px 0px 0px " + QString::number(tmpNode->indentation()*10) + "px");
+        if(disabledBtn){
+            curNodeBut->setDisabled(true);
+            curNodeBut->setStyleSheet("margin : 0px 0px 0px " + QString::number(tmpNode->indentation()*10) + "px; font-size: 11px");
+            disabledBtn = false;
+        }
+        else {
+            QObject::connect(curNodeBut, SIGNAL(clicked()), this, SLOT(open_and_jump_code_file()));
+            curNodeBut->setStyleSheet("background-color:#ffad33; margin : 0px 0px 0px " + QString::number(tmpNode->indentation()*10) + "px; font-size: 11px");
+        }
+
         _buttonLayout->addWidget(curNodeBut);
         auto revesedChildren = tmpNode->children();
         std::reverse(revesedChildren.begin(), revesedChildren.end());

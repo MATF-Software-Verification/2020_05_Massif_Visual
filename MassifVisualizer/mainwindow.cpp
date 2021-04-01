@@ -243,17 +243,28 @@ void MainWindow::on_actionPsychedelic_theme_triggered()
     int textColorRed = 255-backgroundRed;
     int textColorGreen = 255-backgroundGreen;
     int textColorBlue = 255-backgroundBlue;
-    //maybe add theme colors for QWidget
 
     QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
     QString pushButtonStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); padding: 3px; font-size: 12pt; font-weight: bold}";
+    QString pushButtnoDisabled = "QPushButton:disabled { background-color: white; border: 1px solid black;}";
     QString backgroundOfElements = "* {background-color: rgba(" + QString::number(backgroundRed) + "," + QString::number(backgroundGreen)  + "," + QString::number(backgroundBlue) + ", 1)}";
     QString textColor = "* {color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); font-weight: bold}";
-    std::cout << backgroundOfElements.toStdString() << std::endl;
-    std::cout << textColor.toStdString() << std::endl;
     QString lineEditBackground = "QLineEdit {background-color: #ffe6cc}";
     QString labelText = "QLabel {color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); font-size: 12pt; font-weight: bold}";
 
-    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + backgroundOfElements + "\n" + textColor
+    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
+                        + "\n" + lineEditBackground + "\n" + labelText);
+}
+
+void MainWindow::on_actionSapphire_triggered()
+{
+    QString pushButtnoPressed = "QPushButton:pressed { background-color:  #ccebff; border: 1px solid black;}";
+    QString pushButtonStyle = "QPushButton { background-color: #4db8ff; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
+    QString pushButtnoDisabled = "QPushButton:disabled { background-color: #cce6ff; border: 1px solid black;}";
+    QString backgroundOfElements = "* {background-color: #004080}";
+    QString textColor = "* {color:  #e6f3ff}";
+    QString lineEditBackground = "QLineEdit {background-color: #cce6ff}";
+    QString labelText = "QLabel {color:   #e6f3ff; font-size: 12pt; font-weight: bold}";
+    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
 }
