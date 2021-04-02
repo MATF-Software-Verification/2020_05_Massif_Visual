@@ -25,6 +25,8 @@ public:
     std::string exeFile() const;
     std::string timeUnit() const;
 
+    SnapshotItem *peakSnapshot() const;
+
 private:
     std::string _inputFileName;
     std::map<std::string, std::string> _descArgs;
@@ -34,8 +36,8 @@ private:
     */
     std::string _exeFile;
     std::string _timeUnit;
-
     std::vector<SnapshotItem*> _snapshotItems;
+    SnapshotItem* _peakSnapshot;
 
     void parseDescLine(const std::string &line);
     void parseCmdLine(const std::string &line);

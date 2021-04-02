@@ -111,6 +111,7 @@ void ParserMassif::parseMassifOutput()
                     }
                     else {
                         newSnapshot->setTreeType(HeapTreeType::PEAK);
+                        _peakSnapshot = newSnapshot;
                     }
 
                     newSnapshot->setHeapTreeItem(returnTypeAndHeapTree.second);
@@ -152,6 +153,11 @@ std::string ParserMassif::exeFile() const
 std::string ParserMassif::timeUnit() const
 {
     return _timeUnit;
+}
+
+SnapshotItem *ParserMassif::peakSnapshot() const
+{
+    return _peakSnapshot;
 }
 
 void ParserMassif::parseDescLine(const std::string &line)

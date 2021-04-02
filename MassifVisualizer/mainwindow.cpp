@@ -129,8 +129,6 @@ void MainWindow::visualizeData(QString fileName)
     auto index = _fileName.find_last_of('/');
     _directoryName = _fileName.substr(0, (index+1));
 
-    //TODO: parse the input
-
     std::ofstream outfile;
     outfile.open(_recentFilesFile, std::ios_base::app);
     outfile << _fileName << std::endl;
@@ -138,7 +136,6 @@ void MainWindow::visualizeData(QString fileName)
     parseRecentFiles();
     updateMenus();
 
-    //TODO: visualize the data
     int indexx =  QString::fromStdString(_fileName).lastIndexOf("/");
 
     int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, _fileName), QString::fromStdString(_fileName).mid(indexx+1));
@@ -210,7 +207,6 @@ void MainWindow::parseRecentFiles()
 void MainWindow::setDefaultTheme()
 {
 
-
     //QString pushButtnoPressed = "QPushButton:pressed { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))}";
     QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
     QString pushButtonStyle = "QPushButton { background-color: #ff8000; border: 1px solid #ff8000; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
@@ -240,7 +236,6 @@ void MainWindow::on_actionBright_theme_triggered()
 
     this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
-
 }
 
 void MainWindow::on_actionPsychedelic_theme_triggered()

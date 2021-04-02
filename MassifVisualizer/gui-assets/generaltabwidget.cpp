@@ -62,7 +62,8 @@ void GeneralTabWidget::createChart()
     _seriesSnapshotNum = new QLineSeries();
     _seriesTimeUnit = new QLineSeries();
 
-    _parser->parseMassifOutput();
+    // This is now in the constructor
+    // _parser->parseMassifOutput();
     uint peakNum = 0;
     float peakValue = 0;
 
