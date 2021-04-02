@@ -36,6 +36,8 @@ class GeneralTabWidget : public QWidget
 public:
     explicit GeneralTabWidget(QWidget *parent = nullptr,
                               std::string fileName = "");
+    explicit GeneralTabWidget(QWidget *parent = nullptr,
+                              QStringList* fileNames = new QStringList());
 
 signals:
 
@@ -50,6 +52,7 @@ private slots:
 private:
 
     void createChart();
+    void createMultiGraph();
     void createChartView();
     void createChartBoxLayout();
 
@@ -72,6 +75,8 @@ private:
     QRadioButton* _radioButtonTimeUnit;
     QLineSeries* _seriesSnapshotNum;
     QLineSeries* _seriesTimeUnit;
+    QStringList* _fileNames;
+    std::vector<ParserMassif*> _parsers;
 };
 
 #endif // GENERALTABWIDGET_H

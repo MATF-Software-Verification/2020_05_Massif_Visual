@@ -285,3 +285,29 @@ void MainWindow::onValgrindMassifFinished(QString massifOutputName)
 {
     visualizeData(massifOutputName);
 }
+
+void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
+{
+    QStringList fileNames = QFileDialog::getOpenFileNames();
+    QStringList *fileNamesPtr = new QStringList(fileNames);
+//    for(QString fileName : fileNames){
+//        if (fileName.isEmpty())
+//            return;
+
+//        _fileName = fileName.toStdString();
+//        auto index = _fileName.find_last_of('/');
+//        _directoryName = _fileName.substr(0, (index+1));
+
+//        std::ofstream outfile;
+//        outfile.open(_recentFilesFile, std::ios_base::app);
+//        outfile << _fileName << std::endl;
+//        outfile.close();
+//        parseRecentFiles();
+//        updateMenus();
+
+//        int indexx =  QString::fromStdString(_fileName).lastIndexOf("/");
+//    }
+
+    int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, fileNamesPtr), "Multiple Graphs");
+    ui->tabWidget->setCurrentIndex(indexxx);
+}

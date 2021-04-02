@@ -45,6 +45,8 @@ private slots:
     void on_actionOpen_From_Executable_triggered();
     void onValgrindMassifFinished(QString massifOutputName);
 
+    void on_actionOpen_Multiple_Massif_Files_triggered();
+
 private:
 
     Ui::MainWindow *ui;

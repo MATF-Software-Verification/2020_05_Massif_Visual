@@ -10,6 +10,19 @@ GeneralTabWidget::GeneralTabWidget(QWidget *parent, std::string fileName)
     createGraph();
 }
 
+GeneralTabWidget::GeneralTabWidget(QWidget *parent, QStringList* fileNames)
+    : QWidget(parent),
+      _fileNames(fileNames)
+{
+    _codeTextBrowser = new QTextBrowser();
+    for(QString fileName : *fileNames){
+        ParserMassif* parser = new ParserMassif(fileName.toStdString());
+        parser->parseMassifOutput();
+        _parsers.push_back(parser);
+    }
+    createMultiGraph();
+}
+
 void GeneralTabWidget::changeRange()
 {
     int num_minLE = 0;
@@ -117,6 +130,63 @@ void GeneralTabWidget::createChart()
 
     //_chart->createDefaultAxes();
     _chart->setTheme(QChart::ChartThemeBrownSand);
+}
+
+void GeneralTabWidget::createMultiGraph()
+{
+    _chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+
+    _chart = new QChart();
+    std::ostringstream title;
+
+    title << "TODO";
+
+    _chart->setTitle(QString::fromStdString(title.str()));
+    _chart->legend()->hide();
+    _chart->adjustSize();
+
+    QValueAxis* axisYLeft = new QValueAxis();
+    axisYLeft->applyNiceNumbers();
+    axisYLeft->setMin(0);
+    axisYLeft->setLabelFormat("%d");
+    axisYLeft->setTitleText("memory size");
+
+    QValueAxis* axisXBottom = new QValueAxis();
+    axisXBottom->applyNiceNumbers();
+    axisXBottom->setMin(0);
+    axisXBottom->setLabelFormat("%d");
+
+    _chart->addAxis(axisYLeft, Qt::AlignLeft);
+    _chart->addAxis(axisXBottom, Qt::AlignBottom);
+
+    for(ParserMassif *parser : _parsers){
+        QLineSeries *seriesSnapshotNums = new QLineSeries();
+
+        for (SnapshotItem* snapshot : parser->snapshotItems()) {
+            uint xValue = snapshot->snapshotNum();
+            quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
+            seriesSnapshotNums->append(xValue, yValue);
+        }
+        _chart->addSeries(seriesSnapshotNums);
+    }
+    _chart->createDefaultAxes();
+    axisXBottom->setTitleText("snapshot #");
+    _chart->setTheme(QChart::ChartThemeBrownSand);
+    createChartView();
+    _chartBoxLayout->addWidget(_chartView);
+    _chartBoxLayout->addLayout(createChangeRangeLayout());
+
+    QGraphicsView* graphicsView = new QGraphicsView();
+    //QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    //spLeft.setHorizontalStretch(2);
+    //graphicsView->setSizePolicy(spLeft);
+    graphicsView->setLayout(_chartBoxLayout);
+
+    QBoxLayout *generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    generalTabLayout->addWidget(graphicsView);
+    //generalTabLayout->addLayout(createSnapshotListLayout());
+    //generalTabLayout->addLayout(createCodeAndTreeTabLayout());
+    this->setLayout(generalTabLayout);
 }
 
 void GeneralTabWidget::createChartView()

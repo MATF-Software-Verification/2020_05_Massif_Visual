@@ -71,6 +71,7 @@
      </property>
      <addaction name="actionOpen_Massif_File"/>
      <addaction name="actionOpen_From_Executable"/>
+     <addaction name="actionOpen_Multiple_Massif_Files"/>
     </widget>
     <addaction name="menuOpen_File"/>
    </widget>
@@ -162,6 +163,11 @@
   <action name="actionOpen_From_Executable">
    <property name="text">
     <string>Open From Executable</string>
+   </property>
+  </action>
+  <action name="actionOpen_Multiple_Massif_Files">
+   <property name="text">
+    <string>Open Multiple Massif Files</string>
    </property>
   </action>
  </widget>
