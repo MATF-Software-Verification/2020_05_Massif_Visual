@@ -14,12 +14,14 @@ GeneralTabWidget::GeneralTabWidget(QWidget *parent, QStringList* fileNames)
     : QWidget(parent),
       _fileNames(fileNames)
 {
+    _parsers.clear();
     _codeTextBrowser = new QTextBrowser();
     for(QString fileName : *fileNames){
         ParserMassif* parser = new ParserMassif(fileName.toStdString());
         parser->parseMassifOutput();
         _parsers.push_back(parser);
     }
+    std::cout << _parsers.size() << std::endl;
     createGraph();
 }
 
@@ -60,14 +62,16 @@ void GeneralTabWidget::createChartBoxLayout()
 {
     _chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
+    std::cout << "Aca" << std::endl;
     if(_parser){
         _chart = new Chart(_parser);
         _chartBoxLayout->addWidget(_chart->radioButtonTimeUnit());
     }
     else if(_parsers.size() > 0){
+        std::cout << "Beka" << std::endl;
         _chart = new Chart(_parsers);
     }
-
+    std::cout << "naucicemo debagovanje" << std::endl;
     createChartView();
     _chartBoxLayout->addWidget(_chartView);
     _chartBoxLayout->addLayout(createChangeRangeLayout());
@@ -133,6 +137,46 @@ QBoxLayout *GeneralTabWidget::createTreeLayout(SnapshotListButton* generalBtn)
 
 }
 
+QBoxLayout *GeneralTabWidget::createPeakListLayout()
+{
+    QBoxLayout *generalPeakListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+
+    QBoxLayout* flowLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    QWidget* scrollAreaContent = new QWidget;
+    scrollAreaContent->setLayout(flowLayout);
+    QScrollArea* scrollArea = new QScrollArea;
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(scrollAreaContent);
+    QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spLeft.setHorizontalStretch(1);
+    scrollArea->setSizePolicy(spLeft);
+
+    //auto index = _fileName.find_last_of('/');
+    //auto directoryName = _fileName.substr(0, (index+1));
+    ListButton* listButton;
+    int i = 0;
+    for(ParserMassif* parser : _parsers){
+        auto index = (_fileNames->at(i)).toStdString().find_last_of('/');
+        auto directoryName = (_fileNames->at(i)).toStdString().substr(0, (index+1));
+        SnapshotItem* currPeak = parser->peakSnapshot();
+        TreeWidget* treeWidget = new TreeWidget(currPeak->snapshotNum(), parser, directoryName, _codeTextBrowser);
+        treeWidget->setVisible(false);
+        listButton = new ListButton(treeWidget);
+        QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
+        flowLayout->addWidget(listButton);
+        flowLayout->addWidget(treeWidget);
+        QString listBtnName = "peak " + QString::number(currPeak->snapshotNum()) + " ";
+        listButton->setText(listBtnName.append((_fileNames->at(i)).mid(index+1)));
+        listButton->setStyleSheet("margin: 0px 15px 0px 0px");
+        i++;
+    }
+
+    generalPeakListLayout->addWidget(scrollArea);
+    return generalPeakListLayout;
+}
+
 QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
 {
     QBoxLayout *generalSnapshotListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -152,13 +196,8 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
     auto index = _fileName.find_last_of('/');
     auto directoryName = _fileName.substr(0, (index+1));
 
-    std::cout << _parser->snapshotItems().size() << std::endl;
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
-
-
         //SnapshotListButton* generalPushButton = new SnapshotListButton("snapshot " + QString::number(snapshot->snapshotNum()).toStdString() , 3, "/home/student/Desktop/massif_example.c");
-
-
        ListButton* listButton;
         if(snapshot->treeType() == HeapTreeType::EMPTY){
             listButton = new ListButton();
@@ -167,7 +206,7 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
         }
         else{
 
-            TreeWidget* treeWidget = new TreeWidget(snapshot->snapshotNum(), _parser, directoryName,_codeTextBrowser);
+            TreeWidget* treeWidget = new TreeWidget(snapshot->snapshotNum(), _parser, directoryName, _codeTextBrowser);
             treeWidget->setVisible(false);
             listButton = new ListButton(treeWidget);
             QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
@@ -185,11 +224,9 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
     return generalSnapshotListLayout;
 }
 
-QBoxLayout *GeneralTabWidget::createCodeAndTreeTabLayout()
+QBoxLayout *GeneralTabWidget::createCodeLayout()
 {
     QBoxLayout *generalCreateCodeAndTreeTabLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-
-    //_codeTextBrowser = new QTextBrowser();
     QSizePolicy spDown(QSizePolicy::Preferred, QSizePolicy::Preferred);
     spDown.setHorizontalStretch(1);
     _codeTextBrowser->setSizePolicy(spDown);
@@ -213,10 +250,16 @@ void GeneralTabWidget::createGraph()
     QBoxLayout *generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     generalTabLayout->addWidget(graphicsView);
 
+    if(_parsers.size() > 0)
+        std::cout << "Aca " << std::endl;
     if(_parser){
         generalTabLayout->addLayout(createSnapshotListLayout());
-        generalTabLayout->addLayout(createCodeAndTreeTabLayout());
+    }
+    else if(_parsers.size() > 0){
+        std::cout << "Andja" << std::endl;
+        generalTabLayout->addLayout(createPeakListLayout());
     }
 
+    generalTabLayout->addLayout(createCodeLayout());
     this->setLayout(generalTabLayout);
 }

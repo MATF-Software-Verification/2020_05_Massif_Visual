@@ -52,8 +52,9 @@ private:
 
     QBoxLayout *createChangeRangeLayout();
     QBoxLayout *createSnapshotListLayout();
-    QBoxLayout *createCodeAndTreeTabLayout();
+    QBoxLayout *createCodeLayout();
     QBoxLayout *createTreeLayout(SnapshotListButton* generalBtn);
+    QBoxLayout* createPeakListLayout();
 
     void createGraph();
 
@@ -64,13 +65,10 @@ private:
     QLineEdit* _minLE;
     QLineEdit* _maxLE;
     QTextBrowser* _codeTextBrowser;
-    ParserMassif* _parser;
+    ParserMassif* _parser = nullptr;
     std::string _fileName;
-    QRadioButton* _radioButtonTimeUnit;
-    QLineSeries* _seriesSnapshotNum;
-    QLineSeries* _seriesTimeUnit;
-    QStringList* _fileNames;
     std::vector<ParserMassif*> _parsers;
+    QStringList* _fileNames;
 };
 
 #endif // GENERALTABWIDGET_H
