@@ -8,7 +8,6 @@
 #include <QValueAxis>
 #include <QCategoryAxis>
 #include <QLineSeries>
-#include <QValueAxis>
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QRadioButton>
@@ -25,6 +24,7 @@
 #include "snapshotlistbutton.h"
 #include "heaptreebutton.h"
 #include "parse-massif-file/parser-massif.h"
+#include "chart.h"
 
 #include "listbutton.h"
 
@@ -44,15 +44,9 @@ signals:
 public slots:
 
 private slots:
-
-    void changeRange();
+    void change_range();
     void easy_visibility();
-    void showTimeUnitGraph();
-
 private:
-
-    void createChart();
-    void createMultiGraph();
     void createChartView();
     void createChartBoxLayout();
 
@@ -63,7 +57,7 @@ private:
 
     void createGraph();
 
-    QChart* _chart;
+    Chart* _chart;
     QChartView* _chartView;
     QBoxLayout* _chartBoxLayout;
     QBoxLayout* _treeBoxLayout;

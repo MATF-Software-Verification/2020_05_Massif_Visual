@@ -20,10 +20,10 @@ GeneralTabWidget::GeneralTabWidget(QWidget *parent, QStringList* fileNames)
         parser->parseMassifOutput();
         _parsers.push_back(parser);
     }
-    createMultiGraph();
+    createGraph();
 }
 
-void GeneralTabWidget::changeRange()
+void GeneralTabWidget::change_range()
 {
     int num_minLE = 0;
     int num_maxLE = 0;
@@ -49,145 +49,6 @@ void GeneralTabWidget::easy_visibility()
     button->setIsVisible(!button->isVisible());
 }
 
-void GeneralTabWidget::showTimeUnitGraph()
-{
-    auto axisXBottom = _chart->axes(Qt::Horizontal).back();
-
-    if (_radioButtonTimeUnit->isChecked()) {
-        _chart->axes(Qt::Horizontal).back()->setRange(0, _seriesTimeUnit->at(_seriesTimeUnit->count()-1).x());
-        std::string timeUnit = "time unit [" + _parser->timeUnit() + "]";
-        axisXBottom->setTitleText(QString::fromStdString(timeUnit.c_str()));
-        _chart->addSeries(_seriesTimeUnit);
-        _seriesTimeUnit->attachAxis(_chart->axes(Qt::Vertical).back());
-        _chart->removeSeries(_seriesSnapshotNum);
-        _seriesTimeUnit->attachAxis(axisXBottom);
-    }
-    else {
-        _chart->axes(Qt::Horizontal).back()->setRange(0, _seriesSnapshotNum->count()-1);
-        axisXBottom->setTitleText("snapshot #");
-        _chart->addSeries(_seriesSnapshotNum);
-        _chart->removeSeries(_seriesTimeUnit);
-        _seriesSnapshotNum->attachAxis(axisXBottom);
-    }
-}
-void GeneralTabWidget::createChart()
-{
-    _seriesSnapshotNum = new QLineSeries();
-    _seriesTimeUnit = new QLineSeries();
-
-    // This is now in the constructor
-    // _parser->parseMassifOutput();
-    uint peakNum = 0;
-    float peakValue = 0;
-
-    for (SnapshotItem* snapshot : _parser->snapshotItems()) {
-        uint xValue = snapshot->snapshotNum();
-        quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
-        _seriesSnapshotNum->append(xValue, yValue);
-        _seriesTimeUnit->append(snapshot->time(), yValue);
-
-        if (snapshot->treeType() == HeapTreeType::PEAK) {
-            peakNum = xValue;
-            peakValue = yValue;
-        }
-    }
-
-    _chart = new QChart();
-    std::ostringstream title;
-    std::string peakValueStr = std::to_string(peakValue/1000);
-
-    title << "<i>File exe: ./"
-          << _parser->exeFile()
-          << "</i><br><b>Peak: "
-          << peakValueStr.substr(0, peakValueStr.find(".")+4)
-          << "KB at Snapshot #"
-          << std::to_string(peakNum)
-          << "</b>";
-
-    _chart->setTitle(QString::fromStdString(title.str()));
-    _chart->legend()->hide();
-    _chart->adjustSize();
-
-    QValueAxis* axisYLeft = new QValueAxis();
-    axisYLeft->applyNiceNumbers();
-    axisYLeft->setMin(0);
-    axisYLeft->setLabelFormat("%d");
-    axisYLeft->setTitleText("memory size");
-
-    QValueAxis* axisXBottom = new QValueAxis();
-    axisXBottom->applyNiceNumbers();
-    axisXBottom->setMin(0);
-    axisXBottom->setLabelFormat("%d");
-
-    _chart->addAxis(axisYLeft, Qt::AlignLeft);
-    _chart->addAxis(axisXBottom, Qt::AlignBottom);
-
-    _chart->addSeries(_seriesSnapshotNum);
-
-    axisXBottom->setTitleText("snapshot #");
-    _seriesSnapshotNum->attachAxis(axisYLeft);
-    _seriesSnapshotNum->attachAxis(axisXBottom);
-
-    //_chart->createDefaultAxes();
-    _chart->setTheme(QChart::ChartThemeBrownSand);
-}
-
-void GeneralTabWidget::createMultiGraph()
-{
-    _chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-
-    _chart = new QChart();
-    std::ostringstream title;
-
-    title << "TODO";
-
-    _chart->setTitle(QString::fromStdString(title.str()));
-    _chart->legend()->hide();
-    _chart->adjustSize();
-
-    QValueAxis* axisYLeft = new QValueAxis();
-    axisYLeft->applyNiceNumbers();
-    axisYLeft->setMin(0);
-    axisYLeft->setLabelFormat("%d");
-    axisYLeft->setTitleText("memory size");
-
-    QValueAxis* axisXBottom = new QValueAxis();
-    axisXBottom->applyNiceNumbers();
-    axisXBottom->setMin(0);
-    axisXBottom->setLabelFormat("%d");
-
-    _chart->addAxis(axisYLeft, Qt::AlignLeft);
-    _chart->addAxis(axisXBottom, Qt::AlignBottom);
-
-    for(ParserMassif *parser : _parsers){
-        QLineSeries *seriesSnapshotNums = new QLineSeries();
-
-        for (SnapshotItem* snapshot : parser->snapshotItems()) {
-            uint xValue = snapshot->snapshotNum();
-            quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
-            seriesSnapshotNums->append(xValue, yValue);
-        }
-        _chart->addSeries(seriesSnapshotNums);
-    }
-    _chart->createDefaultAxes();
-    axisXBottom->setTitleText("snapshot #");
-    _chart->setTheme(QChart::ChartThemeBrownSand);
-    createChartView();
-    _chartBoxLayout->addWidget(_chartView);
-    _chartBoxLayout->addLayout(createChangeRangeLayout());
-
-    QGraphicsView* graphicsView = new QGraphicsView();
-    //QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    //spLeft.setHorizontalStretch(2);
-    //graphicsView->setSizePolicy(spLeft);
-    graphicsView->setLayout(_chartBoxLayout);
-
-    QBoxLayout *generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-    generalTabLayout->addWidget(graphicsView);
-    //generalTabLayout->addLayout(createSnapshotListLayout());
-    //generalTabLayout->addLayout(createCodeAndTreeTabLayout());
-    this->setLayout(generalTabLayout);
-}
 
 void GeneralTabWidget::createChartView()
 {
@@ -198,14 +59,16 @@ void GeneralTabWidget::createChartView()
 void GeneralTabWidget::createChartBoxLayout()
 {
     _chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    _radioButtonTimeUnit = new QRadioButton("Time unit on x-axis");
-    QObject::connect(_radioButtonTimeUnit, SIGNAL(clicked()), this, SLOT(showTimeUnitGraph()));
 
-    _chartBoxLayout->addWidget(_radioButtonTimeUnit);
+    if(_parser){
+        _chart = new Chart(_parser);
+        _chartBoxLayout->addWidget(_chart->radioButtonTimeUnit());
+    }
+    else if(_parsers.size() > 0){
+        _chart = new Chart(_parsers);
+    }
 
-    createChart();
     createChartView();
-
     _chartBoxLayout->addWidget(_chartView);
     _chartBoxLayout->addLayout(createChangeRangeLayout());
 }
@@ -231,7 +94,7 @@ QBoxLayout* GeneralTabWidget::createChangeRangeLayout()
     QPushButton* submit = new QPushButton("submit");
     lineEditsLayout->addWidget(submit);
 
-    QObject::connect(submit, SIGNAL(clicked()), this, SLOT(changeRange()));
+    QObject::connect(submit, SIGNAL(clicked()), this, SLOT(change_range()));
 
     return lineEditsLayout;
 }
@@ -239,7 +102,6 @@ QBoxLayout* GeneralTabWidget::createChangeRangeLayout()
 QBoxLayout *GeneralTabWidget::createTreeLayout(SnapshotListButton* generalBtn)
 {
     QBoxLayout *btnLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-
 
     QString text = generalBtn->text();
     unsigned snapNum = static_cast<unsigned>(std::atoi((text.split(" ")[1]).toStdString().c_str()));
@@ -249,7 +111,6 @@ QBoxLayout *GeneralTabWidget::createTreeLayout(SnapshotListButton* generalBtn)
     HeapTreeItem* root = snap->heapTreeItem();
     std::stack<HeapTreeItem*> tree;
     tree.push(root);
-
 
     while(!tree.empty()){
         HeapTreeItem* tmpNode = tree.top();
@@ -348,11 +209,14 @@ void GeneralTabWidget::createGraph()
     graphicsView->setSizePolicy(spLeft);
     graphicsView->setLayout(_chartBoxLayout);
 
+
     QBoxLayout *generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     generalTabLayout->addWidget(graphicsView);
-    generalTabLayout->addLayout(createSnapshotListLayout());
 
-    generalTabLayout->addLayout(createCodeAndTreeTabLayout());
+    if(_parser){
+        generalTabLayout->addLayout(createSnapshotListLayout());
+        generalTabLayout->addLayout(createCodeAndTreeTabLayout());
+    }
+
     this->setLayout(generalTabLayout);
 }
-
