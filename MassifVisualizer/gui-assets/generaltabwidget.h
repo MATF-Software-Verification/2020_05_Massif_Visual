@@ -5,9 +5,9 @@
 
 #include <QWidget>
 #include <QChartView>
-#include <QValueAxis>
-#include <QCategoryAxis>
-#include <QLineSeries>
+//#include <QValueAxis>
+//#include <QCategoryAxis>
+//#include <QLineSeries>
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QRadioButton>
@@ -17,12 +17,12 @@
 #include <QListWidget>
 #include <QMessageBox>
 #include <QTextBrowser>
-#include <QTextCursor>
-#include <QTextBlock>
+//#include <QTextCursor>
+//#include <QTextBlock>
 #include <QScrollBar>
 
 #include "snapshotlistbutton.h"
-#include "heaptreebutton.h"
+//#include "heaptreebutton.h"
 #include "parse-massif-file/parser-massif.h"
 #include "chart.h"
 
@@ -39,6 +39,8 @@ public:
     explicit GeneralTabWidget(QWidget *parent = nullptr,
                               QStringList* fileNames = new QStringList());
 
+    std::vector<TreeWidget *> treeWidgets() const;
+
 signals:
 
 public slots:
@@ -53,7 +55,6 @@ private:
     QBoxLayout *createChangeRangeLayout();
     QBoxLayout *createSnapshotListLayout();
     QBoxLayout *createCodeLayout();
-    QBoxLayout *createTreeLayout(SnapshotListButton* generalBtn);
     QBoxLayout* createPeakListLayout();
 
     void createGraph();
@@ -69,6 +70,7 @@ private:
     std::string _fileName;
     std::vector<ParserMassif*> _parsers;
     QStringList* _fileNames;
+    std::vector<TreeWidget*> _treeWidgets;
 };
 
 #endif // GENERALTABWIDGET_H

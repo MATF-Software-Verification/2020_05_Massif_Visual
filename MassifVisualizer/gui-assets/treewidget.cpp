@@ -14,10 +14,8 @@ void TreeWidget::open_and_jump_code_file()
 {
     SnapshotListButton *button= qobject_cast<SnapshotListButton * >(sender());
 
-
     auto directoryName = _filename;
     std::string fileName =directoryName + button->getCodeFileName();
-    std::cout << fileName << std::endl;
     unsigned jumpLine = button->getLineNumber()-1;
 
     if (fileName.empty())
@@ -68,13 +66,36 @@ void TreeWidget::open_and_jump_code_file()
 
 }
 
-void TreeWidget::highlightLine(unsigned lineNumber)
+void TreeWidget::highlightLine(unsigned lineNum)
 {
-    QTextCursor coursor(_textBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNumber)));
+    QTextCursor coursor(_textBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNum)));
     QTextBlockFormat frmt = coursor.blockFormat();
-    frmt.setBackground(QBrush(QColor(255, 128, 0)));
+    frmt.setBackground(QBrush(_penColor));
     coursor.setBlockFormat(frmt);
     _textBrowser->setTextCursor(coursor);
+}
+
+void TreeWidget::updateBtnTheme()
+{
+
+    switch(theme){
+        case Theme::DEFAULT:
+            this->setStyleSheet("QPushButton {background-color: #ff8000}\nQPushButton:disabled { background-color: #ffe0b3}");
+            _penColor = QColor(255, 128, 0);
+            break;
+        case Theme::BRIGHT:
+            this->setStyleSheet("QPushButton {background-color: #fff2e6}\nQPushButton:disabled { background-color: white}");
+            _penColor = QColor(255, 230, 204);
+            break;
+        case Theme::PSYCHEDELIC:
+            this->setStyleSheet("QPushButton {background-color: #cc33ff}\nQPushButton:disabled { background-color: white}");
+            _penColor = QColor(204, 51, 255);
+            break;
+        case Theme::SAPPHIRE:
+            this->setStyleSheet("QPushButton {background-color: #99ccff}\nQPushButton:disabled { background-color: #e6f2ff}");
+            _penColor = QColor(77, 184, 255);
+            break;
+    }
 }
 
 void TreeWidget::createTreeLayout()
@@ -89,6 +110,8 @@ void TreeWidget::createTreeLayout()
     tree.push(root);
     bool disabledBtn = true;
 
+    updateBtnTheme();
+
     while(!tree.empty()){
         HeapTreeItem* tmpNode = tree.top();
         tree.pop();
@@ -102,7 +125,7 @@ void TreeWidget::createTreeLayout()
         }
         else {
             QObject::connect(curNodeBut, SIGNAL(clicked()), this, SLOT(open_and_jump_code_file()));
-            curNodeBut->setStyleSheet("background-color:#ffad33; margin : 0px 0px 0px " + QString::number(tmpNode->indentation()*10) + "px; font-size: 11px");
+            curNodeBut->setStyleSheet("margin : 0px 0px 0px " + QString::number(tmpNode->indentation()*10) + "px; font-size: 11px");
         }
 
         _buttonLayout->addWidget(curNodeBut);

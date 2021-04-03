@@ -8,9 +8,8 @@
 #include <QTextBlock>
 
 #include "snapshotlistbutton.h"
-//#include "heaptreebutton.h"
 #include "parse-massif-file/parser-massif.h"
-
+#include "../helper-functions.h"
 
 class TreeWidget : public QWidget
 {
@@ -21,19 +20,22 @@ public:
 
     QBoxLayout *buttonLayout() const;
     void setButtonLayout(QBoxLayout *buttonLayout);
+    void updateBtnTheme();
 
 private slots:
     void open_and_jump_code_file();
 private:
 
     void createTreeLayout();
+    void highlightLine(unsigned lineNum);
+
 
     unsigned _snapshotNum;
     ParserMassif* _parser;
     QBoxLayout* _buttonLayout;
     std::string _filename;
     QTextBrowser* _textBrowser;
-    void highlightLine(unsigned lineNumber);
+    QColor _penColor = QColor(255, 128, 0);
 };
 
 #endif // TREEWIDGET_H

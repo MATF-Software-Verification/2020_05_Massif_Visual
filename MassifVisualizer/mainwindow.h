@@ -9,6 +9,7 @@
 
 #include "gui-assets/generaltabwidget.h"
 #include "./exethread.h"
+#include "helper-functions.h"
 
 namespace Ui {
 class MainWindow;
@@ -44,8 +45,9 @@ private slots:
     void on_actionSapphire_triggered();
     void on_actionOpen_From_Executable_triggered();
     void onValgrindMassifFinished(QString massifOutputName);
-
     void on_actionOpen_Multiple_Massif_Files_triggered();
+
+
 
 private:
 
@@ -65,6 +67,7 @@ private:
     void updateMenus();
     void parseRecentFiles();
     void setDefaultTheme();
+    void updateTreeThemes();
 };
 
 #endif // MAINWINDOW_H

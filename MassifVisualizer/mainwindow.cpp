@@ -12,6 +12,7 @@
 #include <QMovie>
 #include <QRandomGenerator>
 
+Theme theme = Theme::DEFAULT;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -204,6 +205,16 @@ void MainWindow::parseRecentFiles()
 
 }
 
+void MainWindow::updateTreeThemes()
+{
+    auto n = ui->tabWidget->count();
+    for(int i = 0; i < n; i++){
+        GeneralTabWidget* tab = qobject_cast<GeneralTabWidget * >(ui->tabWidget->widget(i));
+        for(TreeWidget* trW : tab->treeWidgets())
+            trW->updateBtnTheme();
+    }
+}
+
 void MainWindow::setDefaultTheme()
 {
 
@@ -217,6 +228,8 @@ void MainWindow::setDefaultTheme()
     QString labelText = "QLabel {color: #ff8000; font-size: 12pt; font-weight: bold}";
     this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
+    theme = Theme::DEFAULT;
+    updateTreeThemes();
 }
 
 void MainWindow::on_actionDefault_triggered()
@@ -236,6 +249,9 @@ void MainWindow::on_actionBright_theme_triggered()
 
     this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
+
+    theme = Theme::BRIGHT;
+    updateTreeThemes();
 }
 
 void MainWindow::on_actionPsychedelic_theme_triggered()
@@ -257,6 +273,8 @@ void MainWindow::on_actionPsychedelic_theme_triggered()
 
     this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
+    theme = Theme::PSYCHEDELIC;
+    updateTreeThemes();
 }
 
 void MainWindow::on_actionSapphire_triggered()
@@ -270,6 +288,9 @@ void MainWindow::on_actionSapphire_triggered()
     QString labelText = "QLabel {color:   #e6f3ff; font-size: 12pt; font-weight: bold}";
     this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);
+
+    theme = Theme::SAPPHIRE;
+    updateTreeThemes();
 }
 
 void MainWindow::on_actionOpen_From_Executable_triggered()
@@ -290,23 +311,6 @@ void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames();
     QStringList *fileNamesPtr = new QStringList(fileNames);
-//    for(QString fileName : fileNames){
-//        if (fileName.isEmpty())
-//            return;
-
-//        _fileName = fileName.toStdString();
-//        auto index = _fileName.find_last_of('/');
-//        _directoryName = _fileName.substr(0, (index+1));
-
-//        std::ofstream outfile;
-//        outfile.open(_recentFilesFile, std::ios_base::app);
-//        outfile << _fileName << std::endl;
-//        outfile.close();
-//        parseRecentFiles();
-//        updateMenus();
-
-//        int indexx =  QString::fromStdString(_fileName).lastIndexOf("/");
-//    }
 
     int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, fileNamesPtr), "Multiple Graphs");
     ui->tabWidget->setCurrentIndex(indexxx);

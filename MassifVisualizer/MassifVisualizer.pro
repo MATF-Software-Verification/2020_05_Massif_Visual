@@ -33,7 +33,6 @@ SOURCES += \
         parse-massif-file/snapshotitem.cpp \
         parse-massif-file/heaptreeitem.cpp \
         helper-functions.cpp \
-    gui-assets/heaptreebutton.cpp \
     gui-assets/listbutton.cpp \
     gui-assets/treewidget.cpp \
     exethread.cpp \
@@ -47,7 +46,6 @@ HEADERS += \
         parse-massif-file/snapshotitem.h \
         parse-massif-file/heaptreeitem.h \
         helper-functions.h \
-    gui-assets/heaptreebutton.h \
     gui-assets/listbutton.h \
     gui-assets/treewidget.h \
     exethread.h \
