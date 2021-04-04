@@ -42,16 +42,15 @@ void Chart::createChart()
     uint peakNum = 0;
     float peakValue = 0;
 
+    SnapshotItem* peakSnapshot = _parser->peakSnapshot();
+    peakNum = peakSnapshot->snapshotNum();
+    peakValue = peakSnapshot->memHeapB() + peakSnapshot->memHeapExtraB() + peakSnapshot->memStacksB();
+
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
         uint xValue = snapshot->snapshotNum();
         quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
         _seriesSnapshotNum->append(xValue, yValue);
         _seriesTimeUnit->append(snapshot->time(), yValue);
-
-        if (snapshot->treeType() == HeapTreeType::PEAK) {
-            peakNum = xValue;
-            peakValue = yValue;
-        }
     }
 
     std::ostringstream title;
@@ -73,32 +72,22 @@ void Chart::createChart()
     this->setTitle(QString::fromStdString(title.str()));
     this->legend()->hide();
     this->adjustSize();
-
-    QValueAxis* axisYLeft = new QValueAxis();
-    axisYLeft->applyNiceNumbers();
-    axisYLeft->setMin(0);
-    axisYLeft->setLabelFormat("%d");
-    axisYLeft->setTitleText("memory size");
-
-    QValueAxis* axisXBottom = new QValueAxis();
-    axisXBottom->applyNiceNumbers();
-    axisXBottom->setMin(0);
-    axisXBottom->setLabelFormat("%d");
-
-    this->addAxis(axisYLeft, Qt::AlignLeft);
-    this->addAxis(axisXBottom, Qt::AlignBottom);
-
     this->addSeries(_seriesSnapshotNum);
+    this->createDefaultAxes();
 
-    axisXBottom->setTitleText("snapshot #");
-    _seriesSnapshotNum->attachAxis(axisYLeft);
-    _seriesSnapshotNum->attachAxis(axisXBottom);
+    QValueAxis* axisX = qobject_cast<QValueAxis*>(this->axes(Qt::Horizontal)[0]);
+    axisX->applyNiceNumbers();
+    axisX->setLabelFormat("%d");
+    axisX->setTitleText("snapshot #");
+
+    QValueAxis* axisY = qobject_cast<QValueAxis*>(this->axes(Qt::Vertical)[0]);
+    axisY->applyNiceNumbers();
+    axisY->setTitleText("memory size");
 
     this->setTheme(QChart::ChartThemeBrownSand);
 
     _radioButtonTimeUnit = new QRadioButton("Time unit on x-axis");
     QObject::connect(_radioButtonTimeUnit, SIGNAL(clicked()), this, SLOT(show_time_unit_graph()));
-
 }
 
 void Chart::createMultiChart()
@@ -128,6 +117,7 @@ void Chart::createMultiChart()
         i++;
     }
     this->createDefaultAxes();
+    qobject_cast<QValueAxis*>(this->axes(Qt::Horizontal)[0])->applyNiceNumbers();
     this->axes(Qt::Vertical)[0]->setTitleText("memory size");
     this->axes(Qt::Horizontal)[0]->setTitleText("snapshot #");
     this->setTheme(QChart::ChartThemeBrownSand);
