@@ -10,13 +10,15 @@ ConfigDialog::ConfigDialog()
 
     QBoxLayout* pathAndButtonBL = new QBoxLayout(QBoxLayout::LeftToRight);
     _valgrindPathLE = new QLineEdit();
-    QPushButton* submit = new QPushButton("Submit");
-    // disable this button while _valgrindPathLE is empty
-    //submit->setDisabled(true);
-    QObject::connect(submit, SIGNAL(clicked()), this, SLOT(submit_valgrind_path()));
+
+    _submit = new QPushButton("Submit");
+    _submit->setDisabled(true);
+
+    QObject::connect(_valgrindPathLE, SIGNAL(textChanged(QString)), this, SLOT(enable_submit(QString)));
+    QObject::connect(_submit, SIGNAL(clicked()), this, SLOT(submit_valgrind_path()));
 
     pathAndButtonBL->addWidget(_valgrindPathLE);
-    pathAndButtonBL->addWidget(submit);
+    pathAndButtonBL->addWidget(_submit);
     configLayoutBL->addLayout(pathAndButtonBL);
 
     this->setLayout(configLayoutBL);
@@ -47,5 +49,15 @@ void ConfigDialog::submit_valgrind_path()
         messageBox->setWindowTitle("Try Again");
         messageBox->open();
         _valgrindPathLE->clear();
+    }
+}
+
+void ConfigDialog::enable_submit(const QString &text)
+{
+    if (text.size() > 0) {
+        _submit->setEnabled(true);
+    }
+    else {
+        _submit->setDisabled(true);
     }
 }

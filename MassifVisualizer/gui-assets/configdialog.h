@@ -20,12 +20,14 @@ public:
 
 private slots:
     void submit_valgrind_path();
+    void enable_submit(const QString & text);
 
 private:
     bool pathExistsAndExecutable(QString path);
 
     QString _valgrindPath = "valgrind";
     QLineEdit* _valgrindPathLE = nullptr;
+    QPushButton* _submit = nullptr;
 };
 
 #endif // CONFIGDIALOG_H
