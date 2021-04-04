@@ -22,10 +22,7 @@ void ExeThread::run()
     if (_optionsDialog!=nullptr && _optionsDialog->massifOptions().size() > 0)
         massifOptions = _optionsDialog->massifOptions();
 
-    std::cout << "B " << std::endl;
-
     QString processCommand = valgrindPath + " --tool=massif " + massifOptions + _exeFilePath;
-    std::cout << "processCommand : " << processCommand.toStdString() << std::endl;
     valgrindMassifProcess->start(processCommand);
     QString massifFileName = workingDirectory + "/massif.out." + QString::number(valgrindMassifProcess->processId());
 
