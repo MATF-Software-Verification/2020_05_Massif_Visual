@@ -66,7 +66,7 @@ void GeneralTabWidget::createChartBoxLayout()
         _chartBoxLayout->addWidget(_chart->radioButtonTimeUnit());
     }
     else if(_parsers.size() > 0){
-        _chart = new Chart(_parsers);
+        _chart = new Chart(_parsers, _fileNames);
     }
     createChartView();
     _chartBoxLayout->addWidget(_chartView);
@@ -128,8 +128,8 @@ QBoxLayout *GeneralTabWidget::createPeakListLayout()
         treeWidget->setVisible(false);
         listButton = new ListButton(treeWidget);
         QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
-        flowLayout->addWidget(listButton);
-        flowLayout->addWidget(treeWidget);
+        flowLayout->addWidget(listButton, 0, Qt::AlignTop);
+        flowLayout->addWidget(treeWidget, 1, Qt::AlignTop);
         QString listBtnName = "peak " + QString::number(currPeak->snapshotNum()) + " ";
         listButton->setText(listBtnName.append((_fileNames->at(i)).mid(index+1)));
         listButton->setStyleSheet("margin: 0px 15px 0px 0px");
@@ -170,7 +170,7 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
         if(snapshot->treeType() == HeapTreeType::EMPTY){
             listButton = new ListButton();
             listButton->setDisabled(true);
-            flowLayout->addWidget(listButton);
+            flowLayout->addWidget(listButton, 0, Qt::AlignTop);
         }
         else{
 
@@ -178,8 +178,8 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
             treeWidget->setVisible(false);
             listButton = new ListButton(treeWidget);
             QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
-            flowLayout->addWidget(listButton);
-            flowLayout->addWidget(treeWidget);
+            flowLayout->addWidget(listButton, 0, Qt::AlignTop);
+            flowLayout->addWidget(treeWidget, 0, Qt::AlignTop);
             _treeWidgets.push_back(treeWidget);
         }
 

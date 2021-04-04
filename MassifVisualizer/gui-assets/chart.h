@@ -17,7 +17,7 @@ class Chart : public QChart
    Q_OBJECT
 public:
     Chart(ParserMassif* parser);
-    Chart(std::vector<ParserMassif*> parsers);
+    Chart(std::vector<ParserMassif*> parsers, QStringList* fileNames);
 
     QRadioButton *radioButtonTimeUnit() const;
 
@@ -31,6 +31,7 @@ private:
     QLineSeries* _seriesTimeUnit;
     ParserMassif* _parser;
     std::vector<ParserMassif*> _parsers;
+    QStringList* _fileNames;
 
     QRadioButton* _radioButtonTimeUnit;
 };

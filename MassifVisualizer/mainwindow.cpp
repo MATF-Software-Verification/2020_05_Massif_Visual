@@ -284,7 +284,7 @@ void MainWindow::on_actionSapphire_triggered()
     QString pushButtnoDisabled = "QPushButton:disabled { background-color: #cce6ff; border: 1px solid black;}";
     QString backgroundOfElements = "* {background-color: #004080}";
     QString textColor = "* {color:  #e6f3ff}";
-    QString lineEditBackground = "QLineEdit {background-color: #cce6ff}";
+    QString lineEditBackground = "QLineEdit {background-color: #cce6ff; color: #004080}";
     QString labelText = "QLabel {color:   #e6f3ff; font-size: 12pt; font-weight: bold}";
     this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
                         + "\n" + lineEditBackground + "\n" + labelText);

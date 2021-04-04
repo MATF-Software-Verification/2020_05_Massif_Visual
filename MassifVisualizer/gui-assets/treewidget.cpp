@@ -128,7 +128,7 @@ void TreeWidget::createTreeLayout()
             curNodeBut->setStyleSheet("margin : 0px 0px 0px " + QString::number(tmpNode->indentation()*10) + "px; font-size: 11px");
         }
 
-        _buttonLayout->addWidget(curNodeBut);
+        _buttonLayout->addWidget(curNodeBut, 0, Qt::AlignTop);
         auto revesedChildren = tmpNode->children();
         std::reverse(revesedChildren.begin(), revesedChildren.end());
 

@@ -5,7 +5,9 @@ Chart::Chart(ParserMassif* parser) : _parser(parser)
     createChart();
 }
 
-Chart::Chart(std::vector<ParserMassif *> parsers) : _parsers(parsers)
+Chart::Chart(std::vector<ParserMassif *> parsers, QStringList* fileNames)
+    : _parsers(parsers),
+      _fileNames(fileNames)
 {
     createMultiChart();
 }
@@ -98,39 +100,33 @@ void Chart::createMultiChart()
 {
     std::ostringstream title;
 
-    title << "TODO";
+    title << "Multiple Massif Output Files Graph";
 
     this->setTitle(QString::fromStdString(title.str()));
-    this->legend()->hide();
+    this->legend()->setVisible(true);
+    this->legend()->setAlignment(Qt::AlignBottom);
     this->adjustSize();
 
-    QValueAxis* axisYLeft = new QValueAxis();
-    axisYLeft->applyNiceNumbers();
-    axisYLeft->setMin(0);
-    axisYLeft->setLabelFormat("%d");
-    axisYLeft->setTitleText("memory size");
-
-    QValueAxis* axisXBottom = new QValueAxis();
-    axisXBottom->applyNiceNumbers();
-    axisXBottom->setMin(0);
-    axisXBottom->setLabelFormat("%d");
-
-    this->addAxis(axisYLeft, Qt::AlignLeft);
-    this->addAxis(axisXBottom, Qt::AlignBottom);
-
+    int i = 0;
     for(ParserMassif *parser : _parsers){
         QLineSeries *seriesSnapshotNums = new QLineSeries();
+        unsigned long index = ((_fileNames->at(i)).toStdString().find_last_of('/'));
+        auto fileName = (_fileNames->at(i)).mid(static_cast<int>(index)+1);
 
+        seriesSnapshotNums->setName(fileName);
         for (SnapshotItem* snapshot : parser->snapshotItems()) {
             uint xValue = snapshot->snapshotNum();
             quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
             seriesSnapshotNums->append(xValue, yValue);
         }
         this->addSeries(seriesSnapshotNums);
+        i++;
     }
     this->createDefaultAxes();
-    axisXBottom->setTitleText("snapshot #");
+    this->axes(Qt::Vertical)[0]->setTitleText("memory size");
+    this->axes(Qt::Horizontal)[0]->setTitleText("snapshot #");
     this->setTheme(QChart::ChartThemeBrownSand);
+
 }
 
 QRadioButton *Chart::radioButtonTimeUnit() const
