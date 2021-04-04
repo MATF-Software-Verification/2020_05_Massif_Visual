@@ -145,7 +145,7 @@ void MainWindow::visualizeData(QString fileName)
 
 void MainWindow::runMassif(QString exeFileName)
 {
-    ExeThread *exeThread = new ExeThread(this, exeFileName);
+    ExeThread *exeThread = new ExeThread(this, exeFileName, _dialogPath, _dialogMOptions);
     connect(exeThread, SIGNAL(valgrindMassifFinished(QString)),
                 this, SLOT(onValgrindMassifFinished(QString)));
     exeThread->start();
@@ -153,7 +153,6 @@ void MainWindow::runMassif(QString exeFileName)
 
 void MainWindow::createMenus()
 {
-
     QAction* clearRecentFiles = new QAction(this);
     QObject::connect(clearRecentFiles, SIGNAL(triggered()), this, SLOT(clearRecent()));
     clearRecentFiles->setText(QString::fromStdString("Clear recent files"));
@@ -295,9 +294,8 @@ void MainWindow::on_actionSapphire_triggered()
 
 void MainWindow::on_actionOpen_From_Executable_triggered()
 {
-    // TODO: how to put OR in regex and add .exe option
     QString exeFileName = QFileDialog::getOpenFileName(this,
-                              "Executable File (BEERVILLE)", "./", "*.out");
+                              "Select an Executable File", "./",  tr("Executables (*.out *.exe)"));
 
     runMassif(exeFileName);
 }
@@ -314,4 +312,16 @@ void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 
     int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, fileNamesPtr), "Multiple Graphs");
     ui->tabWidget->setCurrentIndex(indexxx);
+}
+
+void MainWindow::on_actionValgrind_Path_Config_triggered()
+{
+    _dialogPath = new ConfigDialog();
+    _dialogPath->open();
+}
+
+void MainWindow::on_actionMassif_User_Options_triggered()
+{
+    _dialogMOptions = new MassifOptionsDialog();
+    _dialogMOptions->open();
 }

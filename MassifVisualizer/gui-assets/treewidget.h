@@ -16,7 +16,7 @@ class TreeWidget : public QWidget
     Q_OBJECT
 
 public:
-    TreeWidget(unsigned snapshotNum, ParserMassif* parser, std::string filename, QTextBrowser* textBrowser);
+    TreeWidget(unsigned snapshotNum, ParserMassif* parser, std::string dirName, QTextBrowser* textBrowser);
 
     QBoxLayout *buttonLayout() const;
     void setButtonLayout(QBoxLayout *buttonLayout);
@@ -29,11 +29,12 @@ private:
     void createTreeLayout();
     void highlightLine(unsigned lineNum);
 
-
     unsigned _snapshotNum;
+    // because of the alignment issues, it can be replaced with #pragma pack(1)
+    char _padding[4];
     ParserMassif* _parser;
     QBoxLayout* _buttonLayout;
-    std::string _filename;
+    std::string _dirName;
     QTextBrowser* _textBrowser;
     QColor _penColor = QColor(255, 128, 0);
 };

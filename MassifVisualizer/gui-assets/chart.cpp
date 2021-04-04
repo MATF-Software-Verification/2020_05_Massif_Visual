@@ -57,13 +57,18 @@ void Chart::createChart()
     std::ostringstream title;
     std::string peakValueStr = std::to_string(peakValue/1000);
 
-    title << "<i>File exe: ./"
-          << _parser->exeFile()
-          << "</i><br><b>Peak: "
-          << peakValueStr.substr(0, peakValueStr.find(".")+4)
-          << "KB at Snapshot #"
-          << std::to_string(peakNum)
-          << "</b>";
+    if (_parser->exeFile().empty()) {
+        title << "massif.out file does not exist!";
+    }
+    else {
+        title << "<i>File exe: "
+              << _parser->exeFile()
+              << "</i><br><b>Peak: "
+              << peakValueStr.substr(0, peakValueStr.find(".")+4)
+              << "KB at Snapshot #"
+              << std::to_string(peakNum)
+              << "</b>";
+    }
 
     this->setTitle(QString::fromStdString(title.str()));
     this->legend()->hide();
@@ -126,7 +131,6 @@ void Chart::createMultiChart()
     this->axes(Qt::Vertical)[0]->setTitleText("memory size");
     this->axes(Qt::Horizontal)[0]->setTitleText("snapshot #");
     this->setTheme(QChart::ChartThemeBrownSand);
-
 }
 
 QRadioButton *Chart::radioButtonTimeUnit() const

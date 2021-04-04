@@ -16,6 +16,8 @@ public:
 private:
 
     unsigned _lineNumber;
+    // because of the alignment issues, it can be replaced with #pragma pack(1)
+    char _padding[4];
     std::string _codeFilename;
 };
 

@@ -173,7 +173,6 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
             flowLayout->addWidget(listButton, 0, Qt::AlignTop);
         }
         else{
-
             TreeWidget* treeWidget = new TreeWidget(snapshot->snapshotNum(), _parser, directoryName, _codeTextBrowser);
             treeWidget->setVisible(false);
             listButton = new ListButton(treeWidget);

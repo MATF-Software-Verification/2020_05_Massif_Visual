@@ -61,6 +61,9 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">selection-background-color: rgb(245, 121, 0)</string>
+   </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
@@ -80,7 +83,10 @@
      <string>Help</string>
     </property>
     <addaction name="actionHelp"/>
+    <addaction name="separator"/>
     <addaction name="actionReport_Bug"/>
+    <addaction name="separator"/>
+    <addaction name="actionWhat_s_This"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -99,6 +105,9 @@
      <addaction name="actionSapphire"/>
     </widget>
     <addaction name="menuChange_Theme"/>
+    <addaction name="separator"/>
+    <addaction name="actionValgrind_Path_Config"/>
+    <addaction name="actionMassif_User_Options"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>
@@ -168,6 +177,21 @@
   <action name="actionOpen_Multiple_Massif_Files">
    <property name="text">
     <string>Open Multiple Massif Files</string>
+   </property>
+  </action>
+  <action name="actionWhat_s_This">
+   <property name="text">
+    <string>What's This?</string>
+   </property>
+  </action>
+  <action name="actionValgrind_Path_Config">
+   <property name="text">
+    <string>Valgrind Path Config</string>
+   </property>
+  </action>
+  <action name="actionMassif_User_Options">
+   <property name="text">
+    <string>Massif User Options</string>
    </property>
   </action>
  </widget>

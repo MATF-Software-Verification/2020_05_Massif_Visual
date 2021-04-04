@@ -10,6 +10,8 @@
 #include "gui-assets/generaltabwidget.h"
 #include "./exethread.h"
 #include "helper-functions.h"
+#include "gui-assets/configdialog.h"
+#include "gui-assets/massifoptionsdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -49,6 +51,10 @@ private slots:
 
 
 
+    void on_actionValgrind_Path_Config_triggered();
+
+    void on_actionMassif_User_Options_triggered();
+
 private:
 
     Ui::MainWindow *ui;
@@ -60,6 +66,8 @@ private:
     std::vector<std::string> _recentFiles;
     std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
     QList<QAction*> _recentFileActionList;
+    ConfigDialog *_dialogPath;
+    MassifOptionsDialog* _dialogMOptions;
 
     void visualizeData(QString fileName);
     void runMassif(QString exeFileName);

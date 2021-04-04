@@ -36,7 +36,9 @@ SOURCES += \
     gui-assets/listbutton.cpp \
     gui-assets/treewidget.cpp \
     exethread.cpp \
-    gui-assets/chart.cpp
+    gui-assets/chart.cpp \
+    gui-assets/configdialog.cpp \
+    gui-assets/massifoptionsdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,7 +51,9 @@ HEADERS += \
     gui-assets/listbutton.h \
     gui-assets/treewidget.h \
     exethread.h \
-    gui-assets/chart.h
+    gui-assets/chart.h \
+    gui-assets/configdialog.h \
+    gui-assets/massifoptionsdialog.h
 
 FORMS += \
         mainwindow.ui

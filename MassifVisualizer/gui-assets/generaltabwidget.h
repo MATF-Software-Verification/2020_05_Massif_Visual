@@ -5,9 +5,6 @@
 
 #include <QWidget>
 #include <QChartView>
-//#include <QValueAxis>
-//#include <QCategoryAxis>
-//#include <QLineSeries>
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QRadioButton>
@@ -17,12 +14,9 @@
 #include <QListWidget>
 #include <QMessageBox>
 #include <QTextBrowser>
-//#include <QTextCursor>
-//#include <QTextBlock>
 #include <QScrollBar>
 
 #include "snapshotlistbutton.h"
-//#include "heaptreebutton.h"
 #include "parse-massif-file/parser-massif.h"
 #include "chart.h"
 

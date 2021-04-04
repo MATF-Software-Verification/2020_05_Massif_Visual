@@ -200,7 +200,7 @@ void ParserMassif::parseDescLine(const std::string &line)
 
 void ParserMassif::parseCmdLine(const std::string &line)
 {
-     std::string target = "./";
+     std::string target = "/";
      size_t start = line.find_first_of(target);
      _exeFile = trim(line.substr(start+target.size()));
 }
@@ -269,6 +269,10 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
 
     auto currentMother = newHeapTree;
     for (auto line : lines) {
+
+        if (line.find("threshold") != std::string::npos)
+            continue;
+
         HeapTreeItem* newTree = new HeapTreeItem;
 
         size_t posN = line.find("n");

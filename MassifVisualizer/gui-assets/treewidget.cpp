@@ -1,10 +1,10 @@
 #include "treewidget.h"
 
-TreeWidget::TreeWidget(unsigned snapshotNum, ParserMassif *parser, std::string filename, QTextBrowser* textBrowser)
+TreeWidget::TreeWidget(unsigned snapshotNum, ParserMassif *parser, std::string dirName, QTextBrowser* textBrowser)
 {
     _snapshotNum = snapshotNum;
     _parser = parser;
-    _filename = filename;
+    _dirName = dirName;
     _textBrowser = textBrowser;
     createTreeLayout();
     this->setLayout(_buttonLayout);
@@ -14,8 +14,8 @@ void TreeWidget::open_and_jump_code_file()
 {
     SnapshotListButton *button= qobject_cast<SnapshotListButton * >(sender());
 
-    auto directoryName = _filename;
-    std::string fileName =directoryName + button->getCodeFileName();
+    auto directoryName = _dirName;
+    std::string fileName = directoryName + button->getCodeFileName();
     unsigned jumpLine = button->getLineNumber()-1;
 
     if (fileName.empty())
