@@ -50,7 +50,6 @@ void MainWindow::quit()
 
 void MainWindow::on_actionOpen_Massif_File_triggered()
 {
-    //0xF0 0x9F 0x8C 0x88
     QString fileName = QFileDialog::getOpenFileName(this,
                               "Massif Out File " + QString::fromUtf8("\xF0\x9F\x8C\x88"), "./", "massif.out.*");
 

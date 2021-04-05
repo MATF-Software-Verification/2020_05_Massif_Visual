@@ -2,7 +2,7 @@
 #define HELPERFUNCTIONS_H
 
 #include <string>
-
+#include <QDialog>
 enum class Theme {
     DEFAULT,
     BRIGHT,
@@ -14,5 +14,7 @@ enum class Theme {
 extern Theme theme;
 
 std::string trim(const std::string& line);
+void setTheme(QDialog* dialog);
+
 
 #endif // HELPERFUNCTIONS_H
