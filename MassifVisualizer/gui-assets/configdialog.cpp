@@ -28,7 +28,8 @@ ConfigDialog::ConfigDialog()
 ConfigDialog::~ConfigDialog()
 {
     delete _configLayoutBL;
-    delete _messageBox;
+    if (_messageBox != nullptr)
+        delete _messageBox;
 }
 
 // TODO: How to validate if it is actually valgrind exe?

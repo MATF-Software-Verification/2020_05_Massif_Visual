@@ -32,10 +32,10 @@ private:
     QLineEdit* _valgrindPathLE = nullptr;
     QPushButton* _submit = nullptr;
 
-    QBoxLayout* _configLayoutBL;
-    QLabel* _insertPathL;
-    QBoxLayout* _pathAndButtonBL;
-    QMessageBox* _messageBox;
+    QBoxLayout* _configLayoutBL = nullptr;
+    QLabel* _insertPathL = nullptr;
+    QBoxLayout* _pathAndButtonBL = nullptr;
+    QMessageBox* _messageBox = nullptr;
 };
 
 #endif // CONFIGDIALOG_H
