@@ -17,6 +17,7 @@ class ConfigDialog : public QDialog
     Q_OBJECT
 public:
     ConfigDialog();
+    ~ConfigDialog();
 
     QString valgrindPath() const;
 
@@ -30,6 +31,11 @@ private:
     QString _valgrindPath = "valgrind";
     QLineEdit* _valgrindPathLE = nullptr;
     QPushButton* _submit = nullptr;
+
+    QBoxLayout* _configLayoutBL;
+    QLabel* _insertPathL;
+    QBoxLayout* _pathAndButtonBL;
+    QMessageBox* _messageBox;
 };
 
 #endif // CONFIGDIALOG_H

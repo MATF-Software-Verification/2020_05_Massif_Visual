@@ -33,6 +33,8 @@ public:
     explicit GeneralTabWidget(QWidget *parent = nullptr,
                               QStringList* fileNames = new QStringList());
 
+    ~GeneralTabWidget();
+
     std::vector<TreeWidget *> treeWidgets() const;
 
 signals:
@@ -53,6 +55,7 @@ private:
 
     void createGraph();
 
+    QBoxLayout* _generalTabLayout;
     Chart* _chart;
     QChartView* _chartView;
     QBoxLayout* _chartBoxLayout;
@@ -63,8 +66,12 @@ private:
     ParserMassif* _parser = nullptr;
     std::string _fileName;
     std::vector<ParserMassif*> _parsers;
-    QStringList* _fileNames;
     std::vector<TreeWidget*> _treeWidgets;
+    QStringList* _fileNames;
+    QBoxLayout* _flowLayout;
+    QBoxLayout* _flowAllSnapshotsLayout;
+    QWidget* _scrollAreaContent;
+    QWidget* _scrollAllSnapshotAreaContent;
 };
 
 #endif // GENERALTABWIDGET_H

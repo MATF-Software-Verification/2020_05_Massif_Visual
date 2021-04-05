@@ -14,7 +14,7 @@ Chart::Chart(std::vector<ParserMassif *> parsers, QStringList* fileNames)
 
 void Chart::show_time_unit_graph()
 {
-    auto axisXBottom = this->axes(Qt::Horizontal).back();
+    QAbstractAxis* axisXBottom = this->axes(Qt::Horizontal).back();
 
     if (_radioButtonTimeUnit->isChecked()) {
         this->axes(Qt::Horizontal).back()->setRange(0, _seriesTimeUnit->at(_seriesTimeUnit->count()-1).x());

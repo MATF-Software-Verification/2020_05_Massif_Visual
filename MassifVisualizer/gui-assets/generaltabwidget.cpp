@@ -24,6 +24,27 @@ GeneralTabWidget::GeneralTabWidget(QWidget *parent, QStringList* fileNames)
     createGraph();
 }
 
+GeneralTabWidget::~GeneralTabWidget()
+{
+    delete _generalTabLayout;
+    delete _chartBoxLayout;
+
+    delete _chart;
+    // ovo mozda puca? :D
+    delete _codeTextBrowser;
+    delete _parser;
+
+    for (ParserMassif* parser: _parsers) {
+        delete parser;
+    }
+    _parsers.clear();
+
+    for (TreeWidget* treeWidget: _treeWidgets) {
+        delete treeWidget;
+    }
+    _treeWidgets.clear();
+}
+
 void GeneralTabWidget::change_range()
 {
     int num_minLE = 0;
@@ -44,7 +65,7 @@ void GeneralTabWidget::change_range()
 
 void GeneralTabWidget::easy_visibility()
 {
-    ListButton *button= qobject_cast<ListButton * >(sender());
+    ListButton *button = qobject_cast<ListButton *>(sender());
 
     button->treeWidget()->setVisible(button->isVisible());
     button->setIsVisible(!button->isVisible());
@@ -103,15 +124,15 @@ QBoxLayout *GeneralTabWidget::createPeakListLayout()
 {
     QBoxLayout *generalPeakListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-    QBoxLayout* flowLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    QWidget* scrollAreaContent = new QWidget;
-    scrollAreaContent->setLayout(flowLayout);
+    _flowLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    _scrollAreaContent = new QWidget;
+    _scrollAreaContent->setLayout(_flowLayout);
 
     QScrollArea* scrollArea = new QScrollArea;
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(scrollAreaContent);
+    scrollArea->setWidget(_scrollAreaContent);
 
     QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
     spLeft.setHorizontalStretch(1);
@@ -128,12 +149,11 @@ QBoxLayout *GeneralTabWidget::createPeakListLayout()
         treeWidget->setVisible(false);
         listButton = new ListButton(treeWidget);
         QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
-        flowLayout->addWidget(listButton, 0, Qt::AlignTop);
-        flowLayout->addWidget(treeWidget, 1, Qt::AlignTop);
+        _flowLayout->addWidget(listButton, 0, Qt::AlignTop);
+        _flowLayout->addWidget(treeWidget, 1, Qt::AlignTop);
         QString listBtnName = "peak " + QString::number(currPeak->snapshotNum()) + " ";
         listButton->setText(listBtnName.append((_fileNames->at(i)).mid(index+1)));
         listButton->setStyleSheet("margin: 0px 15px 0px 0px");
-
         _treeWidgets.push_back(treeWidget);
         i++;
     }
@@ -146,15 +166,15 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
 {
     QBoxLayout *generalSnapshotListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-    QBoxLayout* flowLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    QWidget* scrollAreaContent = new QWidget;
-    scrollAreaContent->setLayout(flowLayout);
+    _flowAllSnapshotsLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    _scrollAllSnapshotAreaContent = new QWidget;
+    _scrollAllSnapshotAreaContent->setLayout(_flowAllSnapshotsLayout);
 
     QScrollArea* scrollArea = new QScrollArea;
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(scrollAreaContent);
+    scrollArea->setWidget(_scrollAllSnapshotAreaContent);
 
     QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
     spLeft.setHorizontalStretch(1);
@@ -163,27 +183,26 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
     auto index = _fileName.find_last_of('/');
     auto directoryName = _fileName.substr(0, (index+1));
 
-    treeWidgets().clear();
+    _treeWidgets.clear();
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
 
        ListButton* listButton;
         if(snapshot->treeType() == HeapTreeType::EMPTY){
             listButton = new ListButton();
             listButton->setDisabled(true);
-            flowLayout->addWidget(listButton, 0, Qt::AlignTop);
+            _flowAllSnapshotsLayout->addWidget(listButton, 0, Qt::AlignTop);
         }
         else{
             TreeWidget* treeWidget = new TreeWidget(snapshot->snapshotNum(), _parser, directoryName, _codeTextBrowser);
             treeWidget->setVisible(false);
             listButton = new ListButton(treeWidget);
             QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
-            flowLayout->addWidget(listButton, 0, Qt::AlignTop);
-            flowLayout->addWidget(treeWidget, 0, Qt::AlignTop);
+            _flowAllSnapshotsLayout->addWidget(listButton, 0, Qt::AlignTop);
+            _flowAllSnapshotsLayout->addWidget(treeWidget, 0, Qt::AlignTop);
             _treeWidgets.push_back(treeWidget);
         }
 
         listButton->setText("snapshot " + QString::number(snapshot->snapshotNum()));
-
         listButton->setStyleSheet("margin: 0px 15px 0px 0px");
     }
 
@@ -214,18 +233,18 @@ void GeneralTabWidget::createGraph()
     graphicsView->setLayout(_chartBoxLayout);
 
 
-    QBoxLayout *generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-    generalTabLayout->addWidget(graphicsView);
+    _generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    _generalTabLayout->addWidget(graphicsView);
 
     if(_parser){
-        generalTabLayout->addLayout(createSnapshotListLayout());
+        _generalTabLayout->addLayout(createSnapshotListLayout());
     }
     else if(_parsers.size() > 0){
-        generalTabLayout->addLayout(createPeakListLayout());
+        _generalTabLayout->addLayout(createPeakListLayout());
     }
 
-    generalTabLayout->addLayout(createCodeLayout());
-    this->setLayout(generalTabLayout);
+    _generalTabLayout->addLayout(createCodeLayout());
+    this->setLayout(_generalTabLayout);
 }
 
 std::vector<TreeWidget *> GeneralTabWidget::treeWidgets() const

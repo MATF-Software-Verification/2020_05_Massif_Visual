@@ -4,11 +4,11 @@ ConfigDialog::ConfigDialog()
 {
     this->setWindowTitle("Valgrind Path Config");
 
-    QBoxLayout* configLayoutBL = new QBoxLayout(QBoxLayout::TopToBottom);
-    QLabel* insertPathL = new QLabel("Enter Valgrind System Path: ");
-    configLayoutBL->addWidget(insertPathL);
+    _configLayoutBL = new QBoxLayout(QBoxLayout::TopToBottom);
+    _insertPathL = new QLabel("Enter Valgrind System Path: ");
+    _configLayoutBL->addWidget(_insertPathL);
 
-    QBoxLayout* pathAndButtonBL = new QBoxLayout(QBoxLayout::LeftToRight);
+    _pathAndButtonBL = new QBoxLayout(QBoxLayout::LeftToRight);
     _valgrindPathLE = new QLineEdit();
 
     _submit = new QPushButton("Submit");
@@ -17,12 +17,18 @@ ConfigDialog::ConfigDialog()
     QObject::connect(_valgrindPathLE, SIGNAL(textChanged(QString)), this, SLOT(enable_submit(QString)));
     QObject::connect(_submit, SIGNAL(clicked()), this, SLOT(submit_valgrind_path()));
 
-    pathAndButtonBL->addWidget(_valgrindPathLE);
-    pathAndButtonBL->addWidget(_submit);
-    configLayoutBL->addLayout(pathAndButtonBL);
+    _pathAndButtonBL->addWidget(_valgrindPathLE);
+    _pathAndButtonBL->addWidget(_submit);
+    _configLayoutBL->addLayout(_pathAndButtonBL);
 
-    this->setLayout(configLayoutBL);
+    this->setLayout(_configLayoutBL);
     setTheme(this);
+}
+
+ConfigDialog::~ConfigDialog()
+{
+    delete _configLayoutBL;
+    delete _messageBox;
 }
 
 // TODO: How to validate if it is actually valgrind exe?
@@ -45,10 +51,10 @@ void ConfigDialog::submit_valgrind_path()
         _valgrindPath = lineEditText;
     }
     else {
-        QMessageBox* messageBox = new QMessageBox();
-        messageBox->setText("Wrong Valgrind Path!");
-        messageBox->setWindowTitle("Try Again");
-        messageBox->open();
+        _messageBox = new QMessageBox();
+        _messageBox->setText("Wrong Valgrind Path!");
+        _messageBox->setWindowTitle("Try Again");
+        _messageBox->open();
         _valgrindPathLE->clear();
     }
 }

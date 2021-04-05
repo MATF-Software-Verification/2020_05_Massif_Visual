@@ -17,6 +17,7 @@ class TreeWidget : public QWidget
 
 public:
     TreeWidget(unsigned snapshotNum, ParserMassif* parser, std::string dirName, QTextBrowser* textBrowser);
+    ~TreeWidget();
 
     QBoxLayout *buttonLayout() const;
     void setButtonLayout(QBoxLayout *buttonLayout);

@@ -25,10 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->menuFile->addSeparator();
 
-    QAction* quit = new QAction(this);
-    QObject::connect(quit, SIGNAL(triggered()), this, SLOT(quit()));
-    quit->setText(QString::fromStdString("Quit"));
-    ui->menuFile->addAction(quit);
+    _quit = new QAction(this);
+    QObject::connect(_quit, SIGNAL(triggered()), this, SLOT(quit()));
+    _quit->setText(QString::fromStdString("Quit"));
+    ui->menuFile->addAction(_quit);
 
     ui->tabWidget->removeTab(0);
     ui->tabWidget->removeTab(0);
@@ -41,6 +41,22 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    // TODO recentFilesMenu underscore add
+    delete recentFilesMenu;
+    for (QAction* qAction: _recentFileActionList)
+        delete qAction;
+    _recentFileActionList.clear();
+
+    delete _dialogPath;
+    delete _dialogMOptions;
+
+    delete _quit;
+    delete _movie;
+    delete _processLabel;
+    delete _wdg;
+    delete _exeThread;
+    delete _clearRecentFiles;
+    delete _fileNamesPtr;
 }
 
 void MainWindow::quit()
@@ -80,17 +96,17 @@ void MainWindow::on_actionReport_Bug_triggered()
     if (ok && !text.isEmpty()){
 
 
-        QMovie *movie = new QMovie("../MassifVisualizer/assets/trash.gif");
-        QLabel *processLabel = new QLabel(this);
-        QWidget *wdg = new QWidget;
+        _movie = new QMovie("../MassifVisualizer/assets/trash.gif");
+        _processLabel = new QLabel(this);
+        _wdg = new QWidget;
 
-        processLabel->setParent(wdg);
-        processLabel->setFixedSize(700, 300);
-        processLabel->setMovie(movie);
-        wdg->setWindowTitle("Your bug report is being processed...");
-        wdg->show();
+        _processLabel->setParent(_wdg);
+        _processLabel->setFixedSize(700, 300);
+        _processLabel->setMovie(_movie);
+        _wdg->setWindowTitle("Your bug report is being processed...");
+        _wdg->show();
 
-        movie->start();
+        _movie->start();
     }
 
 }
@@ -102,7 +118,7 @@ void MainWindow::on_actionOpen_recent_triggered()
 
 void MainWindow::openRecent()
 {
-    QAction *action = qobject_cast<QAction * >(sender());
+    QAction *action = qobject_cast<QAction*>(sender());
     if(action){
         visualizeData(action->data().toString());
     }
@@ -145,18 +161,18 @@ void MainWindow::visualizeData(QString fileName)
 
 void MainWindow::runMassif(QString exeFileName)
 {
-    ExeThread *exeThread = new ExeThread(this, exeFileName, _dialogPath, _dialogMOptions);
-    connect(exeThread, SIGNAL(valgrindMassifFinished(QString)),
+    _exeThread = new ExeThread(this, exeFileName, _dialogPath, _dialogMOptions);
+    connect(_exeThread, SIGNAL(valgrindMassifFinished(QString)),
                 this, SLOT(onValgrindMassifFinished(QString)));
-    exeThread->start();
+    _exeThread->start();
 }
 
 void MainWindow::createMenus()
 {
-    QAction* clearRecentFiles = new QAction(this);
-    QObject::connect(clearRecentFiles, SIGNAL(triggered()), this, SLOT(clearRecent()));
-    clearRecentFiles->setText(QString::fromStdString("Clear recent files"));
-    recentFilesMenu->addAction(clearRecentFiles);
+    _clearRecentFiles = new QAction(this);
+    QObject::connect(_clearRecentFiles, SIGNAL(triggered()), this, SLOT(clearRecent()));
+    _clearRecentFiles->setText(QString::fromStdString("Clear recent files"));
+    recentFilesMenu->addAction(_clearRecentFiles);
 
     recentFilesMenu->addSeparator();
 
@@ -308,9 +324,9 @@ void MainWindow::onValgrindMassifFinished(QString massifOutputName)
 void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select Multiple massif.out Files", "./", "massif.out.*");
-    QStringList *fileNamesPtr = new QStringList(fileNames);
+    _fileNamesPtr = new QStringList(fileNames);
 
-    int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, fileNamesPtr), "Multiple Graphs");
+    int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, _fileNamesPtr), "Multiple Graphs");
     ui->tabWidget->setCurrentIndex(indexxx);
 }
 

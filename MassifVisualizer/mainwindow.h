@@ -62,12 +62,22 @@ private:
     std::string _directoryName;
     std::string _codeFileName;
     unsigned long _numRecent = 2;
+    // TODO put underscore here
     QMenu* recentFilesMenu;
     std::vector<std::string> _recentFiles;
     std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
     QList<QAction*> _recentFileActionList;
     ConfigDialog *_dialogPath = nullptr;
     MassifOptionsDialog* _dialogMOptions = nullptr;
+
+    QAction* _quit = nullptr;
+    QMovie* _movie = nullptr;
+    QLabel* _processLabel = nullptr;
+    QWidget* _wdg = nullptr;
+
+    ExeThread* _exeThread = nullptr;
+    QAction* _clearRecentFiles = nullptr;
+    QStringList* _fileNamesPtr = nullptr;
 
     void visualizeData(QString fileName);
     void runMassif(QString exeFileName);

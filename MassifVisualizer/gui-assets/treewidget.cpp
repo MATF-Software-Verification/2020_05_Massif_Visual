@@ -10,11 +10,16 @@ TreeWidget::TreeWidget(unsigned snapshotNum, ParserMassif *parser, std::string d
     this->setLayout(_buttonLayout);
 }
 
+TreeWidget::~TreeWidget()
+{
+    delete _buttonLayout;
+}
+
 void TreeWidget::open_and_jump_code_file()
 {
-    SnapshotListButton *button= qobject_cast<SnapshotListButton * >(sender());
+    SnapshotListButton *button= qobject_cast<SnapshotListButton*>(sender());
 
-    auto directoryName = _dirName;
+    std::string directoryName = _dirName;
     std::string fileName = directoryName + button->getCodeFileName();
     unsigned jumpLine = button->getLineNumber()-1;
 
@@ -102,10 +107,11 @@ void TreeWidget::createTreeLayout()
 {
     _buttonLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-
     SnapshotItem* snap = _parser->snapshotItems().at(_snapshotNum);
     QString numOfChildren = "n"+ QString::number(snap->heapTreeItem()->numOfDirectChildren());
     HeapTreeItem* root = snap->heapTreeItem();
+
+    // because of the: while(!tree.empty()), there is no need for delete
     std::stack<HeapTreeItem*> tree;
     tree.push(root);
     bool disabledBtn = true;

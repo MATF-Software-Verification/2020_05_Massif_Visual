@@ -20,6 +20,7 @@ class MassifOptionsDialog : public QDialog
     Q_OBJECT
 public:
     MassifOptionsDialog();
+    ~MassifOptionsDialog();
 
     QString massifOptions() const;
 
@@ -38,6 +39,10 @@ private:
     QRadioButton* _timeUnitB=nullptr;
     QLineEdit* _detailedFreqLE=nullptr;
     QLineEdit* _maxSnapshotsLE=nullptr;
+
+    QBoxLayout* _optionsBL;
+    QButtonGroup* _stacksGroup;
+    QButtonGroup* _timeUnitGroup;
 };
 
 #endif // MASSIFOPTIONSDIALOG_H

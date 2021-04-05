@@ -17,9 +17,12 @@ public:
               ConfigDialog* configDialog=nullptr,
               MassifOptionsDialog* optionsDialog=nullptr);
 
+    ~ExeThread();
+
     void run();
 private:
     QString _exeFilePath;
+    QProcess* _valgrindMassifProcess;
     ConfigDialog* _configDialog;
     MassifOptionsDialog* _optionsDialog;
 

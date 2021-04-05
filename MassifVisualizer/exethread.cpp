@@ -6,11 +6,16 @@ ExeThread::ExeThread(QObject *parent, QString exeFilePath, ConfigDialog* configD
 
 }
 
+ExeThread::~ExeThread()
+{
+    delete _valgrindMassifProcess;
+}
+
 void ExeThread::run()
 {
-    QProcess *valgrindMassifProcess = new QProcess();
+    _valgrindMassifProcess = new QProcess();
     QString workingDirectory = _exeFilePath.mid(0, _exeFilePath.lastIndexOf("/")+1);
-    valgrindMassifProcess->setWorkingDirectory(workingDirectory);
+    _valgrindMassifProcess->setWorkingDirectory(workingDirectory);
 
     QString valgrindPath = "valgrind";
 
@@ -23,10 +28,10 @@ void ExeThread::run()
         massifOptions = _optionsDialog->massifOptions();
 
     QString processCommand = valgrindPath + " --tool=massif " + massifOptions + _exeFilePath;
-    valgrindMassifProcess->start(processCommand);
-    QString massifFileName = workingDirectory + "/massif.out." + QString::number(valgrindMassifProcess->processId());
+    _valgrindMassifProcess->start(processCommand);
+    QString massifFileName = workingDirectory + "/massif.out." + QString::number(_valgrindMassifProcess->processId());
 
-    valgrindMassifProcess->waitForFinished();
+    _valgrindMassifProcess->waitForFinished();
 
     emit valgrindMassifFinished(massifFileName);
 }

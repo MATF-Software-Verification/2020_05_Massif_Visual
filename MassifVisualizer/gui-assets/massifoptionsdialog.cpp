@@ -4,12 +4,12 @@ MassifOptionsDialog::MassifOptionsDialog()
 {
     this->setWindowTitle("Massif User Options");
 
-    QBoxLayout* optionsBL = new QBoxLayout(QBoxLayout::TopToBottom);
+    _optionsBL = new QBoxLayout(QBoxLayout::TopToBottom);
     QLabel* infoL = new QLabel("For more info write: <i><b> valgrind --tool=massif --help </b></i> in terminal<br>");
-    optionsBL->addWidget(infoL);
+    _optionsBL->addWidget(infoL);
 
 //    --stacks
-    QButtonGroup* stacksGroup = new QButtonGroup();
+    _stacksGroup = new QButtonGroup();
     QBoxLayout* stacksBL = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* stacksL = new QLabel("<pre><b>--stacks       </b></pre>");
     stacksBL->addWidget(stacksL);
@@ -18,8 +18,8 @@ MassifOptionsDialog::MassifOptionsDialog()
     _noStacksRB = new QRadioButton("no");
     _noStacksRB->setChecked(true);
     stacksBL->addWidget(_noStacksRB);
-    stacksGroup->addButton(_yesStacksRB);
-    stacksGroup->addButton(_noStacksRB);
+    _stacksGroup->addButton(_yesStacksRB);
+    _stacksGroup->addButton(_noStacksRB);
 
 //    --alloc-fn=<name>         specify <name> as an alloc function [empty]
     QBoxLayout* allocFunBL = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -39,7 +39,7 @@ MassifOptionsDialog::MassifOptionsDialog()
 
 //    --time-unit=i|ms|B        time unit: instructions executed, milliseconds
 //                              or heap bytes alloc'd/dealloc'd [i]
-    QButtonGroup* timeUnitGroup = new QButtonGroup();
+    _timeUnitGroup = new QButtonGroup();
     QBoxLayout* timeUnitBL = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* timeUnitL = new QLabel("<pre><b>--time-unit    </b></pre>");
     timeUnitBL->addWidget(timeUnitL);
@@ -50,9 +50,9 @@ MassifOptionsDialog::MassifOptionsDialog()
     timeUnitBL->addWidget(_timeUnitms);
     _timeUnitB = new QRadioButton("B");
     timeUnitBL->addWidget(_timeUnitB);
-    timeUnitGroup->addButton(_timeUnitI);
-    timeUnitGroup->addButton(_timeUnitms);
-    timeUnitGroup->addButton(_timeUnitB);
+    _timeUnitGroup->addButton(_timeUnitI);
+    _timeUnitGroup->addButton(_timeUnitms);
+    _timeUnitGroup->addButton(_timeUnitB);
 
 //    --detailed-freq=<N>       every Nth snapshot should be detailed [10]
     QBoxLayout* detailedFreqBL = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -78,16 +78,23 @@ MassifOptionsDialog::MassifOptionsDialog()
     QPushButton* submitB = new QPushButton("Submit");
     QObject::connect(submitB, SIGNAL(clicked()), this, SLOT(submit_massif_options()));
 
-    optionsBL->addLayout(stacksBL);
-    optionsBL->addLayout(allocFunBL);
-    optionsBL->addLayout(thresholdBL);
-    optionsBL->addLayout(timeUnitBL);
-    optionsBL->addLayout(detailedFreqBL);
-    optionsBL->addLayout(maxSnapsBL);
-    optionsBL->addWidget(submitB);
-    this->setLayout(optionsBL);
+    _optionsBL->addLayout(stacksBL);
+    _optionsBL->addLayout(allocFunBL);
+    _optionsBL->addLayout(thresholdBL);
+    _optionsBL->addLayout(timeUnitBL);
+    _optionsBL->addLayout(detailedFreqBL);
+    _optionsBL->addLayout(maxSnapsBL);
+    _optionsBL->addWidget(submitB);
+    this->setLayout(_optionsBL);
 
     setTheme(this);
+}
+
+MassifOptionsDialog::~MassifOptionsDialog()
+{
+    delete _optionsBL;
+    delete _stacksGroup;
+    delete _timeUnitGroup;
 }
 
 void MassifOptionsDialog::submit_massif_options()
