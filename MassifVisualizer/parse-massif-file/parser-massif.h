@@ -13,7 +13,7 @@
 class ParserMassif
 {
 public:
-    ParserMassif();
+
     ParserMassif(std::string inputFileName);
     ~ParserMassif();
 

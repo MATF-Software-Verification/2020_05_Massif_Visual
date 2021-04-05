@@ -139,7 +139,8 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::visualizeData(QString fileName)
 {
-    if (fileName.isEmpty())
+     QFileInfo check_file(fileName);
+    if (fileName.isEmpty() || !check_file.exists())
         return;
 
     _fileName = fileName.toStdString();

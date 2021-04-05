@@ -1,11 +1,6 @@
 #include "parser-massif.h"
 #include "helper-functions.h"
 
-ParserMassif::ParserMassif()
-{
-    _inputFileName = ("../MassifVisualizer/input-examples/massif_output1");
-}
-
 ParserMassif::ParserMassif(std::string inputFileName)
     : _inputFileName(inputFileName)
 {
@@ -17,10 +12,6 @@ ParserMassif::~ParserMassif()
     for (SnapshotItem* si: _snapshotItems) {
         delete si;
     }
-    // TODO: napisati obican c++ program van Qt i pokrenuti Valgrind --massif
-    // u kom ce se meriti da li se poziva default destruktor za mapu
-    // default destructor for a map containing primitive types will free memory
-    // _descArgs
 }
 
 
@@ -120,20 +111,6 @@ void ParserMassif::parseMassifOutput()
             }
         }
         inputFile.close();
-    }
-    else {
-        std::cout << "File is not opened." << std::endl;
-    }
-}
-
-void ParserMassif::parseMsPrintOutput()
-{
-    std::string line;
-    std::ifstream inputFile(_inputFileName);
-    if (inputFile.is_open()) {
-        while (std::getline(inputFile, line)) {
-            std::cout << line << '\n';
-        }
     }
     else {
         std::cout << "File is not opened." << std::endl;
