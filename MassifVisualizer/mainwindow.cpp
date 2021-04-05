@@ -327,7 +327,14 @@ void MainWindow::on_actionMassif_User_Options_triggered()
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    _dialogPath->close();
-    _dialogMOptions->close();
     event->accept();
+
+    if (_dialogPath != nullptr)
+        _dialogPath->close();
+
+    if (_dialogMOptions != nullptr)
+        _dialogMOptions->close();
+
+    QWidget::closeEvent(event);
+    QApplication::quit();
 }

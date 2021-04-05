@@ -66,8 +66,8 @@ private:
     std::vector<std::string> _recentFiles;
     std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
     QList<QAction*> _recentFileActionList;
-    ConfigDialog *_dialogPath;
-    MassifOptionsDialog* _dialogMOptions;
+    ConfigDialog *_dialogPath = nullptr;
+    MassifOptionsDialog* _dialogMOptions = nullptr;
 
     void visualizeData(QString fileName);
     void runMassif(QString exeFileName);
