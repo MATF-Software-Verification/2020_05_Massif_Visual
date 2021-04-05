@@ -10,6 +10,8 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
+#include "../helper-functions.h"
+
 class ConfigDialog : public QDialog
 {
     Q_OBJECT

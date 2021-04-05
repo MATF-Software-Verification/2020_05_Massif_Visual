@@ -10,6 +10,7 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QRegExpValidator>
+#include "../helper-functions.h"
 
 // TODO: remove this when not needed
 #include <iostream>

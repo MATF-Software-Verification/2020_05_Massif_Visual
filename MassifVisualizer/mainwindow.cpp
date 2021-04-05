@@ -51,7 +51,7 @@ void MainWindow::quit()
 void MainWindow::on_actionOpen_Massif_File_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-                              "Massif Out File (rainbow emoji)", "./", "massif.out.*");
+                              "Massif Out File U+1F600", "./", "massif.out.*");
 
     visualizeData(fileName);
 }
@@ -59,7 +59,7 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
 void MainWindow::on_actionHelp_triggered()
 {
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Help me Obi Van");
+    msgBox.setWindowTitle("Help me box");
     msgBox.setText("You are on your own.");
     msgBox.exec();
 }

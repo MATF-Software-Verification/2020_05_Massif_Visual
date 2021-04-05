@@ -11,7 +11,7 @@ MassifOptionsDialog::MassifOptionsDialog()
 //    --stacks
     QButtonGroup* stacksGroup = new QButtonGroup();
     QBoxLayout* stacksBL = new QBoxLayout(QBoxLayout::LeftToRight);
-    QLabel* stacksL = new QLabel("<b>--stacks</b>");
+    QLabel* stacksL = new QLabel("<pre><b>--stacks       </b></pre>");
     stacksBL->addWidget(stacksL);
     _yesStacksRB = new QRadioButton("yes");
     stacksBL->addWidget(_yesStacksRB);
@@ -23,14 +23,14 @@ MassifOptionsDialog::MassifOptionsDialog()
 
 //    --alloc-fn=<name>         specify <name> as an alloc function [empty]
     QBoxLayout* allocFunBL = new QBoxLayout(QBoxLayout::LeftToRight);
-    QLabel* allocFunL = new QLabel("<b>--alloc-fn</b>");
+    QLabel* allocFunL = new QLabel("<pre><b>--alloc-fn     </b></pre>");
     allocFunBL->addWidget(allocFunL);
     _allocLE = new QLineEdit();
     allocFunBL->addWidget(_allocLE);
 
 //    --threshold=<m.n>         significance threshold, as a percentage [1.0]
     QBoxLayout* thresholdBL = new QBoxLayout(QBoxLayout::LeftToRight);
-    QLabel* thresholdL = new QLabel("<b>--threshold</b>");
+    QLabel* thresholdL = new QLabel("<pre><b>--threshold    </b></pre>");
     thresholdBL->addWidget(thresholdL);
     _thresholdLE = new QLineEdit();
     _thresholdLE->setValidator(new QRegExpValidator
@@ -41,7 +41,7 @@ MassifOptionsDialog::MassifOptionsDialog()
 //                              or heap bytes alloc'd/dealloc'd [i]
     QButtonGroup* timeUnitGroup = new QButtonGroup();
     QBoxLayout* timeUnitBL = new QBoxLayout(QBoxLayout::LeftToRight);
-    QLabel* timeUnitL = new QLabel("<b>--time-unit</b>");
+    QLabel* timeUnitL = new QLabel("<pre><b>--time-unit    </b></pre>");
     timeUnitBL->addWidget(timeUnitL);
     _timeUnitI = new QRadioButton("i");
     _timeUnitI->setChecked(true);
@@ -56,7 +56,7 @@ MassifOptionsDialog::MassifOptionsDialog()
 
 //    --detailed-freq=<N>       every Nth snapshot should be detailed [10]
     QBoxLayout* detailedFreqBL = new QBoxLayout(QBoxLayout::LeftToRight);
-    QLabel* detailedFreqL = new QLabel("<b>--detailed-freq</b>");
+    QLabel* detailedFreqL = new QLabel("<pre><b>--detailed-freq</b></pre>");
     detailedFreqBL->addWidget(detailedFreqL);
     _detailedFreqLE = new QLineEdit();
     _detailedFreqLE->setValidator(new QRegExpValidator
@@ -65,7 +65,7 @@ MassifOptionsDialog::MassifOptionsDialog()
 
 //    --max-snapshots=<N>       maximum number of snapshots recorded [100]
     QBoxLayout* maxSnapsBL = new QBoxLayout(QBoxLayout::LeftToRight);
-    QLabel* maxSnapsL = new QLabel("<b>--max-snapshots</b>");
+    QLabel* maxSnapsL = new QLabel("<pre><b>--max-snapshots</b></pre>");
     maxSnapsBL->addWidget(maxSnapsL);
     _maxSnapshotsLE = new QLineEdit();
     _maxSnapshotsLE->setValidator(new QRegExpValidator
@@ -86,6 +86,51 @@ MassifOptionsDialog::MassifOptionsDialog()
     optionsBL->addLayout(maxSnapsBL);
     optionsBL->addWidget(submitB);
     this->setLayout(optionsBL);
+
+    QString labelStyle = "";
+    QString lineEditStyle = "";
+    QString backgroundStyle = "";
+    QString textStyle = "";
+    QString btnStyle = "";
+    QString btnPressed = "";
+    switch(theme){
+        case Theme::DEFAULT:
+            labelStyle = "QLabel {color: #ff8000; font-size: 12pt; font-weight: bold}\n";
+            lineEditStyle = "QLineEdit {background-color: #262626}\n";
+            backgroundStyle = "* {background-color: #4d4d4d}\n";
+            textStyle = "* {color : white}\n";
+            btnStyle = "QPushButton { background-color: #ff8000; border: 1px solid #ff8000; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}\n";
+            btnPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
+            this->setStyleSheet(labelStyle + lineEditStyle + backgroundStyle + textStyle + btnStyle + btnPressed);
+            break;
+        case Theme::BRIGHT:
+            labelStyle = "QLabel {color: black; font-size: 12pt; font-weight: bold}\n";
+            lineEditStyle = "QLineEdit {background-color: #ffe6cc}\n";
+            backgroundStyle = "* {background-color: #f2f2f2}\n";
+            textStyle = "* {color : black}\n";
+            btnStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}\n";
+            btnPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
+            this->setStyleSheet(labelStyle + lineEditStyle + backgroundStyle + textStyle + btnStyle + btnPressed);
+            break;
+        case Theme::PSYCHEDELIC:
+            labelStyle = "QLabel {color: #0033cc; font-size: 12pt; font-weight: bold}\n";
+            lineEditStyle = "QLineEdit {background-color: #993399}\n";
+            backgroundStyle = "* {background-color: #4dffa6}\n";
+            textStyle = "* {color : #26004d}\n";
+            btnStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}\n";
+            btnPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
+            this->setStyleSheet(labelStyle + lineEditStyle + backgroundStyle + textStyle + btnStyle + btnPressed);
+            break;
+        case Theme::SAPPHIRE:
+            labelStyle = "QLabel {color: #e6f3ff; font-size: 12pt; font-weight: bold}\n";
+            lineEditStyle = "QLineEdit {background-color: #cce6ff; color: #004080}\n";
+            backgroundStyle = "* {background-color: #004080}\n";
+            textStyle = "* {color : #e6f3ff}\n";
+            btnStyle = "QPushButton { background-color: #4db8ff; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}\n";
+            btnPressed = "QPushButton:pressed { background-color:  #ccebff; border: 1px solid black;}";
+            this->setStyleSheet(labelStyle + lineEditStyle + backgroundStyle + textStyle + btnStyle + btnPressed);
+            break;
+    }
 }
 
 void MassifOptionsDialog::submit_massif_options()
