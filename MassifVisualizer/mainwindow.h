@@ -76,6 +76,7 @@ private:
     void parseRecentFiles();
     void setDefaultTheme();
     void updateTreeThemes();
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

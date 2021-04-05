@@ -325,3 +325,9 @@ void MainWindow::on_actionMassif_User_Options_triggered()
     _dialogMOptions = new MassifOptionsDialog();
     _dialogMOptions->open();
 }
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    _dialogPath->close();
+    _dialogMOptions->close();
+    event->accept();
+}
