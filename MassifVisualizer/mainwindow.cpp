@@ -307,7 +307,7 @@ void MainWindow::onValgrindMassifFinished(QString massifOutputName)
 
 void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames();
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select Multiple massif.out Files", "./", "massif.out.*");
     QStringList *fileNamesPtr = new QStringList(fileNames);
 
     int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, fileNamesPtr), "Multiple Graphs");
