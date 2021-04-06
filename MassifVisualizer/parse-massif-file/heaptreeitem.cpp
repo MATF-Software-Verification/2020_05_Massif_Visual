@@ -118,28 +118,3 @@ void HeapTreeItem::addChild(HeapTreeItem *node)
     node->_mother = this;
     _children.push_back(node);
 }
-
-// OVO NAM NE TREBA NI ZA STA
-quint64 HeapTreeItem::heapTreeSum()
-{
-    quint64 sum = 0;
-
-    std::queue<HeapTreeItem*> queue;
-    queue.push(this);
-
-    while (!queue.empty()) {
-        auto n = queue.size();
-        while (n > 0) {
-            HeapTreeItem* tmpNode = queue.front();
-            queue.pop();
-            sum += tmpNode->memoryAlloc();
-
-            for (auto child : tmpNode->children()) {
-                queue.push(child);
-            }
-            n--;
-        }
-    }
-    return sum;
-}
-

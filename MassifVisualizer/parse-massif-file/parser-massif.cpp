@@ -86,12 +86,6 @@ void ParserMassif::parseMassifOutput()
                     std::getline(inputFile, line);
                 }
                 else {
-                    /*
-                     * push_back("foo") constructs a temporary string from the string literal,
-                     * and then moves that string into the container, whereas emplace_back("foo")
-                     * just constructs the string directly in the container,
-                     * avoiding the extra move.
-                    */
                     while (line.compare("#-----------") && !inputFile.eof()) {
                         lines.emplace_back(line);
                         std::getline(inputFile, line);

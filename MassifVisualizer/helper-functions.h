@@ -20,5 +20,4 @@ void setTheme(QWidget* widget);
 void psychedelicTheme(QWidget* widget);
 void generateRandomColors(QString& backgroundColor, QString& textColor);
 
-
 #endif // HELPERFUNCTIONS_H

@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    recentFilesMenu = ui->menuFile->addMenu("Open Recent");
+    _recentFilesMenu = ui->menuFile->addMenu("Open Recent");
     parseRecentFiles();
     createMenus();
 
@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->removeTab(0);
     ui->tabWidget->removeTab(0);
     this->resize(1000, 600);
-    this->setWindowTitle("MassifCorn" + QString::fromUtf8("\xF0\x9F\x8C\xBD"));
+    this->setWindowTitle("MassifCorn " + QString::fromUtf8("\xF0\x9F\x8C\xBD"));
 
     setDefaultTheme();
 }
@@ -41,8 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    // TODO recentFilesMenu underscore add
-    delete recentFilesMenu;
+    delete _recentFilesMenu;
     for (QAction* qAction: _recentFileActionList)
         delete qAction;
     _recentFileActionList.clear();
@@ -84,8 +83,8 @@ void MainWindow::on_actionHelp_triggered()
 void MainWindow::on_actionReport_Bug_triggered()
 {
 
-    std::string title = "So you wanted to report a bug?"  + QString::fromUtf8("\xF0\x9F\x90\xBF").toStdString();
-    std::string description = "Describe in detail the bug that you have ecountered... "
+    std::string title = "So you wanted to report a bug? "  + QString::fromUtf8("\xF0\x9F\x90\xBF").toStdString();
+    std::string description = "Describe in detail the bug that you have encountered... "
                    "Your description matters to us! "
                    "The more you write the more effective we will be in solving the bug! ";
     std::string input = "Are you sure you've really found a bug?";
@@ -95,8 +94,6 @@ void MainWindow::on_actionReport_Bug_triggered()
                                              tr(description.c_str()), QLineEdit::Normal,
                                              tr(input.c_str()), &ok);
     if (ok && !text.isEmpty()){
-
-
         _movie = new QMovie("../MassifVisualizer/assets/trash.gif");
         _processLabel = new QLabel(this);
         if(_wdg && _wdg->isVisible())
@@ -106,17 +103,16 @@ void MainWindow::on_actionReport_Bug_triggered()
         _processLabel->setParent(_wdg);
         _processLabel->setFixedSize(700, 300);
         _processLabel->setMovie(_movie);
-        _wdg->setWindowTitle("Your bug report is being processed..." + QString::fromUtf8("\xF0\x9F\x93\x9C"));
+        _wdg->setWindowTitle("Your bug report is being processed... " + QString::fromUtf8("\xF0\x9F\x93\x9C"));
         _wdg->show();
 
         _movie->start();
     }
-
 }
 
 void MainWindow::on_actionOpen_recent_triggered()
 {
-    ui->menuFile->addMenu(recentFilesMenu);
+    ui->menuFile->addMenu(_recentFilesMenu);
 }
 
 void MainWindow::openRecent()
@@ -176,16 +172,16 @@ void MainWindow::createMenus()
     _clearRecentFiles = new QAction(this);
     QObject::connect(_clearRecentFiles, SIGNAL(triggered()), this, SLOT(clearRecent()));
     _clearRecentFiles->setText(QString::fromStdString("Clear recent files"));
-    recentFilesMenu->addAction(_clearRecentFiles);
+    _recentFilesMenu->addAction(_clearRecentFiles);
 
-    recentFilesMenu->addSeparator();
+    _recentFilesMenu->addSeparator();
 
     for(unsigned long i = 0; i < _numRecent; i++){
         QAction* recentFile = new QAction(this);
         QObject::connect(recentFile, SIGNAL(triggered()), this, SLOT(openRecent()));
         recentFile->setText(QString::fromStdString(_recentFiles[i]));
         recentFile->setData(QString::fromStdString(_recentFiles[i]));
-        recentFilesMenu->addAction(recentFile);
+        _recentFilesMenu->addAction(recentFile);
         _recentFileActionList.append(recentFile);
     }
 }
@@ -299,7 +295,7 @@ void MainWindow::onValgrindMassifFinished(QString massifOutputName)
 void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(this,
-                                                          "Select Multiple massif.out Files" + QString::fromUtf8("\xF0\x9F\x8C\x88") + QString::fromUtf8("\xF0\x9F\x8C\x88"),
+                                                          "Select Multiple massif.out Files " + QString::fromUtf8("\xF0\x9F\x8C\x88") + QString::fromUtf8("\xF0\x9F\x8C\x88"),
                                                           "./",
                                                           "massif.out.*");
 

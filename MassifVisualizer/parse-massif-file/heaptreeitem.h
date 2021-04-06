@@ -34,10 +34,6 @@ public:
     void setLineNum(const uint &lineNum);
     void setIndentation(const uint &indentation);
 
-    quint64 heapTreeSum();    
-
-
-
 private:
     uint _numOfDirectChildren;
     quint64 _memoryAlloc;

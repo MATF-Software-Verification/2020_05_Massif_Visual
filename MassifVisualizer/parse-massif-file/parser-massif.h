@@ -18,7 +18,6 @@ public:
     ~ParserMassif();
 
     void parseMassifOutput();
-    void parseMsPrintOutput();
 
     std::vector<SnapshotItem *> snapshotItems() const;
 
@@ -30,10 +29,6 @@ public:
 private:
     std::string _inputFileName;
     std::map<std::string, std::string> _descArgs;
-    /*
-        insert elements in random order
-        _descArgs.insert(pair<str, str>("bla", "blah"));
-    */
     std::string _exeFile;
     std::string _timeUnit;
     std::vector<SnapshotItem*> _snapshotItems;

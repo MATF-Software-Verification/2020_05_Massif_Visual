@@ -62,8 +62,7 @@ private:
     std::string _directoryName;
     std::string _codeFileName;
     unsigned long _numRecent = 2;
-    // TODO put underscore here
-    QMenu* recentFilesMenu;
+    QMenu* _recentFilesMenu;
     std::vector<std::string> _recentFiles;
     std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
     QList<QAction*> _recentFileActionList;
