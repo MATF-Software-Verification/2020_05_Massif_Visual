@@ -75,15 +75,16 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
 void MainWindow::on_actionHelp_triggered()
 {
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Help me box" + QString::fromUtf8("\xE2\x80\xBC"));
+    msgBox.setWindowTitle("Help me box " + QString::fromUtf8("\xF0\x9F\x8F\xA5"));
     msgBox.setText("You are on your own.");
+    setTheme(qobject_cast<QWidget*>(&msgBox));
     msgBox.exec();
 }
 
 void MainWindow::on_actionReport_Bug_triggered()
 {
 
-    std::string title = "So you wanted to report a bug?"  + QString::fromUtf8("\xF0\x9F\x93\x9C").toStdString();
+    std::string title = "So you wanted to report a bug?"  + QString::fromUtf8("\xF0\x9F\x90\xBF").toStdString();
     std::string description = "Describe in detail the bug that you have ecountered... "
                    "Your description matters to us! "
                    "The more you write the more effective we will be in solving the bug! ";
@@ -98,6 +99,8 @@ void MainWindow::on_actionReport_Bug_triggered()
 
         _movie = new QMovie("../MassifVisualizer/assets/trash.gif");
         _processLabel = new QLabel(this);
+        if(_wdg && _wdg->isVisible())
+            return;
         _wdg = new QWidget;
 
         _processLabel->setParent(_wdg);
@@ -233,18 +236,12 @@ void MainWindow::updateTreeThemes()
 
 void MainWindow::setDefaultTheme()
 {
-
-    //QString pushButtnoPressed = "QPushButton:pressed { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))}";
-    QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
-    QString pushButtonStyle = "QPushButton { background-color: #ff8000; border: 1px solid #ff8000; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
-    QString pushButtnoDisabled = "QPushButton:disabled { background-color: #ffe0b3; border: 1px solid black;}";
-    QString backgroundOfElements = "* {background-color: #4d4d4d}";
-    QString textColor = "* {color: white}";
-    QString lineEditBackground = "QLineEdit {background-color: #262626}";
-    QString labelText = "QLabel {color: #ff8000; font-size: 12pt; font-weight: bold}";
-    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
-                        + "\n" + lineEditBackground + "\n" + labelText);
     theme = Theme::DEFAULT;
+    setTheme(this);
+    if(_dialogPath)
+        setTheme(qobject_cast<QWidget*>(_dialogPath));
+    if(_dialogMOptions)
+        setTheme(qobject_cast<QWidget*>(_dialogMOptions));
     updateTreeThemes();
 }
 
@@ -255,57 +252,34 @@ void MainWindow::on_actionDefault_triggered()
 
 void MainWindow::on_actionBright_theme_triggered()
 {
-    QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
-    QString pushButtonStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
-    QString pushButtnoDisabled = "QPushButton:disabled { background-color: white; border: 1px solid black;}";
-    QString backgroundOfElements = "* {background-color: #f2f2f2}";
-    QString textColor = "* {color: black}";
-    QString lineEditBackground = "QLineEdit {background-color: #ffe6cc}";
-    QString labelText = "QLabel {color: black; font-size: 12pt; font-weight: bold}";
-
-    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
-                        + "\n" + lineEditBackground + "\n" + labelText);
-
     theme = Theme::BRIGHT;
+    setTheme(this);
+    if(_dialogPath)
+        setTheme(qobject_cast<QWidget*>(_dialogPath));
+    if(_dialogMOptions)
+        setTheme(qobject_cast<QWidget*>(_dialogMOptions));
     updateTreeThemes();
 }
 
 void MainWindow::on_actionPsychedelic_theme_triggered()
 {
-    int backgroundRed = QRandomGenerator::global()->bounded(255);
-    int backgroundGreen = QRandomGenerator::global()->bounded(255);
-    int backgroundBlue = QRandomGenerator::global()->bounded(255);
-    int textColorRed = 255-backgroundRed;
-    int textColorGreen = 255-backgroundGreen;
-    int textColorBlue = 255-backgroundBlue;
-
-    QString pushButtnoPressed = "QPushButton:pressed { background-color: #ffbf80; border: 1px solid black;}";
-    QString pushButtonStyle = "QPushButton { background-color: #ffe6cc; border: 1px solid black; border-radius: 5px; color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); padding: 3px; font-size: 12pt; font-weight: bold}";
-    QString pushButtnoDisabled = "QPushButton:disabled { background-color: white; border: 1px solid black;}";
-    QString backgroundOfElements = "* {background-color: rgba(" + QString::number(backgroundRed) + "," + QString::number(backgroundGreen)  + "," + QString::number(backgroundBlue) + ", 1)}";
-    QString textColor = "* {color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); font-weight: bold}";
-    QString lineEditBackground = "QLineEdit {background-color: #ffe6cc}";
-    QString labelText = "QLabel {color: rgba(" + QString::number(textColorRed) + "," + QString::number(textColorGreen)  + "," + QString::number(textColorBlue) + ", 255); font-size: 12pt; font-weight: bold}";
-
-    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
-                        + "\n" + lineEditBackground + "\n" + labelText);
     theme = Theme::PSYCHEDELIC;
+    setTheme(this);
+    if(_dialogPath)
+        setTheme(qobject_cast<QWidget*>(_dialogPath));
+    if(_dialogMOptions)
+        setTheme(qobject_cast<QWidget*>(_dialogMOptions));
     updateTreeThemes();
 }
 
 void MainWindow::on_actionSapphire_triggered()
 {
-    QString pushButtnoPressed = "QPushButton:pressed { background-color:  #ccebff; border: 1px solid black;}";
-    QString pushButtonStyle = "QPushButton { background-color: #4db8ff; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}";
-    QString pushButtnoDisabled = "QPushButton:disabled { background-color: #cce6ff; border: 1px solid black;}";
-    QString backgroundOfElements = "* {background-color: #004080}";
-    QString textColor = "* {color:  #e6f3ff}";
-    QString lineEditBackground = "QLineEdit {background-color: #cce6ff; color: #004080}";
-    QString labelText = "QLabel {color:   #e6f3ff; font-size: 12pt; font-weight: bold}";
-    this->setStyleSheet(pushButtnoPressed + "\n" + pushButtonStyle + "\n" + pushButtnoDisabled + "\n" + backgroundOfElements + "\n" + textColor
-                        + "\n" + lineEditBackground + "\n" + labelText);
-
     theme = Theme::SAPPHIRE;
+    setTheme(this);
+    if(_dialogPath)
+        setTheme(qobject_cast<QWidget*>(_dialogPath));
+    if(_dialogMOptions)
+        setTheme(qobject_cast<QWidget*>(_dialogMOptions));
     updateTreeThemes();
 }
 
@@ -340,12 +314,16 @@ void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 
 void MainWindow::on_actionValgrind_Path_Config_triggered()
 {
+    if(_dialogPath && _dialogPath->isVisible())
+        return;
     _dialogPath = new ConfigDialog();
     _dialogPath->open();
 }
 
 void MainWindow::on_actionMassif_User_Options_triggered()
 {
+    if(_dialogMOptions && _dialogMOptions->isVisible())
+        return;
     _dialogMOptions = new MassifOptionsDialog();
     _dialogMOptions->open();
 }

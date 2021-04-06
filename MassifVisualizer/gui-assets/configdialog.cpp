@@ -2,7 +2,7 @@
 
 ConfigDialog::ConfigDialog()
 {
-    this->setWindowTitle("Valgrind Path Config");
+    this->setWindowTitle("Valgrind Path Config " + QString::fromUtf8("\xF0\x9F\xA6\x84"));
 
     _configLayoutBL = new QBoxLayout(QBoxLayout::TopToBottom);
     _insertPathL = new QLabel("Enter Valgrind System Path: ");
@@ -22,7 +22,7 @@ ConfigDialog::ConfigDialog()
     _configLayoutBL->addLayout(_pathAndButtonBL);
 
     this->setLayout(_configLayoutBL);
-    setTheme(this);
+    setTheme(qobject_cast<QWidget*>(this));
 }
 
 ConfigDialog::~ConfigDialog()

@@ -82,25 +82,23 @@ void TreeWidget::highlightLine(unsigned lineNum)
 
 void TreeWidget::updateBtnTheme()
 {
+    setTheme(this);
 
     switch(theme){
-        case Theme::DEFAULT:
-            this->setStyleSheet("QPushButton {background-color: #ff8000}\nQPushButton:disabled { background-color: #ffe0b3}");
+        case Theme::DEFAULT:            
             _penColor = QColor(255, 128, 0);
             break;
-        case Theme::BRIGHT:
-            this->setStyleSheet("QPushButton {background-color: #fff2e6}\nQPushButton:disabled { background-color: white}");
+        case Theme::BRIGHT:           
             _penColor = QColor(255, 230, 204);
             break;
-        case Theme::PSYCHEDELIC:
-            this->setStyleSheet("QPushButton {background-color: #cc33ff}\nQPushButton:disabled { background-color: white}");
-            _penColor = QColor(204, 51, 255);
+        case Theme::PSYCHEDELIC:            
+            _penColor = QColor(255, 255, 255);
             break;
-        case Theme::SAPPHIRE:
-            this->setStyleSheet("QPushButton {background-color: #99ccff}\nQPushButton:disabled { background-color: #e6f2ff}");
+        case Theme::SAPPHIRE:            
             _penColor = QColor(77, 184, 255);
             break;
     }
+
 }
 
 void TreeWidget::createTreeLayout()

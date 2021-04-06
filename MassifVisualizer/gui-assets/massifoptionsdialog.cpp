@@ -2,7 +2,7 @@
 
 MassifOptionsDialog::MassifOptionsDialog()
 {
-    this->setWindowTitle("Massif User Options");
+    this->setWindowTitle("Massif User Options " + QString::fromUtf8("\xF0\x9F\x90\x89"));
 
     _optionsBL = new QBoxLayout(QBoxLayout::TopToBottom);
     QLabel* infoL = new QLabel("For more info write: <i><b> valgrind --tool=massif --help </b></i> in terminal<br>");
@@ -87,7 +87,7 @@ MassifOptionsDialog::MassifOptionsDialog()
     _optionsBL->addWidget(submitB);
     this->setLayout(_optionsBL);
 
-    setTheme(this);
+    setTheme(qobject_cast<QWidget*>(this));
 }
 
 MassifOptionsDialog::~MassifOptionsDialog()

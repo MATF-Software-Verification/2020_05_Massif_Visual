@@ -3,6 +3,8 @@
 
 #include <string>
 #include <QDialog>
+#include <QRandomGenerator>
+
 enum class Theme {
     DEFAULT,
     BRIGHT,
@@ -14,7 +16,9 @@ enum class Theme {
 extern Theme theme;
 
 std::string trim(const std::string& line);
-void setTheme(QDialog* dialog);
+void setTheme(QWidget* widget);
+void psychedelicTheme(QWidget* widget);
+void generateRandomColors(QString& backgroundColor, QString& textColor);
 
 
 #endif // HELPERFUNCTIONS_H
