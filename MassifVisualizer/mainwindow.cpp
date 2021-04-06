@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->removeTab(0);
     ui->tabWidget->removeTab(0);
     this->resize(1000, 600);
-    this->setWindowTitle("MassifCorn");
+    this->setWindowTitle("MassifCorn" + QString::fromUtf8("\xF0\x9F\x8C\xBD"));
 
     setDefaultTheme();
 }
@@ -75,7 +75,7 @@ void MainWindow::on_actionOpen_Massif_File_triggered()
 void MainWindow::on_actionHelp_triggered()
 {
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Help me box");
+    msgBox.setWindowTitle("Help me box" + QString::fromUtf8("\xE2\x80\xBC"));
     msgBox.setText("You are on your own.");
     msgBox.exec();
 }
@@ -83,7 +83,7 @@ void MainWindow::on_actionHelp_triggered()
 void MainWindow::on_actionReport_Bug_triggered()
 {
 
-    std::string title = "So you wanted to report a bug?";
+    std::string title = "So you wanted to report a bug?"  + QString::fromUtf8("\xF0\x9F\x93\x9C").toStdString();
     std::string description = "Describe in detail the bug that you have ecountered... "
                    "Your description matters to us! "
                    "The more you write the more effective we will be in solving the bug! ";
@@ -103,7 +103,7 @@ void MainWindow::on_actionReport_Bug_triggered()
         _processLabel->setParent(_wdg);
         _processLabel->setFixedSize(700, 300);
         _processLabel->setMovie(_movie);
-        _wdg->setWindowTitle("Your bug report is being processed...");
+        _wdg->setWindowTitle("Your bug report is being processed..." + QString::fromUtf8("\xF0\x9F\x93\x9C"));
         _wdg->show();
 
         _movie->start();
@@ -312,7 +312,7 @@ void MainWindow::on_actionSapphire_triggered()
 void MainWindow::on_actionOpen_From_Executable_triggered()
 {
     QString exeFileName = QFileDialog::getOpenFileName(this,
-                              "Select an Executable File", "./",  tr("Executables (*.out *.exe)"));
+                              "Select an Executable File " + QString::fromUtf8("\xF0\x9F\x8F\xB0"), "./",  tr("Executables (*.out *.exe)"));
 
     runMassif(exeFileName);
 }
@@ -324,7 +324,14 @@ void MainWindow::onValgrindMassifFinished(QString massifOutputName)
 
 void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select Multiple massif.out Files", "./", "massif.out.*");
+    QStringList fileNames = QFileDialog::getOpenFileNames(this,
+                                                          "Select Multiple massif.out Files" + QString::fromUtf8("\xF0\x9F\x8C\x88") + QString::fromUtf8("\xF0\x9F\x8C\x88"),
+                                                          "./",
+                                                          "massif.out.*");
+
+    if(fileNames.size() == 0){
+        return;
+    }
     _fileNamesPtr = new QStringList(fileNames);
 
     int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, _fileNamesPtr), "Multiple Graphs");
