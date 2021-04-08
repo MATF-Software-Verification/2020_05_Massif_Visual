@@ -8,7 +8,7 @@
 #include <QProcess>
 
 #include "gui-assets/generaltabwidget.h"
-#include "./exethread.h"
+#include "gui-assets/exethread.h"
 #include "helper-functions.h"
 #include "gui-assets/configdialog.h"
 #include "gui-assets/massifoptionsdialog.h"

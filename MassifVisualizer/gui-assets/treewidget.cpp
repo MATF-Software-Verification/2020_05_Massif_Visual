@@ -27,45 +27,32 @@ void TreeWidget::open_and_jump_code_file()
         return;
 
     std::ifstream in(fileName);
-    /*QFile file(QString::fromStdString(fileName));
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-       return;
-    }
-
-    QString text;
-    QString line;
-    int i = 1;
-    QString numberedLine;
-
-    while (!file.atEnd()) {
-        line = file.readLine();
-        numberedLine = "<font color=\"DeepPink\">" + QString::number(i) + " </font>";
-        line = "<pre>" + line + "</pre>";
-        _textBrowser->insertHtml(numberedLine);
-        _textBrowser->insertHtml(line);
-        _textBrowser->insertPlainText("\n");
-        i++;
-
-    }
-
-    file.close();
-    highlightLine(jumpLine);*/
-
-    std::string text;
     std::string line;
     int i = 1;
     std::string numberedLine;
+    std::ostringstream text;
+
 
     while (std::getline(in, line)) {
-        numberedLine = QString::number(i).toStdString() + " ";
-        line.append("\n");
-        text.append(numberedLine);
-        text.append(line);
+        numberedLine = "<b>" + QString::number(i).toStdString() + "</b>";
+
+        // those who have more than 1000 lines in a file should refactor their code
+        unsigned long spaces = 1;
+        if (i < 1000)
+            spaces = 4 - QString::number(i).toStdString().size();
+
+        text << "<pre style = 'line-height: 50%'>";
+        text << numberedLine;
+        for (unsigned long i = 0; i < spaces; i++) {
+            text << " ";
+        }
+        text << line;
+        text << "</pre>";
         i++;
     }
 
     in.close();
-    QString code = QString::fromStdString(text);
+    QString code = QString::fromStdString(text.str());
     _textBrowser->setText(code);
     highlightLine(jumpLine);
 

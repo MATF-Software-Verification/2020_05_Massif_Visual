@@ -6,7 +6,7 @@
 
 QT       += core gui charts
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
 
 TARGET = MassifVisualizer
 TEMPLATE = app
@@ -35,7 +35,7 @@ SOURCES += \
         helper-functions.cpp \
     gui-assets/listbutton.cpp \
     gui-assets/treewidget.cpp \
-    exethread.cpp \
+    gui-assets/exethread.cpp \
     gui-assets/chart.cpp \
     gui-assets/configdialog.cpp \
     gui-assets/massifoptionsdialog.cpp
@@ -50,7 +50,7 @@ HEADERS += \
         helper-functions.h \
     gui-assets/listbutton.h \
     gui-assets/treewidget.h \
-    exethread.h \
+    gui-assets/exethread.h \
     gui-assets/chart.h \
     gui-assets/configdialog.h \
     gui-assets/massifoptionsdialog.h
