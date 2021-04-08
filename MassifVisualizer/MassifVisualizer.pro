@@ -25,14 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-        gui-assets/snapshotlistbutton.cpp \
-        gui-assets/generaltabwidget.cpp \
-        parse-massif-file/parser-massif.cpp \
-        parse-massif-file/snapshotitem.cpp \
-        parse-massif-file/heaptreeitem.cpp \
-        helper-functions.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    gui-assets/snapshotlistbutton.cpp \
+    gui-assets/generaltabwidget.cpp \
+    parse-massif-file/parser-massif.cpp \
+    parse-massif-file/snapshotitem.cpp \
+    parse-massif-file/heaptreeitem.cpp \
+    helper-functions.cpp \
     gui-assets/listbutton.cpp \
     gui-assets/treewidget.cpp \
     gui-assets/exethread.cpp \
@@ -41,13 +41,13 @@ SOURCES += \
     gui-assets/massifoptionsdialog.cpp
 
 HEADERS += \
-        mainwindow.h \
-        gui-assets/snapshotlistbutton.h \
-        gui-assets/generaltabwidget.h \
-        parse-massif-file/parser-massif.h \
-        parse-massif-file/snapshotitem.h \
-        parse-massif-file/heaptreeitem.h \
-        helper-functions.h \
+    mainwindow.h \
+    gui-assets/snapshotlistbutton.h \
+    gui-assets/generaltabwidget.h \
+    parse-massif-file/parser-massif.h \
+    parse-massif-file/snapshotitem.h \
+    parse-massif-file/heaptreeitem.h \
+    helper-functions.h \
     gui-assets/listbutton.h \
     gui-assets/treewidget.h \
     gui-assets/exethread.h \
@@ -56,7 +56,7 @@ HEADERS += \
     gui-assets/massifoptionsdialog.h
 
 FORMS += \
-        mainwindow.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
