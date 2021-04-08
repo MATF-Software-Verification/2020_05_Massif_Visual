@@ -54,6 +54,16 @@ void setTheme(QWidget* widget)
             btnDisabled = "QPushButton:disabled { background-color: #cce6ff; border: 1px solid black;}";
             widget->setStyleSheet(labelStyle + lineEditStyle + backgroundStyle + textStyle + btnStyle + btnPressed + btnDisabled);
             break;
+        case Theme::CORN:
+            labelStyle = "QLabel {color: #ffff00; font-size: 12pt; font-weight: bold}\n";
+            lineEditStyle = "QLineEdit {background-color: #009900; color: #ffff66}\n";
+            backgroundStyle = "* {background-color: #00cc00}\n";
+            textStyle = "* {color : #ffff00}\n";
+            btnStyle = "QPushButton { background-color: #ffff00; border: 1px solid black; border-radius: 5px; color: black; padding: 3px; font-size: 12pt; font-weight: bold}\n";
+            btnPressed = "QPushButton:pressed { background-color:  #ffffe6; border: 1px solid black;}\n";
+            btnDisabled = "QPushButton:disabled { background-color: #ffff99; border: 1px solid black;}";
+            widget->setStyleSheet(labelStyle + lineEditStyle + backgroundStyle + textStyle + btnStyle + btnPressed + btnDisabled);
+            break;
     }
 }
 

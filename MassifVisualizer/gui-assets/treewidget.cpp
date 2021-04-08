@@ -73,11 +73,11 @@ void TreeWidget::open_and_jump_code_file()
 
 void TreeWidget::highlightLine(unsigned lineNum)
 {
-    QTextCursor coursor(_textBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNum)));
-    QTextBlockFormat frmt = coursor.blockFormat();
-    frmt.setBackground(QBrush(_penColor));
-    coursor.setBlockFormat(frmt);
-    _textBrowser->setTextCursor(coursor);
+    _coursor = QTextCursor(_textBrowser->document()->findBlockByLineNumber(static_cast<int>(lineNum)));
+    _frmt = _coursor.blockFormat();
+    _frmt.setBackground(QBrush(_penColor));
+    _coursor.setBlockFormat(_frmt);
+    _textBrowser->setTextCursor(_coursor);
 }
 
 void TreeWidget::updateBtnTheme()
@@ -97,7 +97,13 @@ void TreeWidget::updateBtnTheme()
         case Theme::SAPPHIRE:            
             _penColor = QColor(77, 184, 255);
             break;
+        case Theme::CORN:
+            _penColor = QColor(0, 153, 0);
+            break;
     }
+    _frmt.setBackground(QBrush(_penColor));
+    _coursor.setBlockFormat(_frmt);
+    _textBrowser->setTextCursor(_coursor);
 
 }
 

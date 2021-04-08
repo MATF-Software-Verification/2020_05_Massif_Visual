@@ -38,6 +38,10 @@ private:
     std::string _dirName;
     QTextBrowser* _textBrowser;
     QColor _penColor = QColor(255, 128, 0);
+    //try
+    QTextCursor _coursor;
+    QTextBlockFormat _frmt;
+
 };
 
 #endif // TREEWIDGET_H

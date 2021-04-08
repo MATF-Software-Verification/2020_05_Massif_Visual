@@ -9,7 +9,8 @@ enum class Theme {
     DEFAULT,
     BRIGHT,
     PSYCHEDELIC,
-    SAPPHIRE
+    SAPPHIRE,
+    CORN
 };
 
 //GASP a global variable!? HOW COULD THEY!!! *clutches pearls

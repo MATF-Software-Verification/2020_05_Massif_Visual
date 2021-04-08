@@ -55,6 +55,8 @@ private slots:
 
     void on_actionMassif_User_Options_triggered();
 
+    void on_actionCorn_theme_triggered();
+
 private:
 
     Ui::MainWindow *ui;

@@ -49,9 +49,10 @@ private:
     void createChartBoxLayout();
 
     QBoxLayout *createChangeRangeLayout();
+    void initListLayout(QScrollArea *scrollArea);
     QBoxLayout *createSnapshotListLayout();
-    QBoxLayout *createCodeLayout();
     QBoxLayout* createPeakListLayout();
+    QBoxLayout *createCodeLayout();
 
     void createGraph();
 
@@ -69,9 +70,10 @@ private:
     std::vector<TreeWidget*> _treeWidgets;
     QStringList* _fileNames;
     QBoxLayout* _flowLayout;
-    QBoxLayout* _flowAllSnapshotsLayout;
+    //QBoxLayout* _flowAllSnapshotsLayout;
     QWidget* _scrollAreaContent;
     QWidget* _scrollAllSnapshotAreaContent;
+
 };
 
 #endif // GENERALTABWIDGET_H

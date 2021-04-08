@@ -279,6 +279,18 @@ void MainWindow::on_actionSapphire_triggered()
     updateTreeThemes();
 }
 
+void MainWindow::on_actionCorn_theme_triggered()
+{
+    theme = Theme::CORN;
+    this->setWindowTitle("MassifCorn " + QString::fromUtf8("\xF0\x9F\x8C\xBD") + QString::fromUtf8("\xF0\x9F\x8C\xBD") + QString::fromUtf8("\xF0\x9F\x8C\xBD"));
+    setTheme(this);
+    if(_dialogPath)
+        setTheme(qobject_cast<QWidget*>(_dialogPath));
+    if(_dialogMOptions)
+        setTheme(qobject_cast<QWidget*>(_dialogMOptions));
+    updateTreeThemes();
+}
+
 void MainWindow::on_actionOpen_From_Executable_triggered()
 {
     QString exeFileName = QFileDialog::getOpenFileName(this,
@@ -336,3 +348,5 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     QWidget::closeEvent(event);
     QApplication::quit();
 }
+
+

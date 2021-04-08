@@ -30,7 +30,6 @@ GeneralTabWidget::~GeneralTabWidget()
     delete _chartBoxLayout;
 
     delete _chart;
-    // ovo mozda puca? :D
     delete _codeTextBrowser;
     delete _parser;
 
@@ -57,7 +56,7 @@ void GeneralTabWidget::change_range()
     }
     else {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Invalid axis range change error");
+        msgBox.setWindowTitle("Invalid axis range change error " + QString::fromUtf8("\xF0\x9F\x90\xA2"));
         msgBox.setText("MIN X Axis needs to be less than MAX X Axis.\n To be not empty, they both need.");
         msgBox.exec();
     }
@@ -120,15 +119,12 @@ QBoxLayout* GeneralTabWidget::createChangeRangeLayout()
     return lineEditsLayout;
 }
 
-QBoxLayout *GeneralTabWidget::createPeakListLayout()
+void GeneralTabWidget::initListLayout(QScrollArea *scrollArea)
 {
-    QBoxLayout *generalPeakListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-
     _flowLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     _scrollAreaContent = new QWidget;
     _scrollAreaContent->setLayout(_flowLayout);
 
-    QScrollArea* scrollArea = new QScrollArea;
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setWidgetResizable(true);
@@ -137,6 +133,14 @@ QBoxLayout *GeneralTabWidget::createPeakListLayout()
     QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
     spLeft.setHorizontalStretch(1);
     scrollArea->setSizePolicy(spLeft);
+}
+
+QBoxLayout *GeneralTabWidget::createPeakListLayout()
+{
+    QBoxLayout *generalPeakListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+
+    QScrollArea* scrollArea = new QScrollArea;
+    initListLayout(scrollArea);
 
     ListButton* listButton;
     int i = 0;
@@ -166,19 +170,8 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
 {
     QBoxLayout *generalSnapshotListLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-    _flowAllSnapshotsLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    _scrollAllSnapshotAreaContent = new QWidget;
-    _scrollAllSnapshotAreaContent->setLayout(_flowAllSnapshotsLayout);
-
     QScrollArea* scrollArea = new QScrollArea;
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(_scrollAllSnapshotAreaContent);
-
-    QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    spLeft.setHorizontalStretch(1);
-    scrollArea->setSizePolicy(spLeft);
+    initListLayout(scrollArea);
 
     auto index = _fileName.find_last_of('/');
     auto directoryName = _fileName.substr(0, (index+1));
@@ -187,23 +180,25 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
 
        ListButton* listButton;
+
         if(snapshot->treeType() == HeapTreeType::EMPTY){
             listButton = new ListButton();
             listButton->setDisabled(true);
-            _flowAllSnapshotsLayout->addWidget(listButton, 0, Qt::AlignTop);
+            _flowLayout->addWidget(listButton, 0, Qt::AlignTop);
         }
         else{
             TreeWidget* treeWidget = new TreeWidget(snapshot->snapshotNum(), _parser, directoryName, _codeTextBrowser);
             treeWidget->setVisible(false);
             listButton = new ListButton(treeWidget);
             QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
-            _flowAllSnapshotsLayout->addWidget(listButton, 0, Qt::AlignTop);
-            _flowAllSnapshotsLayout->addWidget(treeWidget, 0, Qt::AlignTop);
+            _flowLayout->addWidget(listButton, 0, Qt::AlignTop);
+            _flowLayout->addWidget(treeWidget, 0, Qt::AlignTop);
             _treeWidgets.push_back(treeWidget);
         }
 
         listButton->setText("snapshot " + QString::number(snapshot->snapshotNum()));
         listButton->setStyleSheet("margin: 0px 15px 0px 0px");
+
     }
 
     generalSnapshotListLayout->addWidget(scrollArea);

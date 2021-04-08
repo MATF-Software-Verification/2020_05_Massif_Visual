@@ -103,6 +103,8 @@
      <addaction name="actionPsychedelic_theme"/>
      <addaction name="separator"/>
      <addaction name="actionSapphire"/>
+     <addaction name="separator"/>
+     <addaction name="actionCorn_theme"/>
     </widget>
     <addaction name="menuChange_Theme"/>
     <addaction name="separator"/>
@@ -192,6 +194,11 @@
   <action name="actionMassif_User_Options">
    <property name="text">
     <string>Massif User Options</string>
+   </property>
+  </action>
+  <action name="actionCorn_theme">
+   <property name="text">
+    <string>Corn theme</string>
    </property>
   </action>
  </widget>
