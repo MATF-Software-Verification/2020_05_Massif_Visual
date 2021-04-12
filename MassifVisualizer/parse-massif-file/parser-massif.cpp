@@ -247,11 +247,13 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
         size_t posN = line.find("n");
         size_t posTwoDots = line.find(":");
         uint numOfDirectChildren = static_cast<uint>(std::stoi(line.substr(posN+1, posTwoDots-posN-1)));
+
         newTree->setNumOfDirectChildren(numOfDirectChildren);
 
         size_t start = line.find(" ", posTwoDots);
         size_t end = line.find(" ", start+1);
         quint64 memoryAlloc = static_cast<quint64>(std::stoi(trim(line.substr(start+1, end-start-1))));
+
         newTree->setMemoryAlloc(memoryAlloc);
 
         start = end;
@@ -270,9 +272,14 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
             std::string fileName = trim(line.substr(start+1, end-start-1));
             newTree->setFileName(fileName);
 
+            // Special case --> no lineNum
+            // n2: 8000 0x109161: g (in /home/student/Desktop/massif)
             start = end;
             end = line.find(")", start+1);
-            uint lineNum = static_cast<uint>(std::stoi(trim(line.substr(start+1, end-start-1))));
+            uint lineNum = 0;
+            if (start != std::string::npos)
+                lineNum = static_cast<uint>(std::stoi(trim(line.substr(start+1, end-start-1))));
+
             newTree->setLineNum(lineNum);
         }
         while(currentMother->children().size() == currentMother->numOfDirectChildren()){
