@@ -43,7 +43,6 @@ void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
                                                           "Select Multiple massif.out Files " + QString::fromUtf8("\xF0\x9F\x8C\x88") + QString::fromUtf8("\xF0\x9F\x8C\x88"),
                                                           "./",
                                                           "massif.out.*");
-
     if(fileNames.size() == 0){
         return;
     }
@@ -51,9 +50,7 @@ void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
 
     GeneralTabWidget* tmp = new GeneralTabWidget(this, _fileNamesPtr);
 
-    std::cout << "b" << std::endl;
     int indexxx = ui->tabWidget->addTab(tmp, "Multiple Graphs");
-
 
     ui->tabWidget->setCurrentIndex(indexxx);
 }
@@ -126,7 +123,6 @@ void MainWindow::createMenus()
 
 void MainWindow::updateMenus()
 {
-
     for(int i = 0; i < _recentFileActionList.size() ; i++){
         _recentFileActionList[i]->setText(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
         _recentFileActionList[i]->setData(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
@@ -154,5 +150,4 @@ void MainWindow::parseRecentFiles()
     std::vector<std::string>::const_iterator begin = allRecentFiles.end() - static_cast<long>(_numRecent);
     std::vector<std::string>::const_iterator end = allRecentFiles.end();
     _recentFiles = std::vector<std::string>(begin, end);
-
 }

@@ -12,7 +12,6 @@ void MainWindow::on_actionHelp_triggered()
 
 void MainWindow::on_actionReport_Bug_triggered()
 {
-
     std::string title = "So you wanted to report a bug? "  + QString::fromUtf8("\xF0\x9F\x90\xBF").toStdString();
     std::string description = "Describe in detail the bug that you have encountered... "
                    "Your description matters to us! "
