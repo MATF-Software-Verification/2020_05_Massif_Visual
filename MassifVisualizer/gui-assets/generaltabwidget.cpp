@@ -14,6 +14,7 @@ GeneralTabWidget::GeneralTabWidget(QWidget *parent, QStringList* fileNames)
     : QWidget(parent),
       _fileNames(fileNames)
 {
+
     _parsers.clear();
     _codeTextBrowser = new QTextBrowser();
     for(QString fileName : *fileNames){
@@ -195,12 +196,9 @@ QBoxLayout *GeneralTabWidget::createSnapshotListLayout()
             _flowLayout->addWidget(treeWidget, 0, Qt::AlignTop);
             _treeWidgets.push_back(treeWidget);
         }
-
         listButton->setText("snapshot " + QString::number(snapshot->snapshotNum()));
         listButton->setStyleSheet("margin: 0px 15px 0px 0px");
-
     }
-
     generalSnapshotListLayout->addWidget(scrollArea);
     return generalSnapshotListLayout;
 }
@@ -226,7 +224,6 @@ void GeneralTabWidget::createGraph()
     spLeft.setHorizontalStretch(2);
     graphicsView->setSizePolicy(spLeft);
     graphicsView->setLayout(_chartBoxLayout);
-
 
     _generalTabLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     _generalTabLayout->addWidget(graphicsView);

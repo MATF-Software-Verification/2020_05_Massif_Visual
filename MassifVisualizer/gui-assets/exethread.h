@@ -20,6 +20,7 @@ public:
     ~ExeThread();
 
     void run();
+
 private:
     QString _exeFilePath;
     QProcess* _valgrindMassifProcess;

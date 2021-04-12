@@ -15,15 +15,18 @@ QT_CHARTS_USE_NAMESPACE
 class Chart : public QChart
 {
    Q_OBJECT
+
 public:
     Chart(ParserMassif* parser);
     Chart(std::vector<ParserMassif*> parsers, QStringList* fileNames);
-
     QRadioButton *radioButtonTimeUnit() const;
 
 private slots:
+
     void show_time_unit_graph();
+
 private:
+
     void createChart();
     void createMultiChart();
 
@@ -32,7 +35,6 @@ private:
     ParserMassif* _parser;
     std::vector<ParserMassif*> _parsers;
     QStringList* _fileNames;
-
     QRadioButton* _radioButtonTimeUnit;
 };
 

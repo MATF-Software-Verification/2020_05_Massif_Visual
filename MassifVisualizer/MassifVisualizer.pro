@@ -32,13 +32,16 @@ SOURCES += \
     parse-massif-file/parser-massif.cpp \
     parse-massif-file/snapshotitem.cpp \
     parse-massif-file/heaptreeitem.cpp \
-    helper-functions.cpp \
     gui-assets/listbutton.cpp \
     gui-assets/treewidget.cpp \
     gui-assets/exethread.cpp \
     gui-assets/chart.cpp \
     gui-assets/configdialog.cpp \
-    gui-assets/massifoptionsdialog.cpp
+    gui-assets/massifoptionsdialog.cpp \
+    gui-assets/toolbar/file.cpp \
+    gui-assets/toolbar/settings.cpp \
+    gui-assets/toolbar/help.cpp \
+    themestyles.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -47,13 +50,13 @@ HEADERS += \
     parse-massif-file/parser-massif.h \
     parse-massif-file/snapshotitem.h \
     parse-massif-file/heaptreeitem.h \
-    helper-functions.h \
     gui-assets/listbutton.h \
     gui-assets/treewidget.h \
     gui-assets/exethread.h \
     gui-assets/chart.h \
     gui-assets/configdialog.h \
-    gui-assets/massifoptionsdialog.h
+    gui-assets/massifoptionsdialog.h \
+    themestyles.h
 
 FORMS += \
     mainwindow.ui

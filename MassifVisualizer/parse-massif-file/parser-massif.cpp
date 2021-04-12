@@ -1,5 +1,4 @@
 #include "parser-massif.h"
-#include "helper-functions.h"
 
 ParserMassif::ParserMassif(std::string inputFileName)
     : _inputFileName(inputFileName)
@@ -13,7 +12,6 @@ ParserMassif::~ParserMassif()
         delete si;
     }
 }
-
 
 /*
     desc: --massif-out-file=izlaz_masif
@@ -292,3 +290,13 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
     returnTypeAndHeapTree.second = newHeapTree;
     return returnTypeAndHeapTree;
 }
+
+std::string trim(const std::string& line)
+{
+    const char* WhiteSpace = " \t\v\r\n";
+    std::size_t start = line.find_first_not_of(WhiteSpace);
+    std::size_t end = line.find_last_not_of(WhiteSpace);
+
+    return start == end ? line : line.substr(start, end - start + 1);
+}
+

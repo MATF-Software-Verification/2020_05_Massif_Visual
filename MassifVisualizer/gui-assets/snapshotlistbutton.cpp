@@ -2,7 +2,6 @@
 
 SnapshotListButton::SnapshotListButton(std::string buttonName, unsigned lineNumber, std::string codeFilename)
 {
-
     this->setText(QString::fromStdString(buttonName));
     _codeFilename = codeFilename;
     _lineNumber = lineNumber;

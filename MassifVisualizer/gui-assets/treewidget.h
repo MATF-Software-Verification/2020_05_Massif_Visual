@@ -9,7 +9,7 @@
 
 #include "snapshotlistbutton.h"
 #include "parse-massif-file/parser-massif.h"
-#include "../helper-functions.h"
+#include "../themestyles.h"
 
 class TreeWidget : public QWidget
 {
@@ -25,8 +25,8 @@ public:
 
 private slots:
     void open_and_jump_code_file();
-private:
 
+private:
     void createTreeLayout();
     void highlightLine(unsigned lineNum);
 
@@ -38,7 +38,6 @@ private:
     std::string _dirName;
     QTextBrowser* _textBrowser;
     QColor _penColor = QColor(255, 128, 0);
-    //try
     QTextCursor _coursor;
     QTextBlockFormat _frmt;
 

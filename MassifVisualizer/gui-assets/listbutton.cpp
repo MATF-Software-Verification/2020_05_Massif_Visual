@@ -2,7 +2,6 @@
 
 ListButton::ListButton(TreeWidget* treeWidget) : QPushButton()
 {
-
     _treeWidget = treeWidget;
 }
 

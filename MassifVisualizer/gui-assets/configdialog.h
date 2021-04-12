@@ -10,15 +10,15 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-#include "../helper-functions.h"
+#include "../themestyles.h"
 
 class ConfigDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     ConfigDialog();
     ~ConfigDialog();
-
     QString valgrindPath() const;
 
 private slots:
@@ -31,7 +31,6 @@ private:
     QString _valgrindPath = "valgrind";
     QLineEdit* _valgrindPathLE = nullptr;
     QPushButton* _submit = nullptr;
-
     QBoxLayout* _configLayoutBL = nullptr;
     QLabel* _insertPathL = nullptr;
     QBoxLayout* _pathAndButtonBL = nullptr;

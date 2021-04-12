@@ -13,7 +13,6 @@
 class ParserMassif
 {
 public:
-
     ParserMassif(std::string inputFileName);
     ~ParserMassif();
 
@@ -44,6 +43,9 @@ private:
     quint64 parseMemHeapExtraBLine(const std::string &line);
     quint64 parseMemStacksBLine(const std::string &line);
     std::pair<std::string, HeapTreeItem*> parseHeapTreeLines(std::vector<std::string> &lines);
+
 };
+
+std::string trim(const std::string& line);
 
 #endif // PARSERMASSIF_H

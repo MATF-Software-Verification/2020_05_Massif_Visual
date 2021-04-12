@@ -2,14 +2,23 @@
 #define MAINWINDOW_H
 
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include <QMainWindow>
 #include <QList>
 #include <QProcess>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QTabWidget>
+#include <QInputDialog>
+#include <QDialogButtonBox>
+#include <QMovie>
+#include <QRandomGenerator>
 
 #include "gui-assets/generaltabwidget.h"
 #include "gui-assets/exethread.h"
-#include "helper-functions.h"
+#include "themestyles.h"
 #include "gui-assets/configdialog.h"
 #include "gui-assets/massifoptionsdialog.h"
 
@@ -28,45 +37,37 @@ public:
 private slots:
 
     void on_actionOpen_Massif_File_triggered();
-
-    void on_actionHelp_triggered();
-    void on_actionReport_Bug_triggered();
-
     void on_actionOpen_recent_triggered();
     void openRecent();
     void clearRecent();
-
     void on_tabWidget_tabCloseRequested(int index);
+    void on_actionOpen_From_Executable_triggered();
+    void onValgrindMassifFinished(QString massifOutputName);
+    void on_actionOpen_Multiple_Massif_Files_triggered();
+    void quit();
 
     void on_actionDefault_triggered();
     void on_actionBright_theme_triggered();
     void on_actionPsychedelic_theme_triggered();
-
-    void quit();
-
     void on_actionSapphire_triggered();
-    void on_actionOpen_From_Executable_triggered();
-    void onValgrindMassifFinished(QString massifOutputName);
-    void on_actionOpen_Multiple_Massif_Files_triggered();
-
-
-
+    void on_actionCorn_theme_triggered();
     void on_actionValgrind_Path_Config_triggered();
-
     void on_actionMassif_User_Options_triggered();
 
-    void on_actionCorn_theme_triggered();
+    void on_actionHelp_triggered();
+    void on_actionReport_Bug_triggered();
 
 private:
+
+    unsigned long _numRecent = 2;
+    std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
 
     Ui::MainWindow *ui;
     std::string _fileName;
     std::string _directoryName;
     std::string _codeFileName;
-    unsigned long _numRecent = 2;
     QMenu* _recentFilesMenu;
     std::vector<std::string> _recentFiles;
-    std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
     QList<QAction*> _recentFileActionList;
     ConfigDialog *_dialogPath = nullptr;
     MassifOptionsDialog* _dialogMOptions = nullptr;
@@ -85,8 +86,10 @@ private:
     void createMenus();
     void updateMenus();
     void parseRecentFiles();
+
     void setDefaultTheme();
     void updateTreeThemes();
+
     void closeEvent(QCloseEvent *event);
 };
 

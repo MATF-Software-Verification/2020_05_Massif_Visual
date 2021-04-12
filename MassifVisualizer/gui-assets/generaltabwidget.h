@@ -37,13 +37,10 @@ public:
 
     std::vector<TreeWidget *> treeWidgets() const;
 
-signals:
-
-public slots:
-
 private slots:
     void change_range();
     void easy_visibility();
+
 private:
     void createChartView();
     void createChartBoxLayout();
@@ -70,7 +67,6 @@ private:
     std::vector<TreeWidget*> _treeWidgets;
     QStringList* _fileNames;
     QBoxLayout* _flowLayout;
-    //QBoxLayout* _flowAllSnapshotsLayout;
     QWidget* _scrollAreaContent;
     QWidget* _scrollAllSnapshotAreaContent;
 
