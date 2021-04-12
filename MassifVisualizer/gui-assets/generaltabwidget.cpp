@@ -71,7 +71,6 @@ void GeneralTabWidget::easy_visibility()
     button->setIsVisible(!button->isVisible());
 }
 
-
 void GeneralTabWidget::createChartView()
 {
     _chartView = new QChartView(_chart);
@@ -150,16 +149,19 @@ QBoxLayout *GeneralTabWidget::createPeakListLayout()
         int index = static_cast<int>((_fileNames->at(i)).toStdString().find_last_of('/'));
         auto directoryName = (_fileNames->at(i)).toStdString().substr(0, (static_cast<unsigned long>(index)+1));
         SnapshotItem* currPeak = parser->peakSnapshot();
-        TreeWidget* treeWidget = new TreeWidget(currPeak->snapshotNum(), parser, directoryName, _codeTextBrowser);
-        treeWidget->setVisible(false);
-        listButton = new ListButton(treeWidget);
-        QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
-        _flowLayout->addWidget(listButton, 0, Qt::AlignTop);
-        _flowLayout->addWidget(treeWidget, 1, Qt::AlignTop);
-        QString listBtnName = "peak " + QString::number(currPeak->snapshotNum()) + " ";
-        listButton->setText(listBtnName.append((_fileNames->at(i)).mid(index+1)));
-        listButton->setStyleSheet("margin: 0px 15px 0px 0px");
-        _treeWidgets.push_back(treeWidget);
+
+        if (currPeak) {
+            TreeWidget* treeWidget = new TreeWidget(currPeak->snapshotNum(), parser, directoryName, _codeTextBrowser);
+            treeWidget->setVisible(false);
+            listButton = new ListButton(treeWidget);
+            QObject::connect(listButton, SIGNAL(clicked()), this, SLOT(easy_visibility()));
+            _flowLayout->addWidget(listButton, 0, Qt::AlignTop);
+            _flowLayout->addWidget(treeWidget, 1, Qt::AlignTop);
+            QString listBtnName = "peak " + QString::number(currPeak->snapshotNum()) + " ";
+            listButton->setText(listBtnName.append((_fileNames->at(i)).mid(index+1)));
+            listButton->setStyleSheet("margin: 0px 15px 0px 0px");
+            _treeWidgets.push_back(treeWidget);
+        }
         i++;
     }
 

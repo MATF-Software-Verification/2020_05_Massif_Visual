@@ -43,8 +43,11 @@ void Chart::createChart()
     float peakValue = 0;
 
     SnapshotItem* peakSnapshot = _parser->peakSnapshot();
-    peakNum = peakSnapshot->snapshotNum();
-    peakValue = peakSnapshot->memHeapB() + peakSnapshot->memHeapExtraB() + peakSnapshot->memStacksB();
+
+    if (peakSnapshot) {
+        peakNum = peakSnapshot->snapshotNum();
+        peakValue = peakSnapshot->memHeapB() + peakSnapshot->memHeapExtraB() + peakSnapshot->memStacksB();
+    }
 
     for (SnapshotItem* snapshot : _parser->snapshotItems()) {
         uint xValue = snapshot->snapshotNum();

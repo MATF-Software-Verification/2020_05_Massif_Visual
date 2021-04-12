@@ -31,7 +31,7 @@ private:
     std::string _exeFile;
     std::string _timeUnit;
     std::vector<SnapshotItem*> _snapshotItems;
-    SnapshotItem* _peakSnapshot;
+    SnapshotItem* _peakSnapshot = nullptr;
 
     void parseDescLine(const std::string &line);
     void parseCmdLine(const std::string &line);
