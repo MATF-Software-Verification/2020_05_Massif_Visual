@@ -19,8 +19,8 @@ public:
     uint snapshotNum() const;
     void setSnapshotNum(const uint &snapshotNum);
 
-    double time() const;
-    void setTime(double time);
+    quint64 time() const;
+    void setTime(quint64 time);
 
     quint64 memHeapB() const;
     void setMemHeapB(const quint64 &memHeapB);
@@ -39,7 +39,7 @@ public:
 
 private:
     uint _snapshotNum;
-    double _time;
+    quint64 _time;
     //quint64 = unsigned long long int
     quint64 _memHeapB;
     quint64 _memHeapExtraB;

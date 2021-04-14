@@ -38,7 +38,7 @@ private:
     void parseTimeUnitLine(const std::string &line);
 
     uint parseSnapshotNumberLine(const std::string &line);
-    double parseTimeValueLine(const std::string &line);
+    quint64 parseTimeValueLine(const std::string &line);
     quint64 parseMemHeapBLine(const std::string &line);
     quint64 parseMemHeapExtraBLine(const std::string &line);
     quint64 parseMemStacksBLine(const std::string &line);

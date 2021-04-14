@@ -59,7 +59,7 @@ void ParserMassif::parseMassifOutput()
 
                 // to extract time=#
                 std::getline(inputFile, line);
-                double timeValue = parseTimeValueLine(line);
+                quint64 timeValue = parseTimeValueLine(line);
                 newSnapshot->setTime(timeValue);
 
                 // to extract mem_heap_B=#
@@ -182,31 +182,31 @@ void ParserMassif::parseTimeUnitLine(const std::string &line)
 
 uint ParserMassif::parseSnapshotNumberLine(const std::string &line)
 {
-    uint snapshotNum = static_cast<uint>(std::stoi(trim(line.substr(line.find("=")+1))));
+    uint snapshotNum = static_cast<uint>(std::stoull(trim(line.substr(line.find("=")+1))));
     return snapshotNum;
 }
 
-double ParserMassif::parseTimeValueLine(const std::string &line)
+quint64 ParserMassif::parseTimeValueLine(const std::string &line)
 {
-    double timeValue = std::stod(trim(line.substr(line.find("=")+1)));
+    quint64 timeValue = std::stoull(trim(line.substr(line.find("=")+1)));
     return timeValue;
 }
 
 quint64 ParserMassif::parseMemHeapBLine(const std::string &line)
 {
-    quint64 memHeapB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
+    quint64 memHeapB = static_cast<quint64>(std::stoull(trim(line.substr(line.find("=")+1))));
     return memHeapB;
 }
 
 quint64 ParserMassif::parseMemHeapExtraBLine(const std::string &line)
 {
-    quint64 memHeapExtraB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
+    quint64 memHeapExtraB = static_cast<quint64>(std::stoull(trim(line.substr(line.find("=")+1))));
     return memHeapExtraB;
 }
 
 quint64 ParserMassif::parseMemStacksBLine(const std::string &line)
 {
-    quint64 memStacksB = static_cast<quint64>(std::stoi(trim(line.substr(line.find("=")+1))));
+    quint64 memStacksB = static_cast<quint64>(std::stoull(trim(line.substr(line.find("=")+1))));
     return memStacksB;
 }
 
@@ -226,19 +226,18 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
     std::string line = lines[0];
     size_t start = line.find("n");
     size_t end = line.find(":");
-    uint numOfDirectChildren = static_cast<uint>(std::stoi(line.substr(start+1, end-start-1)));
+    uint numOfDirectChildren = static_cast<uint>(std::stoull(line.substr(start+1, end-start-1)));
     newHeapTree->setNumOfDirectChildren(numOfDirectChildren);
 
     start = line.find(" ", end+1);
     end = line.find(" ", start+1);
-    quint64 memoryAlloc = static_cast<quint64>(std::stoi(trim(line.substr(start+1, end-start-1))));
+    quint64 memoryAlloc = static_cast<quint64>(std::stoull(trim(line.substr(start+1, end-start-1))));
     newHeapTree->setMemoryAlloc(memoryAlloc);
     newHeapTree->setMother(nullptr); // the first line is our GRoot :)
     lines.erase(lines.begin());
 
     auto currentMother = newHeapTree;
     for (auto line : lines) {
-
         if (line.find("threshold") != std::string::npos)
             continue;
 
@@ -246,42 +245,52 @@ std::pair<std::string, HeapTreeItem*> ParserMassif::parseHeapTreeLines(std::vect
 
         size_t posN = line.find("n");
         size_t posTwoDots = line.find(":");
-        uint numOfDirectChildren = static_cast<uint>(std::stoi(line.substr(posN+1, posTwoDots-posN-1)));
+        uint numOfDirectChildren = static_cast<uint>(std::stoull(line.substr(posN+1, posTwoDots-posN-1)));
 
         newTree->setNumOfDirectChildren(numOfDirectChildren);
 
         size_t start = line.find(" ", posTwoDots);
         size_t end = line.find(" ", start+1);
-        quint64 memoryAlloc = static_cast<quint64>(std::stoi(trim(line.substr(start+1, end-start-1))));
+        quint64 memoryAlloc = static_cast<quint64>(std::stoull(trim(line.substr(start+1, end-start-1))));
 
         newTree->setMemoryAlloc(memoryAlloc);
 
+        // Cases:
+        // 1. normal: n0: 10000 0x10917D: main (basic.c:9)
+        // 2. without -g compile: n2: 8000 0x109161: g (in /home/student/Desktop/massif)
+        // 3. function name c++: n1: 21949 0x6125403: KDebug::hasNullOutput(QtMsgType, bool, int, bool) (kdebug.cpp:773)
+        // 4. stacks = yes: n3: 10000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+
         start = end;
         end = line.find(":", start+1);
-        if (end != std::string::npos) {
-            std::string memoryAddr = trim(line.substr(start+1, end-start-1));
-            newTree->setMemoryAddr(memoryAddr);
+        std::string memoryAddr = trim(line.substr(start+1, end-start-1));
+        newTree->setMemoryAddr(memoryAddr);
 
-            start = line.find(" ", end+1);
-            end = line.find(" ", start+1);
-            std::string funcName = trim(line.substr(start+1, end-start-1));
-            newTree->setFuncName(funcName);
+        start = line.find(" ", end+1);
+        end = line.find_last_of("(");
+        std::string funcName = trim(line.substr(start+1, end-start-1-1)); // one more -1 because of the space
+        newTree->setFuncName(funcName);
 
-            start = line.find("(", end+1);
+        uint lineNum = 0;
+        std::string fileName;
+        if (line.find("(in ") != std::string::npos) {
+            start = line.find("(in ") + 3;
+            end = line.find_last_of(")");
+            fileName = trim(line.substr(start+1, end-start-1));
+        }
+        else {
+            start = end;
             end = line.find(":", start+1);
-            std::string fileName = trim(line.substr(start+1, end-start-1));
-            newTree->setFileName(fileName);
+            fileName = trim(line.substr(start+1, end-start-1));
 
-            // Special case --> no lineNum
-            // n2: 8000 0x109161: g (in /home/student/Desktop/massif)
             start = end;
             end = line.find(")", start+1);
-            uint lineNum = 0;
-            if (start != std::string::npos)
-                lineNum = static_cast<uint>(std::stoi(trim(line.substr(start+1, end-start-1))));
-
-            newTree->setLineNum(lineNum);
+            lineNum = static_cast<uint>(std::stoull(trim(line.substr(start+1, end-start-1))));
         }
+
+        newTree->setFileName(fileName);
+        newTree->setLineNum(lineNum);
+
         while(currentMother->children().size() == currentMother->numOfDirectChildren()){
             currentMother = currentMother->mother();
 

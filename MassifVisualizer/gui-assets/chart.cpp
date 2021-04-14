@@ -53,6 +53,7 @@ void Chart::createChart()
         uint xValue = snapshot->snapshotNum();
         quint64 yValue = snapshot->memHeapB() + snapshot->memHeapExtraB() + snapshot->memStacksB();
         _seriesSnapshotNum->append(xValue, yValue);
+        // append(qreal), but snapshot->time() is quint64 -> out of range sometimes :(
         _seriesTimeUnit->append(snapshot->time(), yValue);
     }
 

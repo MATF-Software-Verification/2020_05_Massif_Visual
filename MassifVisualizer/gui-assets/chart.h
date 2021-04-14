@@ -1,6 +1,8 @@
 #ifndef CHART_H
 #define CHART_H
 
+#include <sstream>
+
 #include <QObject>
 #include <QChart>
 #include <QChartView>

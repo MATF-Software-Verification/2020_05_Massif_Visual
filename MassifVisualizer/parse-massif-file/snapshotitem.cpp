@@ -27,12 +27,12 @@ void SnapshotItem::setSnapshotNum(const uint &snapshotNum)
     _snapshotNum = snapshotNum;
 }
 
-double SnapshotItem::time() const
+quint64 SnapshotItem::time() const
 {
     return _time;
 }
 
-void SnapshotItem::setTime(double time)
+void SnapshotItem::setTime(quint64 time)
 {
     _time = time;
 }

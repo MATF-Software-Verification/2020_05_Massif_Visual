@@ -1,5 +1,5 @@
-desc: --massif-out-file=izlaz_masif
-cmd: ./a.out
+desc: (none)
+cmd: ./withoutDebugMode
 time_unit: i
 #-----------
 snapshot=0
@@ -12,7 +12,7 @@ heap_tree=empty
 #-----------
 snapshot=1
 #-----------
-time=138239
+time=137829
 mem_heap_B=1000
 mem_heap_extra_B=16
 mem_stacks_B=0
@@ -20,7 +20,7 @@ heap_tree=empty
 #-----------
 snapshot=2
 #-----------
-time=138277
+time=137867
 mem_heap_B=2000
 mem_heap_extra_B=32
 mem_stacks_B=0
@@ -28,7 +28,7 @@ heap_tree=empty
 #-----------
 snapshot=3
 #-----------
-time=138315
+time=137905
 mem_heap_B=3000
 mem_heap_extra_B=48
 mem_stacks_B=0
@@ -36,7 +36,7 @@ heap_tree=empty
 #-----------
 snapshot=4
 #-----------
-time=138353
+time=137943
 mem_heap_B=4000
 mem_heap_extra_B=64
 mem_stacks_B=0
@@ -44,7 +44,7 @@ heap_tree=empty
 #-----------
 snapshot=5
 #-----------
-time=138391
+time=137981
 mem_heap_B=5000
 mem_heap_extra_B=80
 mem_stacks_B=0
@@ -52,7 +52,7 @@ heap_tree=empty
 #-----------
 snapshot=6
 #-----------
-time=138429
+time=138019
 mem_heap_B=6000
 mem_heap_extra_B=96
 mem_stacks_B=0
@@ -60,7 +60,7 @@ heap_tree=empty
 #-----------
 snapshot=7
 #-----------
-time=138467
+time=138057
 mem_heap_B=7000
 mem_heap_extra_B=112
 mem_stacks_B=0
@@ -68,7 +68,7 @@ heap_tree=empty
 #-----------
 snapshot=8
 #-----------
-time=138505
+time=138095
 mem_heap_B=8000
 mem_heap_extra_B=128
 mem_stacks_B=0
@@ -76,17 +76,17 @@ heap_tree=empty
 #-----------
 snapshot=9
 #-----------
-time=138543
+time=138133
 mem_heap_B=9000
 mem_heap_extra_B=144
 mem_stacks_B=0
 heap_tree=detailed
 n1: 9000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
- n0: 9000 0x1091A4: main (massif.c:20)
+ n0: 9000 0x1091A4: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
 #-----------
 snapshot=10
 #-----------
-time=138581
+time=138171
 mem_heap_B=10000
 mem_heap_extra_B=160
 mem_stacks_B=0
@@ -94,7 +94,7 @@ heap_tree=empty
 #-----------
 snapshot=11
 #-----------
-time=138622
+time=138212
 mem_heap_B=12000
 mem_heap_extra_B=168
 mem_stacks_B=0
@@ -102,7 +102,7 @@ heap_tree=empty
 #-----------
 snapshot=12
 #-----------
-time=138656
+time=138246
 mem_heap_B=16000
 mem_heap_extra_B=176
 mem_stacks_B=0
@@ -110,7 +110,7 @@ heap_tree=empty
 #-----------
 snapshot=13
 #-----------
-time=138696
+time=138286
 mem_heap_B=20000
 mem_heap_extra_B=184
 mem_stacks_B=0
@@ -118,23 +118,23 @@ heap_tree=empty
 #-----------
 snapshot=14
 #-----------
-time=138737
+time=138327
 mem_heap_B=20000
 mem_heap_extra_B=184
 mem_stacks_B=0
 heap_tree=peak
 n3: 20000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
- n0: 10000 0x1091A4: main (massif.c:20)
- n2: 8000 0x109161: g (massif.c:5)
-  n1: 4000 0x109177: f (massif.c:11)
-   n0: 4000 0x1091C0: main (massif.c:23)
-  n0: 4000 0x1091C5: main (massif.c:24)
- n1: 2000 0x109172: f (massif.c:10)
-  n0: 2000 0x1091C0: main (massif.c:23)
+ n0: 10000 0x1091A4: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+ n2: 8000 0x109161: g (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+  n1: 4000 0x109177: f (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+   n0: 4000 0x1091C0: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+  n0: 4000 0x1091C5: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+ n1: 2000 0x109172: f (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+  n0: 2000 0x1091C0: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
 #-----------
 snapshot=15
 #-----------
-time=138737
+time=138327
 mem_heap_B=19000
 mem_heap_extra_B=168
 mem_stacks_B=0
@@ -142,7 +142,7 @@ heap_tree=empty
 #-----------
 snapshot=16
 #-----------
-time=138771
+time=138361
 mem_heap_B=18000
 mem_heap_extra_B=152
 mem_stacks_B=0
@@ -150,7 +150,7 @@ heap_tree=empty
 #-----------
 snapshot=17
 #-----------
-time=138805
+time=138395
 mem_heap_B=17000
 mem_heap_extra_B=136
 mem_stacks_B=0
@@ -158,7 +158,7 @@ heap_tree=empty
 #-----------
 snapshot=18
 #-----------
-time=138839
+time=138429
 mem_heap_B=16000
 mem_heap_extra_B=120
 mem_stacks_B=0
@@ -166,7 +166,7 @@ heap_tree=empty
 #-----------
 snapshot=19
 #-----------
-time=138873
+time=138463
 mem_heap_B=15000
 mem_heap_extra_B=104
 mem_stacks_B=0
@@ -174,7 +174,7 @@ heap_tree=empty
 #-----------
 snapshot=20
 #-----------
-time=138907
+time=138497
 mem_heap_B=14000
 mem_heap_extra_B=88
 mem_stacks_B=0
@@ -182,7 +182,7 @@ heap_tree=empty
 #-----------
 snapshot=21
 #-----------
-time=138941
+time=138531
 mem_heap_B=13000
 mem_heap_extra_B=72
 mem_stacks_B=0
@@ -190,7 +190,7 @@ heap_tree=empty
 #-----------
 snapshot=22
 #-----------
-time=138975
+time=138565
 mem_heap_B=12000
 mem_heap_extra_B=56
 mem_stacks_B=0
@@ -198,7 +198,7 @@ heap_tree=empty
 #-----------
 snapshot=23
 #-----------
-time=139009
+time=138599
 mem_heap_B=11000
 mem_heap_extra_B=40
 mem_stacks_B=0
@@ -206,16 +206,16 @@ heap_tree=empty
 #-----------
 snapshot=24
 #-----------
-time=139043
+time=138633
 mem_heap_B=10000
 mem_heap_extra_B=24
 mem_stacks_B=0
 heap_tree=detailed
 n3: 10000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
- n2: 8000 0x109161: g (massif.c:5)
-  n1: 4000 0x109177: f (massif.c:11)
-   n0: 4000 0x1091C0: main (massif.c:23)
-  n0: 4000 0x1091C5: main (massif.c:24)
- n1: 2000 0x109172: f (massif.c:10)
-  n0: 2000 0x1091C0: main (massif.c:23)
+ n2: 8000 0x109161: g (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+  n1: 4000 0x109177: f (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+   n0: 4000 0x1091C0: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+  n0: 4000 0x1091C5: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+ n1: 2000 0x109172: f (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
+  n0: 2000 0x1091C0: main (in /home/student/Desktop/2020_05_Massif_Visual/MassifVisualizer/input-examples/massifOutWithCode/withoutDebugMode)
  n0: 0 in 1 place, below massif's threshold (1.00%)

@@ -1,10 +1,11 @@
 #ifndef TREEWIDGET_H
 #define TREEWIDGET_H
 
+#include <sstream>
+
 #include <QWidget>
 #include <QBoxLayout>
 #include <QTextBrowser>
-
 #include <QTextBlock>
 
 #include "snapshotlistbutton.h"
