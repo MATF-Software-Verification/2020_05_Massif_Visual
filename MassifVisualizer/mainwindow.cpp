@@ -68,6 +68,3 @@ void MainWindow::createMessageBox(QString title, QString text) {
     setTheme(qobject_cast<QWidget*>(&msgBox));
     msgBox.exec();
 }
-
-
-
