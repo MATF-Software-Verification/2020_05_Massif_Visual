@@ -48,11 +48,31 @@ void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
     }
     _fileNamesPtr = new QStringList(fileNames);
 
-    GeneralTabWidget* tmp = new GeneralTabWidget(this, _fileNamesPtr);
+    std::vector<ParserMassif*> parsers;
+    for(QString fileName : *_fileNamesPtr){
+        ParserMassif* parser = new ParserMassif(fileName.toStdString());
+        parser->parseMassifOutput();
 
-    int indexxx = ui->tabWidget->addTab(tmp, "Multiple Graphs");
+        if (parser->validateMassifFile())
+            parsers.push_back(parser);
+        else {
+            QString title = "Invalid Massif Input File " + QString::fromUtf8("\xF0\x9F\x90\x92");
+            QString text = "Invalid massif output file: " + fileName;
+            createMessageBox(title, text);
+        }
+    }
 
-    ui->tabWidget->setCurrentIndex(indexxx);
+    if (parsers.empty()) {
+        QString title = "Invalid Massif Input Files " + QString::fromUtf8("\xF0\x9F\x90\x92");
+        QString text = "All massif.out files are invalid.\n"
+                       "They must have a format as shown in our input-examples directory.";
+        createMessageBox(title, text);
+    }
+    else {
+        GeneralTabWidget* tmp = new GeneralTabWidget(this, _fileNamesPtr, parsers);
+        int indexxx = ui->tabWidget->addTab(tmp, "Multiple Graphs");
+        ui->tabWidget->setCurrentIndex(indexxx);
+    }
 }
 
 void MainWindow::openRecent()
@@ -93,8 +113,19 @@ void MainWindow::visualizeData(QString fileName)
 
     int indexx =  QString::fromStdString(_fileName).lastIndexOf("/");
 
-    int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, _fileName), QString::fromStdString(_fileName).mid(indexx+1));
-    ui->tabWidget->setCurrentIndex(indexxx);
+    ParserMassif* parser = new ParserMassif(_fileName);
+    parser->parseMassifOutput();
+
+    if (!parser->validateMassifFile()) {
+        QString title = "Invalid Massif Input File " + QString::fromUtf8("\xF0\x9F\x90\x92");
+        QString text = "Check the validity of your massif.out file. \n"
+                       "It must have a format as shown in our input-examples directory.";
+        createMessageBox(title, text);
+    }
+    else {
+        int indexxx = ui->tabWidget->addTab(new GeneralTabWidget(this, _fileName, parser), QString::fromStdString(_fileName).mid(indexx+1));
+        ui->tabWidget->setCurrentIndex(indexxx);
+    }
 }
 
 void MainWindow::runMassif(QString exeFileName)

@@ -1,5 +1,10 @@
 #include "chart.h"
 
+Chart::Chart()
+{
+
+}
+
 Chart::Chart(ParserMassif* parser) : _parser(parser)
 {
     createChart();
@@ -60,11 +65,14 @@ void Chart::createChart()
     std::ostringstream title;
     std::string peakValueStr = std::to_string(peakValue/1000);
 
-    if (_parser->exeFile().empty()) {
+    if (!_parser->validateMassifFile()){
+        title << "<b>INVALID massif.out file :(</b>";
+    }
+    else if (_parser->exeFile().empty()) {
         title << "massif.out file does not exist!";
     }
     else {
-        title << "<i>File exe: "
+        title << "<i>File exe [cmd]: "
               << _parser->exeFile()
               << "</i><br><b>Peak: "
               << peakValueStr.substr(0, peakValueStr.find(".")+4)

@@ -1,0 +1,23 @@
+desc: --time-unit=B
+cmd: ./a.out
+time_unit:  ms   
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=    0324
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=9144
+mem_heap_B=9000
+mem_heap_extra_B=144
+mem_stacks_B=0
+heap_tree=detailed
+n1: 9000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 9000 0x1091A4: main (massif_example.c:20)
+njgdfsklgjdsljg
+agsjrui4389395753

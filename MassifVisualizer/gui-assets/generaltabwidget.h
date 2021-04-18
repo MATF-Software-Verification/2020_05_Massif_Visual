@@ -21,6 +21,7 @@
 #include "chart.h"
 
 #include "listbutton.h"
+#include "themestyles.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -29,9 +30,11 @@ class GeneralTabWidget : public QWidget
     Q_OBJECT
 public:
     explicit GeneralTabWidget(QWidget *parent = nullptr,
-                              std::string fileName = "");
+                              std::string fileName = "",
+                              ParserMassif* parser = nullptr);
     explicit GeneralTabWidget(QWidget *parent = nullptr,
-                              QStringList* fileNames = new QStringList());
+                              QStringList* fileNames = new QStringList(),
+                              std::vector<ParserMassif*> parsers = {});
 
     ~GeneralTabWidget();
 
@@ -53,22 +56,22 @@ private:
 
     void createGraph();
 
-    QBoxLayout* _generalTabLayout;
-    Chart* _chart;
-    QChartView* _chartView;
-    QBoxLayout* _chartBoxLayout;
-    QBoxLayout* _treeBoxLayout;
-    QLineEdit* _minLE;
-    QLineEdit* _maxLE;
-    QTextBrowser* _codeTextBrowser;
-    ParserMassif* _parser = nullptr;
+    QBoxLayout* _generalTabLayout = nullptr;
+    Chart* _chart = nullptr;
+    QChartView* _chartView = nullptr;
+    QBoxLayout* _chartBoxLayout = nullptr;
+    QBoxLayout* _treeBoxLayout = nullptr;
+    QLineEdit* _minLE = nullptr;
+    QLineEdit* _maxLE = nullptr;
+    QTextBrowser* _codeTextBrowser = nullptr;
     std::string _fileName;
+    ParserMassif* _parser = nullptr;
+    QStringList* _fileNames = nullptr;
     std::vector<ParserMassif*> _parsers;
     std::vector<TreeWidget*> _treeWidgets;
-    QStringList* _fileNames;
-    QBoxLayout* _flowLayout;
-    QWidget* _scrollAreaContent;
-    QWidget* _scrollAllSnapshotAreaContent;
+    QBoxLayout* _flowLayout = nullptr;
+    QWidget* _scrollAreaContent = nullptr;
+    QWidget* _scrollAllSnapshotAreaContent = nullptr;
 
 };
 

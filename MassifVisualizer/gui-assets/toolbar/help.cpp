@@ -4,10 +4,9 @@
 void MainWindow::on_actionHelp_triggered()
 {
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Help me box " + QString::fromUtf8("\xF0\x9F\x8F\xA5"));
-    msgBox.setText("You are on your own.");
-    setTheme(qobject_cast<QWidget*>(&msgBox));
-    msgBox.exec();
+    QString title = "Help me box " + QString::fromUtf8("\xF0\x9F\x8F\xA5");
+    QString text = "You are on your own.";
+    createMessageBox(title, text);
 }
 
 void MainWindow::on_actionReport_Bug_triggered()

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "../MassifVisualizer/parse-massif-file/parser-massif.h"
 
 //#include <QFileDialog>
 
@@ -59,5 +60,14 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     QWidget::closeEvent(event);
     QApplication::quit();
 }
+
+void MainWindow::createMessageBox(QString title, QString text) {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    setTheme(qobject_cast<QWidget*>(&msgBox));
+    msgBox.exec();
+}
+
 
 

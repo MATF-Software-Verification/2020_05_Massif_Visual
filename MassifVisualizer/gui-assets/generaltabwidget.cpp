@@ -1,27 +1,20 @@
 #include "generaltabwidget.h"
 
-GeneralTabWidget::GeneralTabWidget(QWidget *parent, std::string fileName)
+GeneralTabWidget::GeneralTabWidget(QWidget *parent, std::string fileName, ParserMassif* parser)
     : QWidget(parent),
-      _fileName(fileName)
+      _fileName(fileName),
+      _parser(parser)
 {
     _codeTextBrowser = new QTextBrowser();
-    _parser = new ParserMassif(fileName);
-    _parser->parseMassifOutput();
     createGraph();
 }
 
-GeneralTabWidget::GeneralTabWidget(QWidget *parent, QStringList* fileNames)
+GeneralTabWidget::GeneralTabWidget(QWidget *parent, QStringList* fileNames, std::vector<ParserMassif*> parsers)
     : QWidget(parent),
-      _fileNames(fileNames)
+      _fileNames(fileNames),
+      _parsers(parsers)
 {
-
-    _parsers.clear();
     _codeTextBrowser = new QTextBrowser();
-    for(QString fileName : *fileNames){
-        ParserMassif* parser = new ParserMassif(fileName.toStdString());
-        parser->parseMassifOutput();
-        _parsers.push_back(parser);
-    }
     createGraph();
 }
 
@@ -56,9 +49,12 @@ void GeneralTabWidget::change_range()
         _chart->axes(Qt::Horizontal).back()->setRange(num_minLE, num_maxLE);
     }
     else {
+        QString title = "Invalid axis range change error " + QString::fromUtf8("\xF0\x9F\x90\xA2");
+        QString text = "MIN X Axis needs to be less than MAX X Axis.\n To be not empty, they both need.";
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Invalid axis range change error " + QString::fromUtf8("\xF0\x9F\x90\xA2"));
-        msgBox.setText("MIN X Axis needs to be less than MAX X Axis.\n To be not empty, they both need.");
+        msgBox.setWindowTitle(title);
+        msgBox.setText(text);
+        setTheme(qobject_cast<QWidget*>(&msgBox));
         msgBox.exec();
     }
 }
@@ -81,7 +77,7 @@ void GeneralTabWidget::createChartBoxLayout()
 {
     _chartBoxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-    if(_parser){
+    if(_parser) {
         _chart = new Chart(_parser);
         _chartBoxLayout->addWidget(_chart->radioButtonTimeUnit());
     }

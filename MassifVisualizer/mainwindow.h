@@ -58,7 +58,6 @@ private slots:
     void on_actionReport_Bug_triggered();
 
 private:
-
     unsigned long _numRecent = 2;
     std::string _recentFilesFile = "../MassifVisualizer/assets/recentFiles.txt";
 
@@ -86,6 +85,7 @@ private:
     void createMenus();
     void updateMenus();
     void parseRecentFiles();
+    void createMessageBox(QString title, QString text);
 
     void setDefaultTheme();
     void updateTreeThemes();

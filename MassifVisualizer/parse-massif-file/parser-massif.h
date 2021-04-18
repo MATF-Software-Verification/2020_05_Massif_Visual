@@ -17,6 +17,7 @@ public:
     ~ParserMassif();
 
     void parseMassifOutput();
+    bool validateMassifFile();
 
     std::vector<SnapshotItem *> snapshotItems() const;
 
@@ -36,6 +37,7 @@ private:
     void parseDescLine(const std::string &line);
     void parseCmdLine(const std::string &line);
     void parseTimeUnitLine(const std::string &line);
+    quint64 checkIfNumber(const std::string &line, size_t start, size_t end);
 
     uint parseSnapshotNumberLine(const std::string &line);
     quint64 parseTimeValueLine(const std::string &line);
@@ -44,6 +46,7 @@ private:
     quint64 parseMemStacksBLine(const std::string &line);
     std::pair<std::string, HeapTreeItem*> parseHeapTreeLines(std::vector<std::string> &lines);
 
+    bool validMassifFile = true;
 };
 
 std::string trim(const std::string& line);
