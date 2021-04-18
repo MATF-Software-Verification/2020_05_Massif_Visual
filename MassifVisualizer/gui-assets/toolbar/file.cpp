@@ -69,6 +69,9 @@ void MainWindow::clearRecent(){
     outfile.close();
     parseRecentFiles();
     updateMenus();
+    for(int i = 0; i < _recentFileActionList.size() ; i++){
+        _recentFileActionList[i]->setVisible(false);
+    }
 }
 
 void MainWindow::visualizeData(QString fileName)
@@ -118,14 +121,21 @@ void MainWindow::createMenus()
         recentFile->setData(QString::fromStdString(_recentFiles[i]));
         _recentFilesMenu->addAction(recentFile);
         _recentFileActionList.append(recentFile);
+        recentFile->setVisible(false);
     }
+    parseRecentFiles();
+    updateMenus();
 }
 
 void MainWindow::updateMenus()
 {
     for(int i = 0; i < _recentFileActionList.size() ; i++){
+        if(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]) == ""){
+            continue;
+        }
         _recentFileActionList[i]->setText(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
         _recentFileActionList[i]->setData(QString::fromStdString(_recentFiles[static_cast<unsigned long>(i)]));
+        _recentFileActionList[i]->setVisible(true);
     }
 }
 
