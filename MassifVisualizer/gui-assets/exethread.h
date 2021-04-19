@@ -26,9 +26,10 @@ private:
     QProcess* _valgrindMassifProcess;
     ConfigDialog* _configDialog;
     MassifOptionsDialog* _optionsDialog;
+    int _duration;
 
 signals:
-    void valgrindMassifFinished(QString);
+    void valgrindMassifFinished(QString, int, int);
 };
 
 #endif // EXETHREAD_H

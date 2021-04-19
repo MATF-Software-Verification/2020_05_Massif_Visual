@@ -42,7 +42,7 @@ private slots:
     void clearRecent();
     void on_tabWidget_tabCloseRequested(int index);
     void on_actionOpen_From_Executable_triggered();
-    void onValgrindMassifFinished(QString massifOutputName);
+    void onValgrindMassifFinished(QString massifOutputName, int time, int error);
     void on_actionOpen_Multiple_Massif_Files_triggered();
     void quit();
 
@@ -79,6 +79,7 @@ private:
     ExeThread* _exeThread = nullptr;
     QAction* _clearRecentFiles = nullptr;
     QStringList* _fileNamesPtr = nullptr;
+    QMessageBox _msgBox;
 
     void visualizeData(QString fileName);
     void runMassif(QString exeFileName);

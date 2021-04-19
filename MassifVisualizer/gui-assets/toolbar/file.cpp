@@ -32,9 +32,22 @@ void MainWindow::on_actionOpen_From_Executable_triggered()
     runMassif(exeFileName);
 }
 
-void MainWindow::onValgrindMassifFinished(QString massifOutputName)
+void MainWindow::onValgrindMassifFinished(QString massifOutputName, int duration, int error)
 {
     visualizeData(massifOutputName);
+    if(error != 0){
+        _msgBox.setWindowTitle("Executed");
+
+        QString msgText = "Error: ";
+        msgText.append(QString::number(error));
+        msgText.append("\n");
+        msgText.append("Duration: ");
+        msgText.append(QString::number(duration));
+
+        _msgBox.setText(msgText);
+    }else {
+        _msgBox.close();
+    }
 }
 
 void MainWindow::on_actionOpen_Multiple_Massif_Files_triggered()
@@ -131,9 +144,13 @@ void MainWindow::visualizeData(QString fileName)
 void MainWindow::runMassif(QString exeFileName)
 {
     _exeThread = new ExeThread(this, exeFileName, _dialogPath, _dialogMOptions);
-    connect(_exeThread, SIGNAL(valgrindMassifFinished(QString)),
-                this, SLOT(onValgrindMassifFinished(QString)));
+    connect(_exeThread, SIGNAL(valgrindMassifFinished(QString, int, int)),
+                this, SLOT(onValgrindMassifFinished(QString, int, int)));
     _exeThread->start();
+    _msgBox.setText("Executing...");
+    _msgBox.setWindowTitle("In progress...");
+    setTheme(qobject_cast<QWidget*>(&_msgBox));
+    _msgBox.exec();
 }
 
 void MainWindow::createMenus()
