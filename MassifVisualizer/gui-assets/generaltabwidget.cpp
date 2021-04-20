@@ -121,7 +121,7 @@ void GeneralTabWidget::initListLayout(QScrollArea *scrollArea)
     _scrollAreaContent = new QWidget;
     _scrollAreaContent->setLayout(_flowLayout);
 
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(_scrollAreaContent);
