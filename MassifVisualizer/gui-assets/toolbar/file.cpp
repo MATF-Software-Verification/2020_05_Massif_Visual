@@ -34,8 +34,9 @@ void MainWindow::on_actionOpen_From_Executable_triggered()
 
 void MainWindow::onValgrindMassifFinished(QString massifOutputName, int duration, int error)
 {
-    visualizeData(massifOutputName);
+
     if(error != 0){
+        _msgBox.close();
         _msgBox.setWindowTitle("Executed");
 
         QString msgText = "Error: ";
@@ -45,8 +46,10 @@ void MainWindow::onValgrindMassifFinished(QString massifOutputName, int duration
         msgText.append(QString::number(duration));
 
         _msgBox.setText(msgText);
+        _msgBox.show();
     }else {
         _msgBox.close();
+        visualizeData(massifOutputName);
     }
 }
 
