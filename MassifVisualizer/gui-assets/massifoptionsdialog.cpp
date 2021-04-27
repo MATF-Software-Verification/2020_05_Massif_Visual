@@ -1,5 +1,7 @@
 #include "massifoptionsdialog.h"
 
+#include <iostream>
+
 MassifOptionsDialog::MassifOptionsDialog()
 {
     this->setWindowTitle("Massif User Options " + QString::fromUtf8("\xF0\x9F\x90\x89"));
@@ -75,8 +77,21 @@ MassifOptionsDialog::MassifOptionsDialog()
 //   THIS OPTION IS NOT SUPPORTED!!!
 //    --massif-out-file=<file>  output file name [massif.out.%p]
 
+    QBoxLayout* claBL = new QBoxLayout(QBoxLayout::LeftToRight);
+    QLabel* argInfoL = new QLabel("\nOptions for executable file\n");
+    QLabel* claL = new QLabel("<pre><b>command line arguments: </b></pre>");
+    claBL->addWidget(claL);
+    _claLE = new QLineEdit();
+    claBL->addWidget(_claLE);
+
+    QBoxLayout* buttonBL = new QBoxLayout(QBoxLayout::LeftToRight);
+    QPushButton* resetB = new QPushButton("Reset");
+    QObject::connect(resetB, SIGNAL(clicked()), this, SLOT(reset_to_default()));
+    buttonBL->addWidget(resetB);
+
     QPushButton* submitB = new QPushButton("Submit");
     QObject::connect(submitB, SIGNAL(clicked()), this, SLOT(submit_massif_options()));
+    buttonBL->addWidget(submitB);
 
     _optionsBL->addLayout(stacksBL);
     _optionsBL->addLayout(allocFunBL);
@@ -84,7 +99,9 @@ MassifOptionsDialog::MassifOptionsDialog()
     _optionsBL->addLayout(timeUnitBL);
     _optionsBL->addLayout(detailedFreqBL);
     _optionsBL->addLayout(maxSnapsBL);
-    _optionsBL->addWidget(submitB);
+    _optionsBL->addWidget(argInfoL);
+    _optionsBL->addLayout(claBL);
+    _optionsBL->addLayout(buttonBL);
     this->setLayout(_optionsBL);
 
     setTheme(qobject_cast<QWidget*>(this));
@@ -126,7 +143,34 @@ void MassifOptionsDialog::submit_massif_options()
         _massifOptions.append("--max-snapshots=" + _maxSnapshotsLE->text() + " ");
     }
 
+    if (_claLE->text().size() > 0) {
+        _commandLineArguments = _claLE->text();
+        std::cout << _commandLineArguments.toStdString() << std::endl;
+    }
+
     this->close();
+}
+
+void MassifOptionsDialog::reset_to_default()
+{
+    _yesStacksRB->setChecked(false);
+    _noStacksRB->setChecked(false);
+    _allocLE->clear();
+    _thresholdLE->clear();
+    _timeUnitms->setChecked(false);
+    _timeUnitB->setChecked(false);
+    _timeUnitI->setChecked(false);
+    _detailedFreqLE->clear();
+    _maxSnapshotsLE->clear();
+    _claLE->clear();
+
+    _massifOptions = "";
+    _commandLineArguments = "";
+}
+
+QString MassifOptionsDialog::commandLineArguments() const
+{
+    return _commandLineArguments;
 }
 
 QString MassifOptionsDialog::massifOptions() const

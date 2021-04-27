@@ -28,7 +28,11 @@ void ExeThread::run()
     if (_optionsDialog!=nullptr && _optionsDialog->massifOptions().size() > 0)
         massifOptions = _optionsDialog->massifOptions();
 
-    QString processCommand = valgrindPath + " --tool=massif " + massifOptions + _exeFilePath;
+    QString commandLineArguments = "";
+    if (_optionsDialog!=nullptr && _optionsDialog->commandLineArguments() != "")
+        commandLineArguments = _optionsDialog->commandLineArguments();
+
+    QString processCommand = valgrindPath + " --tool=massif " + massifOptions + _exeFilePath + " " + commandLineArguments;
     _valgrindMassifProcess->start(processCommand);
     auto startTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 

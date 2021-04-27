@@ -25,3 +25,9 @@
 /home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/multiple_examples/massif.out.7789
 /home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/executables//massif.out.8123
 /home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/executables//massif.out.8167
+/home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/withArguments//massif.out.12981
+/home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/withArguments//massif.out.13026
+/home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/withArguments//massif.out.13080
+/home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/withArguments//massif.out.14675
+/home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/withArguments//massif.out.14788
+/home/student/Desktop/VS_project/2020_05_Massif_Visual/MassifVisualizer/input-examples/withArguments//massif.out.14819

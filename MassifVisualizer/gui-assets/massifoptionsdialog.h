@@ -20,12 +20,15 @@ public:
     ~MassifOptionsDialog();
 
     QString massifOptions() const;
+    QString commandLineArguments() const;
 
 private slots:
     void submit_massif_options();
+    void reset_to_default();
 
 private:
     QString _massifOptions="";
+    QString _commandLineArguments="";
 
     QRadioButton* _yesStacksRB=nullptr;
     QRadioButton* _noStacksRB=nullptr;
@@ -36,6 +39,7 @@ private:
     QRadioButton* _timeUnitB=nullptr;
     QLineEdit* _detailedFreqLE=nullptr;
     QLineEdit* _maxSnapshotsLE=nullptr;
+    QLineEdit* _claLE=nullptr;
 
     QBoxLayout* _optionsBL;
     QButtonGroup* _stacksGroup;
