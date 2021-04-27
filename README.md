@@ -133,6 +133,24 @@ Direktorijum <b>_dataFromGitHub_</b> je preuzet sa: https://github.com/KDE/massi
 
 Primeri u ostalim direktorijumima su dobijeni eksperimentisanjem tokom samog procesa izrade aplikacije. Oni (i njima slični) mogu poslužiti kao ulazni primeri u program.
 
+# Ideje za dalji rad :brain:
+
+- Implementacija funkcionalnosti u okviru `Help` opcije (bug report, info…)
+- Unapređivanje preraspodele prostora unutar Snapshot List (ponekad se dešava da ima puno prostora između snapshotova, pa bi bilo lepo to popraviti)
+- Kada se aplikacija uvećava/smanjuje bilo bi dobro da se prostor za snapshot i kôd uvećava/smanjuje u skladu sa proporcijama glavnog prozora
+- Unapređivanje grafika:
+  - interaktivne opcije, tako što se recimo klikom na snapshot number dobiju neke dodatne informacije za taj snapshot
+  - filteri na grafiku u vidu selektovanja samo određenih funkcija iz skupa ponuđenih koje su se našle unutar massif.out fajla (inspiracija na: https://github.com/KDE/massif-visualizer)
+  - iscrtavanje različitih vrsta grafika (pie chart, scatter plot…)
+- Optimizovati prikaz izvornog kôda (trenutno je uvlačenje rednih brojeva linija fiksirano na 4 mesta - tj. maksimalno 1000 linija koda)
+- Testiranje parsera kroz neko testno okruženje (Google Test) i refaktorisanje trenutno glomazne/haotične funkcije koja parsira HeapTree
+- Istraživanje svih opcija (flegova) koji se mogu poslati Massif alatu i njihovo kreativno iskorišćavanje tj. vizualizovanje
+- Osmišljavanje kako za Multiple Massif Files raditi poređenje izvornih kodova i predstavljanje pronađenih promena/razlika
+- Sređivanje intervala vrednosti koje je moguće prikazati na X-osi (najčešće time) na Chart-u (trenutno ukoliko izađe iz opsega qreal vrednosti, imamo negativne vrednosti, pa treba smisliti i koristiti nešto veće)
+- Prikazivanje HeapTree za detailed/peak snapshots u vidu pravog drveta, odnosno iscrtavanje u zasebnom tabu i mogućnost interaktivnih čvorova
+- Mogućnost otvaranja i izmena izvornog kôda, sa opcijom prikaza i ažuriranja massif.out fajla u realnom vremenu
+- Proširivanje tema korišćenjem paleta (QPalette Class)
+
 ---
 
 ## What's This? :deciduous_tree: :leaves::leaves::leaves:
