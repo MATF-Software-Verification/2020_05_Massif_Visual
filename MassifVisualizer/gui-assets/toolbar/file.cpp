@@ -29,12 +29,15 @@ void MainWindow::on_actionOpen_From_Executable_triggered()
     QString exeFileName = QFileDialog::getOpenFileName(this,
                               "Select an Executable File " + QString::fromUtf8("\xF0\x9F\x8F\xB0"), "./",  tr("Executables (*.out *.exe)"));
 
+    if(exeFileName == ""){
+        return;
+    }
+
     runMassif(exeFileName);
 }
 
 void MainWindow::onValgrindMassifFinished(QString massifOutputName, int duration, int error)
 {
-
     if(error != 0){
         _msgBox.close();
         _msgBox.setWindowTitle("Executed");

@@ -1,0 +1,391 @@
+desc: (none)
+cmd: ./2.out
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=139033
+mem_heap_B=2000
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=139067
+mem_heap_B=6000
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=139107
+mem_heap_B=10000
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=139145
+mem_heap_B=11000
+mem_heap_extra_B=40
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=139183
+mem_heap_B=12000
+mem_heap_extra_B=56
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=139221
+mem_heap_B=13000
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=139259
+mem_heap_B=14000
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=139297
+mem_heap_B=15000
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=139335
+mem_heap_B=16000
+mem_heap_extra_B=120
+mem_stacks_B=0
+heap_tree=detailed
+n3: 16000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 8000 0x109161: g (massif_example_2.c:5)
+  n1: 4000 0x109177: f (massif_example_2.c:11)
+   n0: 4000 0x109196: main (massif_example_2.c:19)
+  n0: 4000 0x10919B: main (massif_example_2.c:20)
+ n0: 6000 0x1091AE: main (massif_example_2.c:23)
+ n1: 2000 0x109172: f (massif_example_2.c:10)
+  n0: 2000 0x109196: main (massif_example_2.c:19)
+#-----------
+snapshot=10
+#-----------
+time=139373
+mem_heap_B=17000
+mem_heap_extra_B=136
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=139411
+mem_heap_B=18000
+mem_heap_extra_B=152
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=139449
+mem_heap_B=19000
+mem_heap_extra_B=168
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=139487
+mem_heap_B=20000
+mem_heap_extra_B=184
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=139528
+mem_heap_B=22000
+mem_heap_extra_B=192
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=139562
+mem_heap_B=26000
+mem_heap_extra_B=200
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=139602
+mem_heap_B=30000
+mem_heap_extra_B=208
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=139639
+mem_heap_B=32000
+mem_heap_extra_B=216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=139673
+mem_heap_B=36000
+mem_heap_extra_B=224
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=139713
+mem_heap_B=40000
+mem_heap_extra_B=232
+mem_stacks_B=0
+heap_tree=detailed
+n3: 40000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n4: 24000 0x109161: g (massif_example_2.c:5)
+  n3: 12000 0x109177: f (massif_example_2.c:11)
+   n0: 4000 0x109196: main (massif_example_2.c:19)
+   n0: 4000 0x1091CA: main (massif_example_2.c:26)
+   n0: 4000 0x1091D4: main (massif_example_2.c:28)
+  n0: 4000 0x10919B: main (massif_example_2.c:20)
+  n0: 4000 0x1091CF: main (massif_example_2.c:27)
+  n0: 4000 0x1091D9: main (massif_example_2.c:29)
+ n0: 10000 0x1091AE: main (massif_example_2.c:23)
+ n3: 6000 0x109172: f (massif_example_2.c:10)
+  n0: 2000 0x109196: main (massif_example_2.c:19)
+  n0: 2000 0x1091CA: main (massif_example_2.c:26)
+  n0: 2000 0x1091D4: main (massif_example_2.c:28)
+#-----------
+snapshot=20
+#-----------
+time=139750
+mem_heap_B=42000
+mem_heap_extra_B=240
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=139784
+mem_heap_B=46000
+mem_heap_extra_B=248
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=139824
+mem_heap_B=50000
+mem_heap_extra_B=256
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=139861
+mem_heap_B=52000
+mem_heap_extra_B=264
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=139895
+mem_heap_B=56000
+mem_heap_extra_B=272
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=139935
+mem_heap_B=60000
+mem_heap_extra_B=280
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=139972
+mem_heap_B=62000
+mem_heap_extra_B=288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=140006
+mem_heap_B=66000
+mem_heap_extra_B=296
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=140046
+mem_heap_B=70000
+mem_heap_extra_B=304
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=140087
+mem_heap_B=70000
+mem_heap_extra_B=304
+mem_stacks_B=0
+heap_tree=peak
+n3: 70000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n7: 48000 0x109161: g (massif_example_2.c:5)
+  n6: 24000 0x109177: f (massif_example_2.c:11)
+   n0: 4000 0x109196: main (massif_example_2.c:19)
+   n0: 4000 0x1091CA: main (massif_example_2.c:26)
+   n0: 4000 0x1091D4: main (massif_example_2.c:28)
+   n0: 4000 0x1091DE: main (massif_example_2.c:30)
+   n0: 4000 0x1091E8: main (massif_example_2.c:32)
+   n0: 4000 0x1091F2: main (massif_example_2.c:34)
+  n0: 4000 0x10919B: main (massif_example_2.c:20)
+  n0: 4000 0x1091CF: main (massif_example_2.c:27)
+  n0: 4000 0x1091D9: main (massif_example_2.c:29)
+  n0: 4000 0x1091E3: main (massif_example_2.c:31)
+  n0: 4000 0x1091ED: main (massif_example_2.c:33)
+  n0: 4000 0x1091F7: main (massif_example_2.c:35)
+ n6: 12000 0x109172: f (massif_example_2.c:10)
+  n0: 2000 0x109196: main (massif_example_2.c:19)
+  n0: 2000 0x1091CA: main (massif_example_2.c:26)
+  n0: 2000 0x1091D4: main (massif_example_2.c:28)
+  n0: 2000 0x1091DE: main (massif_example_2.c:30)
+  n0: 2000 0x1091E8: main (massif_example_2.c:32)
+  n0: 2000 0x1091F2: main (massif_example_2.c:34)
+ n0: 10000 0x1091AE: main (massif_example_2.c:23)
+#-----------
+snapshot=30
+#-----------
+time=140087
+mem_heap_B=69000
+mem_heap_extra_B=288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=140121
+mem_heap_B=68000
+mem_heap_extra_B=272
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=140155
+mem_heap_B=67000
+mem_heap_extra_B=256
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=140189
+mem_heap_B=66000
+mem_heap_extra_B=240
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=140223
+mem_heap_B=65000
+mem_heap_extra_B=224
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=140257
+mem_heap_B=64000
+mem_heap_extra_B=208
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=140291
+mem_heap_B=63000
+mem_heap_extra_B=192
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=140325
+mem_heap_B=62000
+mem_heap_extra_B=176
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=140359
+mem_heap_B=61000
+mem_heap_extra_B=160
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=140393
+mem_heap_B=60000
+mem_heap_extra_B=144
+mem_stacks_B=0
+heap_tree=detailed
+n3: 60000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n7: 48000 0x109161: g (massif_example_2.c:5)
+  n6: 24000 0x109177: f (massif_example_2.c:11)
+   n0: 4000 0x109196: main (massif_example_2.c:19)
+   n0: 4000 0x1091CA: main (massif_example_2.c:26)
+   n0: 4000 0x1091D4: main (massif_example_2.c:28)
+   n0: 4000 0x1091DE: main (massif_example_2.c:30)
+   n0: 4000 0x1091E8: main (massif_example_2.c:32)
+   n0: 4000 0x1091F2: main (massif_example_2.c:34)
+  n0: 4000 0x10919B: main (massif_example_2.c:20)
+  n0: 4000 0x1091CF: main (massif_example_2.c:27)
+  n0: 4000 0x1091D9: main (massif_example_2.c:29)
+  n0: 4000 0x1091E3: main (massif_example_2.c:31)
+  n0: 4000 0x1091ED: main (massif_example_2.c:33)
+  n0: 4000 0x1091F7: main (massif_example_2.c:35)
+ n6: 12000 0x109172: f (massif_example_2.c:10)
+  n0: 2000 0x109196: main (massif_example_2.c:19)
+  n0: 2000 0x1091CA: main (massif_example_2.c:26)
+  n0: 2000 0x1091D4: main (massif_example_2.c:28)
+  n0: 2000 0x1091DE: main (massif_example_2.c:30)
+  n0: 2000 0x1091E8: main (massif_example_2.c:32)
+  n0: 2000 0x1091F2: main (massif_example_2.c:34)
+ n0: 0 in 1 place, below massif's threshold (1.00%)
